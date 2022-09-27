@@ -1,8 +1,8 @@
 import { combineReducers } from "redux"
-// import listTour from './reducers/listTour'
+import auth from './reducers/auth'
 
 const rootReducer = combineReducers({
-    // listTour,
+    auth,
 });
 
 export default rootReducer;

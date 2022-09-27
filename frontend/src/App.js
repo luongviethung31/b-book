@@ -1,12 +1,14 @@
 import './App.css';
+import './styles/index.scss'
 import { BrowserRouter } from 'react-router-dom'
+import UserRoutes from 'route/UserRoutes';
 function App() {
   return (
-    <BrowserRouter>
     <div className="App">
-    BBOOK
+      <BrowserRouter>
+        <UserRoutes />
+      </BrowserRouter>
     </div>
-    </BrowserRouter>
   );
 }
 
