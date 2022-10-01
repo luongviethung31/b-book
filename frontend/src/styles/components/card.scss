@@ -1,0 +1,91 @@
+.book-card-wrapper {
+    background: #ffffff;
+    border: 1px solid #eaeaea;
+    padding: 10px;
+    cursor: pointer;
+    color: #66645c;
+    text-align: left;
+    float: left;
+    .pic-book {
+        width: 34%;
+        max-height: 160px;
+        margin-top: -20px;
+        float: left;
+        text-align: center;
+        img {
+            height: 150px;
+            width: 100%;
+            border: 1px solid #d8d8d8;
+            overflow: hidden;
+        }
+    }
+    .text-info {
+        width: 58%;
+        padding-left: 15px;
+        float: left;
+        height: 140px;
+        .book-title {
+            height: 70px;
+            border-bottom: 1px solid rgba(128, 128, 128, 0.338);
+            .title-wrapper{
+                height: 21px;
+                font-size: 16px;
+                font-weight: bolder;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 190px;
+            .title {
+                font-size: 18px;
+                font-family: 'HKGroteskPro-Medium';
+                font-weight: bold;
+                color: #000;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
+            }
+            .author {
+                font-size: 14px;
+                color: #848282;
+                overflow: hidden;
+                height: 19px;
+                display: block;
+                margin-top: 10px;
+            }
+        }
+        .book-description {
+            .description {
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                height: 65px;
+                overflow: hidden;
+                font-size: 14px;
+            }
+        }
+    }
+    .price-box {
+        float: left;
+        width: 100%;
+        margin-top: 10px;
+        padding-top: 10px;
+        padding-right: 10px;
+        border-top: 1px dashed  rgba(128, 128, 128, 0.338);
+        .discount-num {
+            float: left;
+            height: 32px;
+            background: #f03737;
+            text-align: center;
+            color: #ffffff;
+            border-radius: 4px;
+            padding: 5px 10px;
+        }
+        .old-price {
+            float: right;
+        }
+        .new-price {
+            float: right;
+            margin-left: 20px;
+        }
+    }
+}

@@ -1,4 +1,9 @@
 @font-face {
+	font-family: "HKGroteskPro-Medium";
+	src: url("./assets/fonts/HKGroteskPro-Medium.woff2");
+	font-weight: bold
+}
+@font-face {
 	font-family: "HKGroteskPro-Regular";
 	src: url("./assets/fonts/HKGroteskPro-Regular.woff2");
 	font-weight: bold
