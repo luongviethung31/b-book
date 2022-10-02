@@ -1,0 +1,53 @@
+.invalid {
+  border:1px solid red !important;
+ }
+ input, textarea {
+  outline: none !important;
+  box-shadow: none !important; 
+}
+.login-modal {
+  display: flex;
+  flex-direction: column;
+  &__head {
+    float: left;
+    padding: 5px 0;
+    .login-text  {
+      display: flex;
+      justify-content: flex-start;
+      margin: 5px 0;
+      color: #52ab98;
+      font-weight: 900;
+    }
+    p {
+      display: flex;
+      justify-content: flex-start;
+      margin: 5px 0;
+    }
+    p > span {
+      color: #52ab98;
+      cursor: pointer;
+      padding-left: 5px;
+    }
+
+    p > span:hover {
+      color: #168c72;
+    }
+    
+  }
+  .form-group {
+    display: flex;
+    padding-bottom: 30px;
+
+    &__label {
+      display: flex;
+      justify-content: flex-start;
+      float: left;
+      min-width: 180px;
+    }
+
+    .login-submit-text {
+      color: #fff;
+    }
+  }
+ 
+}

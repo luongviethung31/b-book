@@ -1,16 +1,12 @@
 import React from 'react';
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
-import Slider from 'react-slick';
 import BookCart from 'components/Card/BookCard'
 import NewBookPoster from 'components/NewBookPoster';
+import CustomSlide from 'components/CustomSlider/CustomSlide';
+import LoginModal from 'components/modal/LoginModal';
+
 const dummyData = ['Category1', 'Category2', 'Category3', 'Category4', 'Category5', 'Category6']
-const CustomSlide = ({ title }) => {
-    return (
-        <div>
-            <h3>{title}</h3>
-        </div>
-    );
-}
+
 const DataBook = [{
     title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
     author: 'Yuval Noah Harari',
@@ -55,13 +51,7 @@ const DataBook = [{
     image:'https://www.vinabook.com/images/thumbnails/product/115x/372171_sapiens-luoc-su-loai-nguoi-bang-tranh-tap-2-nhung-tru-cot-cua-nen-van-minh.jpg'
 },]
 const Homepage = () => {
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1
-    };
+    
     return (
         <div className='home-page-container'>
             <Container fluid className='container-p-4'>
@@ -78,11 +68,8 @@ const Homepage = () => {
                         </ListGroup>
                     </Col>
                     <Col className='main-contents-row' lg={9} md={12}>
-                        <Slider {...settings}>
-                            <CustomSlide title='Slide 1' />
-                            <CustomSlide title='Slide 2' />
-                            <CustomSlide title='Slide 3' />
-                        </Slider>
+                       <CustomSlide />
+                       
                     </Col>
                 </Row>
                 <Row className='new-book-session'>
@@ -97,6 +84,7 @@ const Homepage = () => {
                 </Row>
                 <Row className='items-session'>
                     <Col className='items--left-col' lg={9}>
+                    <LoginModal />
                         <Row className='new-book-wrapper'></Row>
                         <Row className='discount-book-wrapper'>
                             <Col lg={12}>
