@@ -1,10 +1,10 @@
 @font-face {
-	font-family: "HKGroteskPro-Medium";
+	font-family: "HK-medium";
 	src: url("./assets/fonts/HKGroteskPro-Medium.woff2");
 	font-weight: bold
 }
 @font-face {
-	font-family: "HKGroteskPro-Regular";
+	font-family: "HK-regular";
 	src: url("./assets/fonts/HKGroteskPro-Regular.woff2");
 	font-weight: bold
 }
@@ -17,7 +17,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 *{
-  font-family: "HKGroteskPro-Regular";
+  font-family: "HK-regular";
 }
 
 code {

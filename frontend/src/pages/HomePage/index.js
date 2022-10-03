@@ -3,6 +3,7 @@ import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 import Slider from 'react-slick';
 import BookCart from 'components/Card/BookCard'
 import NewBookPoster from 'components/NewBookPoster';
+import Policy from 'components/Policy';
 const dummyData = ['Category1', 'Category2', 'Category3', 'Category4', 'Category5', 'Category6']
 const CustomSlide = ({ title }) => {
     return (
@@ -104,7 +105,7 @@ const Homepage = () => {
                             </Col>
                             {
                                 DataBook.map((item, index) => (
-                                    <Col lg={4} key={index}>
+                                    <Col className='book-card-col' lg={4} key={index}>
                                         <BookCart 
                                             title={item.title} 
                                             discount={item.discount} 
@@ -121,6 +122,7 @@ const Homepage = () => {
                     <Col className='items--right-col' lg={3}></Col>
                 </Row>
             </Container>
+            <Policy/>
         </div>
     );
 };
