@@ -1,0 +1,20 @@
+.policy-session {
+    margin-top: 50px;
+    .policy-card {
+        padding: 20px;
+        border: 3px solid #2b6777;
+        border-radius: 20px;
+        &__text {
+            margin-top: 20px;
+            &--title {
+                font-size: 28px;
+                font-family: 'HK-medium';
+                color: #2b6777;
+            }
+            &--info {
+                font-size: 18px;
+                color: #2b6777d5;
+            }
+        }
+    }
+}

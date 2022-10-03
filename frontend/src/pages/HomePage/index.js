@@ -5,6 +5,7 @@ import NewBookPoster from 'components/NewBookPoster';
 import CustomSlide from 'components/CustomSlider/CustomSlide';
 import LoginModal from 'components/modal/LoginModal';
 
+import Policy from 'components/Policy';
 const dummyData = ['Category1', 'Category2', 'Category3', 'Category4', 'Category5', 'Category6']
 
 const DataBook = [{
@@ -92,7 +93,7 @@ const Homepage = () => {
                             </Col>
                             {
                                 DataBook.map((item, index) => (
-                                    <Col lg={4} key={index}>
+                                    <Col className='book-card-col' lg={4} key={index}>
                                         <BookCart 
                                             title={item.title} 
                                             discount={item.discount} 
@@ -109,6 +110,7 @@ const Homepage = () => {
                     <Col className='items--right-col' lg={3}></Col>
                 </Row>
             </Container>
+            <Policy/>
         </div>
     );
 };
