@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 import BookCart from 'components/Card/BookCard'
 import NewBookPoster from 'components/NewBookPoster';
 import CustomSlide from 'components/CustomSlider/CustomSlide';
-import LoginModal from 'components/modal/LoginModal';
+import RegisterModal from 'components/modal/RegisterModal';
 
 import Policy from 'components/Policy';
-const dummyData = ['Category1', 'Category2', 'Category3', 'Category4', 'Category5', 'Category6']
+import MiniCard from 'components/Card/MiniCard';
+const dummyData = ['Category1', 'Category2', 'Category3', 'Category4', 'Category5', 'Category6', 'Category7','Category8','Category9']
 
 const DataBook = [{
     title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
@@ -70,7 +71,6 @@ const Homepage = () => {
                     </Col>
                     <Col className='main-contents-row' lg={9} md={12}>
                        <CustomSlide />
-                       
                     </Col>
                 </Row>
                 <Row className='new-book-session'>
@@ -83,9 +83,8 @@ const Homepage = () => {
                         price={DataBook[0].price}
                     />
                 </Row>
-                <Row className='items-session'>
+                <Row className='items-session' style={{marginTop:'40px'}}>
                     <Col className='items--left-col' lg={9}>
-                    <LoginModal />
                         <Row className='new-book-wrapper'></Row>
                         <Row className='discount-book-wrapper'>
                             <Col lg={12}>
@@ -107,7 +106,18 @@ const Homepage = () => {
                             }
                         </Row>
                     </Col>
-                    <Col className='items--right-col' lg={3}></Col>
+                    <Col className='items--right-col' lg={3}>
+                    <h2>HOT TRONG TUẦN</h2>
+                        {DataBook.map((item, index) => (
+                            <MiniCard 
+                                image={item.image} 
+                                title={item.title} 
+                                author={item.author}
+                                price={item.price} 
+                                key={index}
+                            />
+                        ))}
+                    </Col>
                 </Row>
             </Container>
             <Policy/>

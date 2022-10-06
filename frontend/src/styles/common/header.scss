@@ -22,6 +22,11 @@
             }
             .login-icon {
                 margin-right: 30px;
+                border-radius: 50%;
+                cursor: pointer;
+                &:hover {
+                    background: #c8d8e4;
+                }
             }
         }
     }

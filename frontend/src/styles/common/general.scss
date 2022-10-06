@@ -2,7 +2,7 @@
     padding-left: 40px !important;
     padding-right: 40px !important;
 }
-button:hover {
+button,button:hover {
     color:#fff !important;
 }
 .discount-num {
@@ -11,4 +11,13 @@ button:hover {
     color: #ffffff;
     border-radius: 4px;
     padding: 5px 10px;
+}
+.list-group-item {
+    color: black !important;
+}
+.btn-outline-primary {
+    color:#52ab98 !important;
+    &:hover{
+        color:#fff;
+    }
 }

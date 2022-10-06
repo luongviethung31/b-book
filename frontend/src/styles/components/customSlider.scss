@@ -6,6 +6,7 @@
 
     .slick-prev, .slick-next {
       z-index: 20;
+      transition: 0.4s;
   }
     
 
@@ -21,16 +22,16 @@
     }
     .slick-next:hover::before,
     .slick-prev:hover::before {
-      font-size: 50px;
-
+      transition: 0.2s;
+      font-size: 32px;
     }
   }
   .slick-next:before {
-    left: -25px;
+    left: -5px;
 
   }
   .slick-prev:before {
-    right: -25px;
+    right: -5px;
   }
   .slick-dots li.slick-active {
     width: 50px;
