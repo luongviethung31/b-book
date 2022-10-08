@@ -10,13 +10,15 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = "__all__"
+        extra_kwargs = {
+            'slug': {'read_only': True}
+        }
     
     def to_representation(self, instance):
         context = super().to_representation(instance)
         context['genre'] = {
             "id": instance.genre.id,
-            "title": instance.genre.title,
-            "slug": instance.genre.slug
+            "title": instance.genre.title
         }
         context['author'] = {
             "id": instance.author.id,
@@ -34,15 +36,21 @@ class RetrieveBookSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "title",
+            'slug',
             "author",
             "genre",
-            "slug",
             "thumbnail",
             "price",
             "created_date",
             "updated_date",
-            "related_books"
+            "related_books",
+            "same_author"
         )
+        extra_kwargs = {
+            "slug": {"read_only": True},
+            "created_date": {"read_only": True},
+            "updated_date": {"read_only": True},
+        }
     
     def to_representation(self, instance):
         context = super().to_representation(instance)
@@ -67,6 +75,9 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = "__all__"
+        extra_kwargs = {
+            'slug': {'read_only': True}
+        }
 
 class RetrieveGenreSerializer(serializers.ModelSerializer):
     books = serializers.SerializerMethodField('get_books')
@@ -81,6 +92,9 @@ class RetrieveGenreSerializer(serializers.ModelSerializer):
             "books",
             "created_date"
         )
+        extra_kwargs = {
+            'slug': {'read_only': True}
+        }
     
     def get_books(self, obj):
         return BookSerializer(obj.books.all(), many=True).data
@@ -89,6 +103,9 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = "__all__"
+        extra_kwargs = {
+            'slug': {'read_only': True}
+        }
     
 class RetrieveAuthorSerializer(serializers.ModelSerializer):
     books = serializers.SerializerMethodField('get_books')
@@ -98,11 +115,15 @@ class RetrieveAuthorSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
+            "slug",
             "born",
             "died",
             "nationality",
             "books",
         )
+        extra_kwargs = {
+            'slug': {'read_only': True}
+        }
     
     def get_books(self, obj):
         return BookSerializer(obj.work.all(), many=True).data

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.text import slugify
 
 class Genre(models.Model):
     title = models.CharField(max_length=100, unique=True)
@@ -11,6 +12,10 @@ class Genre(models.Model):
     
     def __str__(self) -> str:
         return self.title
+    
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Genre, self).save(*args, **kwargs)  
 
 class Author(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -18,9 +23,15 @@ class Author(models.Model):
     born = models.DateField(blank=True)
     died = models.DateField(blank=True)
     nationality = models.CharField(max_length=100, blank=True)
+    portrait = models.URLField()
+    about = models.TextField()
 
     def __str__(self) -> str:
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Author, self).save(*args, **kwargs) 
 
 class Book(models.Model):
     genre = models.ForeignKey(Genre, related_name='books', on_delete=models.CASCADE)
@@ -28,12 +39,17 @@ class Book(models.Model):
     title = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(unique=True)
     thumbnail = models.URLField()
+    count = models.IntegerField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.title
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Book, self).save(*args, **kwargs)  
 
     @property
     def same_genre(self):
