@@ -80,10 +80,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '*',
-        'USER': '*',
-        'PASSWORD': '*',
-        'HOST': '*',
+        'NAME': 'itzghnjb',
+        'USER': 'itzghnjb',
+        'PASSWORD': 'RuiLPBDLLGWMz4Ow_gZt0ug6muL3-Mm3',
+        'HOST': 'tiny.db.elephantsql.com',
         'PORT': '5432',
     }
 }
@@ -127,5 +127,7 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+
+AUTH_USER_MODEL = 'user.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

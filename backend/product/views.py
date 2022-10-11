@@ -45,18 +45,37 @@ class ListCreateGenreView(views.APIView):
         if serializer.is_valid():
             serializer.save()
             return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class RetrieveUpdateDeleteGenreView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
-    def get(self, request, *args, **kwargs):
-        # Get a genre with detail
-        pass
-    def put(self, request, *args, **kwargs):
+    def get(self, request, slug):
+        # Get a genre by slug
+        try: 
+            genres = Genre.objects.get(slug=slug)
+            serializer = RetrieveGenreSerializer(genres)
+            return response.Response(serializer.data, status=status.HTTP_200_OK)
+        except Genre.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, slug):
         # Update a genre by send all field
-        pass
-    def delete(self, request, *args, **kwargs):
+        try: 
+            genre = Genre.objects.get(slug=slug)
+            serializer = RetrieveGenreSerializer(genre, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return response.Response(serializer.data, status=status.HTTP_200_OK)
+        except Genre.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+    def delete(self, request, slug):
         # Delete a genre
-        pass
+        try: 
+            genres = Genre.objects.get(slug=slug)
+            genres.delete()
+            return response.Response(status=status.HTTP_204_NO_CONTENT)
+        except Genre.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
 
 ### !GENRE ###
 
@@ -65,23 +84,48 @@ class RetrieveUpdateDeleteGenreView(views.APIView):
 class ListCreateAuthorView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
     def get(self, request, *args, **kwargs):
-        # Get all author
-        pass
+        # Get all author    
+        author = Author.objects.all()
+        serializer = AuthorSerializer(author,many=True)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
     def post(self, request, *args, **kwargs):
         # Create a author
-        pass
+        serializer = AuthorSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class RetrieveUpdateDeleteAuthorView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
-    def get(self, request, *args, **kwargs):
+    def get(self, request, slug):
         # Get a author with detail
-        pass
-    def put(self, request, *args, **kwargs):
+        try: 
+            author = Author.objects.get(slug=slug)
+            serializer = RetrieveAuthorSerializer(author)
+            return response.Response(serializer.data, status=status.HTTP_200_OK)
+        except Author.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, slug):
         # Update a author by send all field
-        pass
-    def delete(self, request, *args, **kwargs):
+        try: 
+            author = Author.objects.get(slug=slug)
+            serializer = RetrieveAuthorSerializer(author, data=request.data)
+            if serializer.is_valid():
+                return response.Response(serializer.data, status=status.HTTP_200_OK)
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+        except Author.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+    def delete(self, request, slug):
         # Delete a author
-        pass
+        try: 
+            author = Author.objects.get(slug=slug)
+            author.delete()
+            return response.Response(status=status.HTTP_204_NO_CONTENT)
+        except Author.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
 
 
 ### !AUTHOR ###
@@ -92,21 +136,45 @@ class ListCreateBookView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
     def get(self, request, *args, **kwargs):
         # Get all book
-        pass
+        books = Book.objects.all()
+        serializer = BookSerializer(books, many=True)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
     def post(self, request, *args, **kwargs):
         # Create a book
-        pass
+        serializer = BookSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class RetrieveUpdateDeleteBookView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
-    def get(self, request, *args, **kwargs):
+    def get(self, request, slug):
         # Get a book with detail
-        pass
-    def put(self, request, *args, **kwargs):
+        try: 
+            book = Book.objects.get(slug=slug)
+            serializer = RetrieveBookSerializer(book)
+            return response.Response(serializer.data, status=status.HTTP_200_OK)
+        except Book.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+
+    def put(self, request, slug):
         # Update a book by send all field
-        pass
-    def delete(self, request, *args, **kwargs):
+        try: 
+            book = Book.objects.get(slug=slug)
+            serializer = RetrieveBookSerializer(book, data=request.data)
+            if serializer.is_valid():
+                return response.Response(serializer.data, status=status.HTTP_200_OK)
+            return response.Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        except Book.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND)  
+    def delete(self, request, slug):
         # Delete a book
-        pass
+        try: 
+            book = Book.objects.get(slug=slug)
+            book.delete()
+            return response.Response(status=status.HTTP_204_NO_CONTENT)
+        except Author.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
 
 ### !BOOK ###
