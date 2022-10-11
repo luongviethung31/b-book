@@ -20,8 +20,8 @@ class Genre(models.Model):
 class Author(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(unique=True)
-    born = models.DateField(blank=True)
-    died = models.DateField(blank=True)
+    born = models.DateField(blank=True, null=True)
+    died = models.DateField(blank=True, null=True)
     nationality = models.CharField(max_length=100, blank=True)
     portrait = models.URLField()
     about = models.TextField()
