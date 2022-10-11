@@ -11,7 +11,7 @@ $ git clone https://github.com/luongviethung31/b-book.git
 $ cd backend   
 $ python -m venv .env  # create virtual environment to install python package
 $ source .env/Scripts/activate  # activate virtual environment
-$ pip instal -r requirements.txt  # install requirement package
+$ pip install -r requirements.txt  # install requirement package
 ```
 
 ***Note:*** We can run command inside project to do some cron job
