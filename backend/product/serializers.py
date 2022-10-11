@@ -12,7 +12,7 @@ class BookSerializer(serializers.ModelSerializer):
         fields = "__all__"
         extra_kwargs = {
             'slug': {'read_only': True}
-        }
+        }    
     
     def to_representation(self, instance):
         context = super().to_representation(instance)
