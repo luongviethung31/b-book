@@ -1,0 +1,53 @@
+.book-details-session {
+    margin-top: 40px;
+    div {
+        text-align: left;
+    }
+    .title {
+      text-align: left;
+    }
+    .author, .publisher, .year, .total-page {
+     span {
+       color: green;
+     } 
+    }
+    .description {
+      margin-top: 20px;
+      display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            height: 100px;
+            overflow: hidden;
+    }
+    .devider {
+      width: 100%;
+      border: 1px dashed #acacac91;
+      margin-top: 10px;
+    }
+    .price-row {
+      margin-top: 20px;
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      .price-wrapper {
+        margin-right: 20px;
+      }
+    }
+    .payment-col {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .payment-info {
+      padding: 20px;
+      max-width: 300px;
+      width: 100%;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+      .payment-box {
+        .amount {
+          display: flex;
+          align-items:center;
+          }
+        }
+      }
+    }
+  }

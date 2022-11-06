@@ -6,6 +6,7 @@ import ListIcon from 'assets/icons/list.svg'
 import FacebookIcon from 'assets/icons/facebook.svg'
 import InstagramIcon from 'assets/icons/instagram.svg'
 import LoginModal from 'components/modal/LoginModal';
+import logo from 'assets/icons/bbook-logo.png'
 
 const Header = () => {
     const [isShowLoginModal,setIsShowLoginModal] = useState(false)
@@ -14,7 +15,7 @@ const Header = () => {
         <div className='header-panel'>
             <Container fluid className='container-header'>
                 <div className='logo-bbook'>
-                    <img src='https://www.vinabook.com/images/thumbnails/img/252/33/vnb_logo_2x.png' alt='logo' height={50} />
+                    <a href='/'><img src={logo} alt='logo' height={50}/></a>
                 </div>
                 <InputGroup className="search-field">
                     <Form.Control

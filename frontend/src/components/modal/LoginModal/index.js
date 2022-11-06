@@ -76,7 +76,7 @@ const LoginModal = ({ show, handleClose = () => { } }) => {
             <Form.Label column sm={2} className='forget-password-col'>
             </Form.Label>
             <Form.Label column sm={8} className='forget-password-col'>
-              Chưa có tài khoản? Vui lòng <a href="#">Đăng ký </a>
+              Chưa có tài khoản? Vui lòng <a href="/register">Đăng ký </a>
             </Form.Label>
           </Form.Group>
           <Form.Group as={Row} className="mb-3" controlId="formHorizontalForgetPassword">

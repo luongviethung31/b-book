@@ -1,7 +1,8 @@
+import FormatPrice from 'components/FormatPrice';
 import React from 'react';
 import { Col, Row } from 'react-bootstrap';
 
-const MiniCard = ({image, title, author, price}) => {
+const MiniCard = ({image, title, author, price, discount}) => {
     return (
         <div className='mini-book-card'>
             <Row>
@@ -16,8 +17,9 @@ const MiniCard = ({image, title, author, price}) => {
                         {author}
                     </div>
                     <div className='price-box'>
-                        <span className='old-price'>{price}</span>
-                        <span className='new-price'>{price}</span>
+                    <FormatPrice discount={discount} price={price} />
+                        {/* <span className='old-price'>{price}</span>
+                        <span className='new-price'>{price}</span> */}
                     </div>
                 </Col>
             </Row>
