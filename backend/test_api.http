@@ -1,0 +1,77 @@
+// This is file to test api
+
+######################### Environment variable ##########################x
+@userToken = 62fd0a7b48851b4bec1c163d177fae89b8f1f908
+@adminToken = insert adminToken here
+@baseUserUrl = http://127.0.0.1:8000/api/v1/bbook/users
+@baseProductUrl = http://127.0.0.1:8000/api/v1/bbook/products
+
+
+############################## USER ###############################
+
+### GET ALL USER
+GET {{baseUserUrl}}/getAll 
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+### GET USER INFO
+GET {{baseUserUrl}}/info
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+### REGISTER
+POST {{baseUserUrl}}/register
+Content-Type: application/json
+
+{
+    "first_name": "nguyen",
+    "last_name": "van anh",
+    "username": "nguyenanh",
+    "email": "nguyenanh@gmail.com",
+    "password": "Nguyenanh123"
+}
+
+### LOGIN
+POST {{baseUserUrl}}/login
+Content-Type: application/json
+
+{
+    "username": "nguyenanh@gmail.com",
+    "password": "Nguyenanh123"
+}
+
+### LOGOUT
+GET {{baseUserUrl}}/logout
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+####################################################################
+
+############################ PRODUCT ###############################
+
+### GET ALL GENRE 
+GET {{baseProductUrl}}/genres
+
+### CREATE GENRE
+POST {{baseProductUrl}}/genres
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+    "sinh": "sinh"
+}
+
+### RETRIEVE GENRE
+GET {{baseProductUrl}}/genres/sach-thieu-nhi
+
+### UPDATE GENRE
+PUT {{baseProductUrl}}/genres/sach-thieu-nhi
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+    
+}
+
+### DELETE GENRE
+DELETE  {{baseProductUrl}}/genres/sach-thieu-nhi
