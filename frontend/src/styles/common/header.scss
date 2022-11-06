@@ -22,11 +22,16 @@
             }
             .login-icon {
                 margin-right: 30px;
+                border-radius: 50%;
+                cursor: pointer;
+                &:hover {
+                    background: #c8d8e4;
+                }
             }
         }
     }
     .header-contact {
-        background-color: #c8d8e4;
+        background-color: #2b6777;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -38,7 +43,7 @@
                 display: flex;
                 align-items: center;
                 font-size: 20px;
-                color: #52ab98;
+                color: #fff;
                 margin-right: 20px;
             }
             .icon-contact {
