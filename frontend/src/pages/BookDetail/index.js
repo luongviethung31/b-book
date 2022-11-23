@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { Col, Row, Container, Button, ButtonGroup } from "react-bootstrap";
 import FormatPrice from "components/FormatPrice";
+import RatingBook from "./RatingBook";
+import Comment from "./Comment";
+import FeedbackForm from "./FeedbackForm";
+import LoginModal from "components/modal/LoginModal";
 const bookDetail = {
   title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
   author: 'Yuval Noah Harari',
@@ -12,6 +16,12 @@ const bookDetail = {
   year: '2022',
   totalPage: 200
 }
+const dataComment=[{
+  user: 'Luong Mau Viet Hung',
+  rating: 5,
+  comment: 'Thực sự rất hay, từng câu chuyện về các kĩ năng mềm cho bạn trẻ đc tác giả dạy bảo qua lối kể chuyện hóm hỉnh, hài hước. Và phải công nhận là học được nhiều điều qua quyển sách này, giúp bạn đọc có thêm động lực để hoàn thiện bản thân hơn nữa Shipper cũng vui vẻ, tích cực. Nếu bạn nào yêu thích về tác giả Tony nên đọc quyển sách này, rất hay!',
+  date:'20/11/2022'
+}]
 
 const BookDetail = ({
   title,
@@ -25,6 +35,11 @@ const BookDetail = ({
   totalPage
 } = bookDetail) => {
   const [tab, setTab] = useState(1)
+  const [isShowLoginModal,setIsShowLoginModal] = useState(false)
+
+  const handleSendFeedback = (data) => {
+    console.log(data);
+  }
   return (
     <div className="book-details-session">
       <Container fluid="">
@@ -94,24 +109,24 @@ const BookDetail = ({
           </Col>
         </Row>
         <div className="list-menu-wrapper">
-          <span 
-            className={`list-menu-detail ${tab === 1 ? 'active-tab' : ''}`} 
+          <span
+            className={`list-menu-detail ${tab === 1 ? 'active-tab' : ''}`}
             sm={2}
-            onClick={() => {setTab(1)}}
+            onClick={() => { setTab(1) }}
           >
             Giới thiệu sách
           </span>
-          <span 
-            className={`list-menu-detail ${tab === 2 ? 'active-tab' : ''}`} 
+          <span
+            className={`list-menu-detail ${tab === 2 ? 'active-tab' : ''}`}
             sm={2}
-            onClick={() => {setTab(2)}}
+            onClick={() => { setTab(2) }}
           >
             Thông tin chi tiết
           </span>
-          <span 
-            className={`list-menu-detail ${tab === 3 ? 'active-tab' : ''}`} 
+          <span
+            className={`list-menu-detail ${tab === 3 ? 'active-tab' : ''}`}
             sm={2}
-            onClick={() => {setTab(3)}}
+            onClick={() => { setTab(3) }}
           >
             Đánh giá
           </span>
@@ -121,7 +136,7 @@ const BookDetail = ({
           {bookDetail.description}
         </div>
         <Row className="book-detail-wrapper">
-          <div className="book-detail-wrapper__title">Thông tin chi tiết</div>
+          <h2 className="book-detail-wrapper__title">Thông tin chi tiết</h2>
           <Col sm={2}>
             <div className="item-detail">&#x2022; Tác giả:</div>
             <div className="item-detail">&#x2022; Nhà xuất bản:</div>
@@ -135,7 +150,33 @@ const BookDetail = ({
             <div className="item-detail">{bookDetail.year}</div>
           </Col>
         </Row>
+        <Row className="comment-wrapper">
+          <h2>Nhận xét từ khách hàng</h2>
+          {
+            dataComment.map((item, index) => (
+              <Comment key={index} user={item.user} rating={item.rating} comment={item.comment} date={item.date} />
+            ))
+          }
+        </Row>
+        <Row className="book-rating-wrapper">
+          <Col sm={8}>
+            <RatingBook numberRating={5} avarageRating={'5.0'} />
+          </Col>
+          <Col sm={4}>
+            <div className="btn-login">
+              <div>Đăng nhập để gửi nhận xét của bạn!</div>
+              <Button className="btn btn-login" onClick={()=> setIsShowLoginModal(true)}>
+                Đăng nhập
+              </Button>
+              <div>Bạn chưa có tài khoản?<a href="/register">Đăng ký </a></div>
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <FeedbackForm handleSendFeedback={handleSendFeedback}/>
+        </Row>
       </Container>
+      <LoginModal show={isShowLoginModal} handleClose={() => setIsShowLoginModal(false)}/>
     </div>
   );
 };
