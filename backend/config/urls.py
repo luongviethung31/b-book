@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/bbook/products/', include('product.urls')),
     path('api/v1/bbook/users/', include('user.urls')),
+    path('api/v1/bbook/payments/', include('payment.urls'))
 ]
