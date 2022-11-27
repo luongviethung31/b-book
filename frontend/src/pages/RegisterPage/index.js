@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Col, Row, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import UserAPI from 'api/UserAPI'
+import useNotification from "hooks/notification";
 
 const RegisterPage = () => {
     const {
@@ -12,8 +14,26 @@ const RegisterPage = () => {
     } = useForm();
 
     const onSubmit = (data) => {
-        // console.log(data);
-        // reset();
+        console.log(data);
+        delete data.password_confirm
+        UserAPI.registerUser(data)
+        .then((rs) => {
+            if(rs.status === 201) {
+                useNotification.Success({
+                    title: "THÀNH CÔNG!",
+                    message:"Chúc mừng bạn đã tạo tài khoản thành công!"
+                })
+                setTimeout(() => {
+                    window.open('/','_self')
+                },2000)
+            }
+        })
+        .catch((e) => {
+            useNotification.Error({
+                title: "LỖI!",
+                message:"Tạo tài khoản không thành công!"
+            })
+        })
     };
 
 
@@ -31,27 +51,67 @@ const RegisterPage = () => {
                     </div>
                     <Form onSubmit={handleSubmit(onSubmit)}>
                         <Form.Group as={Row} className="mb-3" controlId="formHorizontalName">
-                            <Form.Label column sm={3}>
-                                Name:
+                            <Form.Label column sm={3} style={{textAlign:'left'}}>
+                                Họ:
                             </Form.Label>
                             <Col sm={9}>
                                 <Form.Control
-                                    className={`${errors.name ? "invalid " : ''}`}
+                                    className={`${errors.first_name ? "invalid " : ''}`}
                                     type="text"
                                     required
                                     maxLength={50}
                                     placeholder="Nhập tên của bạn..."
-                                    {...register("name", {
+                                    {...register("first_name", {
                                         required: "Tên là bắt buộc!",
                                     })}
                                     onKeyUp={() => {
-                                        trigger("name");
+                                        trigger("first_name");
+                                    }}
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3" controlId="formHorizontalName">
+                            <Form.Label column sm={3} style={{textAlign:'left'}}>
+                                Tên:
+                            </Form.Label>
+                            <Col sm={9}>
+                                <Form.Control
+                                    className={`${errors.last_name ? "invalid " : ''}`}
+                                    type="text"
+                                    required
+                                    maxLength={50}
+                                    placeholder="Nhập họ của bạn..."
+                                    {...register("last_name", {
+                                        required: "Bắt buộc!",
+                                    })}
+                                    onKeyUp={() => {
+                                        trigger("last_name");
+                                    }}
+                                />
+                            </Col>
+                        </Form.Group>
+                        <Form.Group as={Row} className="mb-3" controlId="formHorizontalName">
+                            <Form.Label column sm={3} style={{textAlign:'left'}}>
+                                Tên người dùng:
+                            </Form.Label>
+                            <Col sm={9}>
+                                <Form.Control
+                                    className={`${errors.username ? "invalid " : ''}`}
+                                    type="text"
+                                    required
+                                    maxLength={50}
+                                    placeholder="Nhập tên người dùng..."
+                                    {...register("username", {
+                                        required: "Bắt buộc!",
+                                    })}
+                                    onKeyUp={() => {
+                                        trigger("username");
                                     }}
                                 />
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3" controlId="formHorizontalEmail">
-                            <Form.Label column sm={3}>
+                            <Form.Label column sm={3} style={{textAlign:'left'}}>
                                 Email:
                             </Form.Label>
                             <Col sm={9}>
@@ -75,7 +135,7 @@ const RegisterPage = () => {
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3" controlId="formHorizontalPhone" >
-                            <Form.Label column sm={3}>
+                            <Form.Label column sm={3} style={{textAlign:'left'}}>
                                 Số điện thoại:
                             </Form.Label>
                             <Col sm={9}>
@@ -95,7 +155,7 @@ const RegisterPage = () => {
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3" controlId="formHorizontalPassword" >
-                            <Form.Label column sm={3}>
+                            <Form.Label column sm={3} style={{textAlign:'left'}}>
                                 Mật khẩu:
                             </Form.Label>
                             <Col sm={9}>
@@ -108,6 +168,7 @@ const RegisterPage = () => {
                                     placeholder="Nhập mật khẩu..."
                                     {...register("password", {
                                         required: "Mật khẩu là bắt buộc!",
+                                        pattern: '^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'
                                     })}
                                     onKeyUp={(e) => {
                                         setPass(e.target.value);
@@ -117,7 +178,7 @@ const RegisterPage = () => {
                             </Col>
                         </Form.Group>
                         <Form.Group as={Row} className="mb-3" controlId="formHorizontalPassword" >
-                            <Form.Label column sm={3}>
+                            <Form.Label column sm={3} style={{textAlign:'left'}}>
                                 Mật khẩu:
                             </Form.Label>
                             <Col sm={9}>
@@ -139,7 +200,7 @@ const RegisterPage = () => {
                                 />
                             </Col>
                         </Form.Group>
-                        <Button type="submit">Đăng ký</Button>
+                        <Button type="submit" className="mb-4">Đăng ký</Button>
                     </Form>
                 </div>
             </div>

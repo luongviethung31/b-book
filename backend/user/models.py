@@ -8,11 +8,12 @@ class User(AbstractUser):
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     email = models.EmailField(verbose_name="Email", max_length=255, unique=True)
+    phone = models.CharField(verbose_name="Phone", max_length=10)
     created = models.DateTimeField(auto_created=True, auto_now=True)
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'username']
+    REQUIRED_FIELDS = ['first_name', 'last_name', 'username', 'phone']
 
     def __str__(self):
         return self.username
