@@ -19,6 +19,8 @@ from .serializers import (
     BookOrderedSerializer
 )
 
+import sys
+
 
 ### ORDER ###
 
@@ -28,38 +30,43 @@ class CreateOrderView(views.APIView):
         # get all order by user id
         try:
             order = Order.objects.filter(user__pk=request.user.pk)
-            serializer = OrderSerializer(data=order, many=True) 
+            serializer = OrderSerializer(order, many=True) 
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except Order.DoesNotExist:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except:
+        except Exception as e:
+            print(e)
             return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request):
         # create new order
         books = request.data.get('product')
         order = {
-            'ship_date': request.data.get('ship_date'),
-            'ship_place': request.data.get('ship_place'),
-            'note': request.data.get('note'),
-            'is_paid': request.data.get('is_paid'),
-            'paid_at': request.data.get('paid_at'),
-            "user": request.user
+            "ship_date": request.data.get("ship_date"),
+            "ship_place": request.data.get("ship_place"),
+            "note": request.data.get("note"),
+            "is_paid": request.data.get("is_paid"),
+            "paid_at": request.data.get("paid_at"),
+            "user": request.user.id
         }
         orderSerializer = OrderSerializer(data=order)
         if not orderSerializer.is_valid():
             return response.Response(orderSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
         errorlist = []
-        for index, item in books:
-            item_serializer = BookOrderedSerializer(data=item)
+        for item in books:
+            book_ordered = {
+                "book": item["book"],
+                "quantity": item["quantity"]
+            }
+            item_serializer = BookOrderedSerializer(data=book_ordered)
             if not item_serializer.is_valid():
-                errorlist.append(index)
+                errorlist.append(item_serializer.error_messages)
         if errorlist.count != 0:
-            return response.Response(item_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return response.Response({"message": errorlist}, status=status.HTTP_400_BAD_REQUEST)
         order_object = orderSerializer.save()
         for item in books:
             item_object = Book.objects.get(id=item.get('id'))
-            order_detail = OrderDetail(order=order_object, book=item_object, quantity=item.get('quantity'))
+            order_detail = OrderDetail(order=order_object.id, book=item_object.id, quantity=item.get('quantity'))
             order_detail.save()
         return response.Response(orderSerializer.data, status=status.HTTP_201_CREATED)
 

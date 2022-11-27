@@ -13,7 +13,7 @@ class Order(models.Model):
     note = models.CharField(blank=True, null=True, max_length=500)
     is_paid = models.BooleanField()
     is_delivered = models.BooleanField()
-    paid_at = models.DateField()
+    paid_at = models.CharField(max_length=100)
     created = models.DateTimeField(auto_created=True, auto_now=True)
 
     def __str__(self) -> str:

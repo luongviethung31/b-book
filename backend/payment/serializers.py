@@ -8,7 +8,6 @@ from .models import (
 from product.serializers import BookSerializer
 
 class OrderSerializer(serializers.ModelSerializer):
-    books = serializers.SerializerMethodField(method_name='get_books')
     class Meta:
         model = Order
         fields = (
