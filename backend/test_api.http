@@ -1,10 +1,11 @@
 // This is file to test api
 
 ######################### Environment variable ##########################x
-@userToken = 62fd0a7b48851b4bec1c163d177fae89b8f1f908
+@userToken = afbb84f0ed869bf3e1fb7a6e7a09ae1067ea54e8
 @adminToken = insert adminToken here
 @baseUserUrl = http://127.0.0.1:8000/api/v1/bbook/users
 @baseProductUrl = http://127.0.0.1:8000/api/v1/bbook/products
+@basePaymentUrl = http://127.0.0.1:8000/api/v1/bbook/payments
 
 
 ############################## USER ###############################
@@ -75,3 +76,48 @@ Authorization: Bearer {{adminToken}}
 
 ### DELETE GENRE
 DELETE  {{baseProductUrl}}/genres/sach-thieu-nhi
+
+####################################################################
+############################ PAYMENT ###############################
+
+### GET ALL USER ORDER 
+GET {{basePaymentUrl}}/order
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+### CREATE ORDER
+POST {{basePaymentUrl}}/order
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+### GET ORDER DETAIL
+GET {{basePaymentUrl}}/order/1
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+### UPDATE ORDER
+PUT {{basePaymentUrl}}/order/1
+Content-Type: application/json
+Authorization: Bearer {{userToken}}
+
+{
+    "ship_date": "",
+    "ship_place": "",
+    "note" : "",
+    "is_paid": true,
+    "paid_at": "",
+    "product": [
+    {
+        "book" : 1,
+        "quantity" : 1,
+    },
+    {
+        "book" : 5,
+        "quantity" : 2
+    }
+    ]
+}
+### DELETE ORDER
+DELETE  {{basePaymentUrl}}/order/1
+
+### GET ALL ORDER
