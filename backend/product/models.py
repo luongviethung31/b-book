@@ -34,8 +34,8 @@ class Author(models.Model):
         super(Author, self).save(*args, **kwargs) 
 
 class Book(models.Model):
-    genre = models.ForeignKey(Genre, related_name='books', on_delete=models.CASCADE)
-    author = models.ForeignKey(Author, related_name='work', on_delete=models.CASCADE, blank=True) 
+    genre = models.ForeignKey(Genre, related_name='books', on_delete=models.RESTRICT)
+    author = models.ForeignKey(Author, related_name='work', on_delete=models.RESTRICT, blank=True) 
     title = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(unique=True)
     thumbnail = models.URLField()

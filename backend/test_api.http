@@ -1,10 +1,11 @@
 // This is file to test api
 
 ######################### Environment variable ##########################x
-@userToken = 62fd0a7b48851b4bec1c163d177fae89b8f1f908
+@userToken = 8d72fd6ffedfa0a54bc65e9700cacae2e0bf6212
 @adminToken = insert adminToken here
 @baseUserUrl = http://127.0.0.1:8000/api/v1/bbook/users
 @baseProductUrl = http://127.0.0.1:8000/api/v1/bbook/products
+@basePaymentUrl = http://127.0.0.1:8000/api/v1/bbook/payments
 
 
 ############################## USER ###############################
@@ -12,7 +13,7 @@
 ### GET ALL USER
 GET {{baseUserUrl}}/getAll 
 Content-Type: application/json
-Authorization: Bearer {{userToken}}
+Authorization: Token {{userToken}}
 
 ### GET USER INFO
 GET {{baseUserUrl}}/info
@@ -43,7 +44,7 @@ Content-Type: application/json
 ### LOGOUT
 GET {{baseUserUrl}}/logout
 Content-Type: application/json
-Authorization: Bearer {{userToken}}
+Authorization: Token {{userToken}}
 
 ####################################################################
 
@@ -55,7 +56,7 @@ GET {{baseProductUrl}}/genres
 ### CREATE GENRE
 POST {{baseProductUrl}}/genres
 Content-Type: application/json
-Authorization: Bearer {{adminToken}}
+Authorization: Token {{adminToken}}
 
 {
     "sinh": "sinh"
@@ -67,7 +68,7 @@ GET {{baseProductUrl}}/genres/sach-thieu-nhi
 ### UPDATE GENRE
 PUT {{baseProductUrl}}/genres/sach-thieu-nhi
 Content-Type: application/json
-Authorization: Bearer {{adminToken}}
+Authorization: Token {{adminToken}}
 
 {
     
@@ -75,3 +76,60 @@ Authorization: Bearer {{adminToken}}
 
 ### DELETE GENRE
 DELETE  {{baseProductUrl}}/genres/sach-thieu-nhi
+
+####################################################################
+############################ PAYMENT ###############################
+
+### GET ALL USER ORDER 
+GET {{basePaymentUrl}}/order
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+### CREATE ORDER
+POST {{basePaymentUrl}}/order
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+{
+    "ship_date": "2022-12-23 12:00",
+    "ship_place": "HCM",
+    "note" : "giao hang tan noi",
+    "is_paid": true,
+    "paid_at": "paypal",
+    "product": [
+        { "book" : 1, "quantity" : 1},
+        { "book" : 2, "quantity" : 2}
+    ]
+}
+
+### GET ORDER DETAIL
+GET {{basePaymentUrl}}/order/1
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+### UPDATE ORDER
+PUT {{basePaymentUrl}}/order/1
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+{
+    "ship_date": "2012-04-23T18:25:43.511Z",
+    "ship_place": "HCM",
+    "note" : "giao hang tan noi",
+    "is_paid": true,
+    "paid_at": "paypal",
+    "product": [
+    {
+        "book" : 1,
+        "quantity" : 1,
+    },
+    {
+        "book" : 2,
+        "quantity" : 2
+    }
+    ]
+}
+### DELETE ORDER
+DELETE  {{basePaymentUrl}}/order/1
+
+### GET ALL ORDER

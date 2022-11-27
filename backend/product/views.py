@@ -35,6 +35,7 @@ class ListCreateGenreView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
     def get(self, request, *args, **kwargs):
         # Get all genre
+        # TODO: need to paginate
         genres = Genre.objects.all()
         serializer = GenreSerializer(genres,many=True)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
@@ -85,6 +86,7 @@ class ListCreateAuthorView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
     def get(self, request, *args, **kwargs):
         # Get all author    
+        # TODO: need to paginate
         author = Author.objects.all()
         serializer = AuthorSerializer(author,many=True)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
@@ -107,6 +109,8 @@ class RetrieveUpdateDeleteAuthorView(views.APIView):
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except Author.DoesNotExist:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except:
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request, slug):
         # Update a author by send all field
@@ -118,6 +122,8 @@ class RetrieveUpdateDeleteAuthorView(views.APIView):
             return response.Response(status=status.HTTP_400_BAD_REQUEST)
         except Author.DoesNotExist:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except:
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     def delete(self, request, slug):
         # Delete a author
         try: 
@@ -126,6 +132,8 @@ class RetrieveUpdateDeleteAuthorView(views.APIView):
             return response.Response(status=status.HTTP_204_NO_CONTENT)
         except Author.DoesNotExist:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except:
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 ### !AUTHOR ###
@@ -136,6 +144,7 @@ class ListCreateBookView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
     def get(self, request, *args, **kwargs):
         # Get all book
+        # TODO: need to paginate
         books = Book.objects.all()
         serializer = BookSerializer(books, many=True)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
@@ -157,6 +166,8 @@ class RetrieveUpdateDeleteBookView(views.APIView):
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except Book.DoesNotExist:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except:
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def put(self, request, slug):
         # Update a book by send all field
@@ -168,6 +179,8 @@ class RetrieveUpdateDeleteBookView(views.APIView):
             return response.Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
         except Book.DoesNotExist:
             return response.Response(status=status.HTTP_404_NOT_FOUND)  
+        except:
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     def delete(self, request, slug):
         # Delete a book
         try: 
@@ -176,5 +189,7 @@ class RetrieveUpdateDeleteBookView(views.APIView):
             return response.Response(status=status.HTTP_204_NO_CONTENT)
         except Author.DoesNotExist:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except:
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 ### !BOOK ###
