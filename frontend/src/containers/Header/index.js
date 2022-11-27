@@ -7,7 +7,7 @@ import FacebookIcon from 'assets/icons/facebook.svg'
 import InstagramIcon from 'assets/icons/instagram.svg'
 import LoginModal from 'components/modal/LoginModal';
 import logo from 'assets/icons/bbook-logo.png'
-import BookCart from 'containers/BookCart';
+// import BookCart from 'containers/BookCart';
 const DataBook = [{
     title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
     author: 'Yuval Noah Harari',
@@ -28,7 +28,7 @@ const DataBook = [{
 
 const Header = () => {
     const [isShowLoginModal, setIsShowLoginModal] = useState(false)
-    const [isShowBookCart, setIsShowBookCart] = useState(false)
+    // const [isShowBookCart, setIsShowBookCart] = useState(false)
 
     return (
         <div className='header-panel'>
@@ -53,7 +53,7 @@ const Header = () => {
                     >
                         <img src={LoginIcon} alt='login icon' />
                     </div>
-                    <OverlayTrigger trigger="click" placement="bottom" overlay={
+                    <OverlayTrigger trigger="focus" placement="bottom" overlay={
                         <Popover id="popover-basic" style={{maxWidth: '400px', width:'400px'}}>
                             <Popover.Body style={{ maxHeight: '309px !important', overflow: 'auto'}}>
                                 {
@@ -77,17 +77,16 @@ const Header = () => {
                             <Popover.Header as="div" style={{background:'#fff'}}>
                                 <div className='cart-footer'>
                                     <h5>{`Tổng cộng: 285.000đ`}</h5>
-                                    <Button>Xem giỏ hàng</Button>
+                                    <Button onClick={() => {window.open("/cart-page","_self")}}>Xem giỏ hàng</Button>
                                 </div>
                             </Popover.Header>
                         </Popover>
                     }>
-                        <div
+                        <button
                             className='action-header cart-icon'
-                            onClick={() => setIsShowBookCart(true)}
                         >
                             <img src={CartIcon} alt='cart icon' />
-                        </div>
+                        </button>
                     </OverlayTrigger>
                 </div>
             </Container>

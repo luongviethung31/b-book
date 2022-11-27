@@ -19,14 +19,15 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                background: none;
+                &:hover {
+                    background: #c8d8e4;
+                }
             }
             .login-icon {
                 margin-right: 30px;
                 border-radius: 50%;
                 cursor: pointer;
-                &:hover {
-                    background: #c8d8e4;
-                }
             }
         }
     }
