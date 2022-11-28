@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
             "last_name",
             "username",
             "email",
-            "phone", 
+            "phone",
             "password", 
         )
         extra_kwargs = {
@@ -30,6 +30,13 @@ class UserSerializer(serializers.ModelSerializer):
            raise serializers.ValidationError("Username length must be from 7 to 50")
         if " " in value:
             raise serializers.ValidationError("Username must be not contain space")
+        return value
+
+    def validate_phone(self, value):
+        if len(value)<10 or len(value) > 12:
+            raise serializers.ValidationError("Phone number must be from 10 to 11")
+        if not CheckIsPhoneNumber(value):
+            raise serializers.ValidationError("Phone number not in right format")
         return value
 
     def validate_password(self, value):
@@ -58,3 +65,8 @@ class UserLoginSerializer(serializers.ModelSerializer):
         fields = ("username", "password")
     username = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
+
+
+def CheckIsPhoneNumber(phone_text): 
+    x = re.search(r"(84|0[3|5|7|8|9])+([0-9]{8}\b)", phone_text)
+    return x

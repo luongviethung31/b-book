@@ -8,7 +8,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     email = models.EmailField(verbose_name="Email", max_length=255, unique=True)
-    phone = models.CharField(verbose_name="Phone", max_length=10)
+    phone = models.CharField(max_length=12, blank=True, null=True)
     created = models.DateTimeField(auto_created=True, auto_now=True)
     objects = UserManager()
 
