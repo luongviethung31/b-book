@@ -2,13 +2,15 @@ import './App.css';
 import './styles/index.scss'
 import { BrowserRouter } from 'react-router-dom'
 import UserRoutes from 'route/UserRoutes';
+import { ReactNotifications } from 'react-notifications-component'
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className="App">
+        <ReactNotifications />
         <UserRoutes />
-      </BrowserRouter>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }
 
