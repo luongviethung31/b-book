@@ -6,6 +6,9 @@ import CustomSlide from 'components/CustomSlider/CustomSlide';
 
 import Policy from 'components/Policy';
 import MiniCard from 'components/Card/MiniCard';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllGenre } from 'redux/reducers/product/action';
 const dummyData = ['Category1', 'Category2', 'Category3', 'Category4', 'Category5', 'Category6', 'Category7', 'Category8', 'Category9']
 
 const DataBook = [{
@@ -52,6 +55,11 @@ const DataBook = [{
     image: 'https://www.vinabook.com/images/thumbnails/product/115x/372171_sapiens-luoc-su-loai-nguoi-bang-tranh-tap-2-nhung-tru-cot-cua-nen-van-minh.jpg'
 },]
 const Homepage = () => {
+    const dispatch = useDispatch()
+    const {listGenre} = useSelector(store => store.product)
+    useEffect(() => {
+        if(!listGenre.length) dispatch(getAllGenre())
+    },[])
 
     return (
         <div className='home-page-container'>
@@ -60,11 +68,11 @@ const Homepage = () => {
                     <Col className='menu-col' lg={3} md={0}>
                         <ListGroup>
                             {
-                                dummyData.map((item, index) => (
-                                    <a href='/list-products/12' key={index} >
+                                listGenre.map((item, index) => (
+                                    <a href='/list-products/12' key={index}>
 
-                                        <ListGroup.Item key={index} action variant="light">
-                                            {item}
+                                        <ListGroup.Item key={index} action variant="light" style={{textAlign:'left'}}>
+                                            {item.title}
                                         </ListGroup.Item>
                                     </a>
                                 ))

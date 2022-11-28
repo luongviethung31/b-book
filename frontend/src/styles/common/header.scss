@@ -87,3 +87,22 @@
     justify-content: space-between;
     align-items: center;
 }
+.dropdown {
+    .account-avatar {
+        padding: 5px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 20px;
+        font-family: 'Circular-Loom';
+        font-weight: 600;
+        color: white;
+        margin-right: 15px;
+        cursor: pointer;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        border: none !important;
+        &::after {
+            display: none;
+        }
+    }
+}

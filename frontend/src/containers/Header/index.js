@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Container, Form, InputGroup, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Button, Container, Dropdown, Form, InputGroup, OverlayTrigger, Popover } from 'react-bootstrap';
 import CartIcon from 'assets/icons/cart.svg'
 import LoginIcon from 'assets/icons/login.svg'
 import ListIcon from 'assets/icons/list.svg'
@@ -7,6 +7,11 @@ import FacebookIcon from 'assets/icons/facebook.svg'
 import InstagramIcon from 'assets/icons/instagram.svg'
 import LoginModal from 'components/modal/LoginModal';
 import logo from 'assets/icons/bbook-logo.png'
+import userAPI from 'api/userAPI';
+import useNotification from 'hooks/notification';
+import { getAccessToken, removeAccessToken, removeUser, setAccessToken, setUser } from 'hooks/localAuth';
+import { setAccountInfo } from 'redux/reducers/auth/action';
+import { useDispatch, useSelector } from 'react-redux';
 // import BookCart from 'containers/BookCart';
 const DataBook = [{
     title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
@@ -16,7 +21,7 @@ const DataBook = [{
     price: '98000',
     amount: 2,
     image: 'https://www.vinabook.com/images/thumbnails/product/115x/372171_sapiens-luoc-su-loai-nguoi-bang-tranh-tap-2-nhung-tru-cot-cua-nen-van-minh.jpg'
-},{
+}, {
     title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
     author: 'Yuval Noah Harari',
     description: 'TẬP 2 của loạt truyện tranh chuyển thể từ tác phẩm "Sapiens - Lược sử loài người" của tác giả Yuval Noah Harari được chính thức phát hành trên toàn cầu.',
@@ -29,7 +34,42 @@ const DataBook = [{
 const Header = () => {
     const [isShowLoginModal, setIsShowLoginModal] = useState(false)
     // const [isShowBookCart, setIsShowBookCart] = useState(false)
+    const { userInfo } = useSelector((store) => store.auth)
+    const dispatch = useDispatch()
+    const handleLogin = (data) => {
+        console.log(data);
+        userAPI.login(data)
+            .then(rs => {
+                console.log(rs);
+                if (rs.status === 200) {
+                    setAccessToken(rs.data.token);
+                    setUser(JSON.stringify({
+                        last_name: rs.data.last_name,
+                        first_name: rs.data.first_name,
+                        is_admin: rs.data.is_admin
+                    }))
+                    dispatch(setAccountInfo({
+                        last_name: rs.data.last_name,
+                        first_name: rs.data.first_name,
+                        is_admin: rs.data.is_admin
+                    }))
+                    window.location.reload();
+                }
+            })
+            .catch(e => {
+                useNotification.Error({
+                    title: "ĐĂNG NHẬP KHÔNG THÀNH CÔNG!",
+                    message: "Email hoặc mật khẩu không đúng!"
+                })
+            })
+    }
 
+    const handleLogout = () => {
+        userAPI.logout(getAccessToken()).then(rs => console.log(rs)).catch(e => console.log(e))
+        removeUser()
+        removeAccessToken()
+        window.open('/', '_self')
+    }
     return (
         <div className='header-panel'>
             <Container fluid className='container-header'>
@@ -47,20 +87,33 @@ const Header = () => {
                     </Button>
                 </InputGroup>
                 <div className='right-cols'>
-                    <div
-                        className='action-header login-icon'
-                        onClick={() => setIsShowLoginModal(true)}
-                    >
-                        <img src={LoginIcon} alt='login icon' />
-                    </div>
+                    {userInfo.last_name ?
+                        <Dropdown>
+                            <Dropdown.Toggle className='account-avatar'>
+                                {userInfo.last_name[0].toUpperCase()}
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu align='end'>
+                                <Dropdown.Item href="#/action-1">Đơn hàng của bạn</Dropdown.Item>
+                                <Dropdown.Item href="#/action-2">Tài khoản của bạn</Dropdown.Item>
+                                <Dropdown.Item onClick={handleLogout}>Đăng xuất</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        :
+                        <div
+                            className='action-header login-icon'
+                            onClick={() => setIsShowLoginModal(true)}
+                        >
+                            <img src={LoginIcon} alt='login icon' />
+                        </div>
+                    }
                     <OverlayTrigger trigger="focus" placement="bottom" overlay={
-                        <Popover id="popover-basic" style={{maxWidth: '400px', width:'400px'}}>
-                            <Popover.Body style={{ maxHeight: '309px !important', overflow: 'auto'}}>
+                        <Popover id="popover-basic" style={{ maxWidth: '400px', width: '400px' }}>
+                            <Popover.Body style={{ maxHeight: '309px !important', overflow: 'auto' }}>
                                 {
                                     DataBook.map((item, idx) => (
                                         <div className='book-card' key={idx}>
                                             <div className='image-book'>
-                                                <img src={item?.image} alt=''/>
+                                                <img src={item?.image} alt='' />
                                             </div>
                                             <div className='book-info'>
                                                 <div className='book-title'>
@@ -74,10 +127,10 @@ const Header = () => {
                                     ))
                                 }
                             </Popover.Body>
-                            <Popover.Header as="div" style={{background:'#fff'}}>
+                            <Popover.Header as="div" style={{ background: '#fff' }}>
                                 <div className='cart-footer'>
                                     <h5>{`Tổng cộng: 285.000đ`}</h5>
-                                    <Button onClick={() => {window.open("/cart-page","_self")}}>Xem giỏ hàng</Button>
+                                    <Button onClick={() => { window.open("/cart-page", "_self") }}>Xem giỏ hàng</Button>
                                 </div>
                             </Popover.Header>
                         </Popover>
@@ -104,7 +157,7 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-            <LoginModal show={isShowLoginModal} handleClose={() => setIsShowLoginModal(false)} />
+            <LoginModal show={isShowLoginModal} handleClose={() => setIsShowLoginModal(false)} handleLogin={handleLogin} />
         </div>
     );
 };
