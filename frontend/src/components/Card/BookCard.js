@@ -1,3 +1,4 @@
+import FormatPrice from 'components/FormatPrice';
 import React from 'react';
 
 const BookCard = ({ title, image, description, price, discount, author }) => {
@@ -20,9 +21,10 @@ const BookCard = ({ title, image, description, price, discount, author }) => {
                 </div>
             </div>
             <div className='price-box'>
-                <div className='discount-num'>{discount}</div>
-                <div className='new-price'>{price}</div>
-                <div className='old-price'>{price}</div>
+                <div className='discount-num'>{discount}%</div>
+                <FormatPrice discount={discount} price={price} />
+                {/* <div className='new-price'>{price}</div>
+                <div className='old-price'>{price}</div> */}
             </div>
         </div>
     );
