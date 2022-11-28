@@ -50,6 +50,8 @@ class RetrieveBookSerializer(serializers.ModelSerializer):
             "slug": {"read_only": True},
             "created_date": {"read_only": True},
             "updated_date": {"read_only": True},
+            "same_author": {"read_only": True},
+            "related_books": {"read_only": True}
         }
     
     def to_representation(self, instance):

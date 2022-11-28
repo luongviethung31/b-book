@@ -59,14 +59,17 @@ class CreateOrderView(views.APIView):
                 "quantity": item["quantity"]
             }
             item_serializer = BookOrderedSerializer(data=book_ordered)
+            print(item)
             if not item_serializer.is_valid():
-                errorlist.append(item_serializer.error_messages)
-        if errorlist.count != 0:
+                errorlist.append(item_serializer.errors)
+        if len(errorlist) != 0:
             return response.Response({"message": errorlist}, status=status.HTTP_400_BAD_REQUEST)
         order_object = orderSerializer.save()
+        print(order_object.pk)
         for item in books:
-            item_object = Book.objects.get(id=item.get('id'))
-            order_detail = OrderDetail(order=order_object.id, book=item_object.id, quantity=item.get('quantity'))
+            item_object = Book.objects.get(id=item["book"])
+            print(item_object.id)
+            order_detail = OrderDetail(order=order_object, book=item_object, quantity=item.get('quantity'))
             order_detail.save()
         return response.Response(orderSerializer.data, status=status.HTTP_201_CREATED)
 

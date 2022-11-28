@@ -44,7 +44,10 @@ class LoginView(views.APIView):
                     token = Token.objects.create(user=user)
                     auth.login(request, user)
                     return response.Response({
-                        "token": token.key
+                        "token": token.key,
+                        "is_admin": user.is_staff,
+                        "first_name": user.first_name,
+                        "last_name": user.last_name
                         }, status=status.HTTP_200_OK)
                 else:
                     return response.Response({

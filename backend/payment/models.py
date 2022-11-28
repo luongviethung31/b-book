@@ -9,10 +9,10 @@ class Order(models.Model):
     order_date = models.DateTimeField(auto_now_add=True)
     ship_date = models.DateTimeField()
     ship_place = models.CharField(max_length=500)
-    total = models.DecimalField(decimal_places=3, max_digits=10)
+    total = models.DecimalField(decimal_places=3, max_digits=10, default=0)
     note = models.CharField(blank=True, null=True, max_length=500)
     is_paid = models.BooleanField()
-    is_delivered = models.BooleanField()
+    is_delivered = models.BooleanField(default=False)
     paid_at = models.CharField(max_length=100)
     created = models.DateTimeField(auto_created=True, auto_now=True)
 
@@ -37,6 +37,6 @@ def my_handler(sender, **kwargs):
 @receiver(post_save , sender = OrderDetail)
 def update_cart(sender , **kwargs):
     order_detail = kwargs['instance']
-    order = Order.objects.get(user = order_detail.user)
+    order = Order.objects.get(pk=order_detail.order.id)
     order.total += order_detail.subtotal
     order.save() 

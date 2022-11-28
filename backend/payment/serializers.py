@@ -22,7 +22,6 @@ class OrderSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'order_date': {'read_only': True},
             'total': {'read_only':True},
-            'is_paid': {'read_only':True},
             'is_delivered': {'read_only':True},
             'books': {'read_only':True}
         }  

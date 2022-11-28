@@ -1,7 +1,7 @@
 // This is file to test api
 
 ######################### Environment variable ##########################x
-@userToken = 8d72fd6ffedfa0a54bc65e9700cacae2e0bf6212
+@userToken = 9a4bde6950672e42a8c887cdee11de0a01ae4d75
 @adminToken = insert adminToken here
 @baseUserUrl = http://127.0.0.1:8000/api/v1/bbook/users
 @baseProductUrl = http://127.0.0.1:8000/api/v1/bbook/products
@@ -78,6 +78,50 @@ Authorization: Token {{adminToken}}
 DELETE  {{baseProductUrl}}/genres/sach-thieu-nhi
 
 ####################################################################
+
+############################# BOOK #################################
+
+### GET ALL BOOK
+GET {{baseProductUrl}}/books
+
+### CREATE BOOK
+POST {{baseProductUrl}}/books
+Content-Type: application/json
+Authorization: Token {{adminToken}}
+
+{
+    "genre": 1,
+    "author": 1,
+    "title": "Tiếng chim hót trong bụi mận gai",
+    "thumbnail": "",
+    "count": 1000,
+    "price": 100000
+}
+
+### RETRIEVE BOOK
+GET {{baseProductUrl}}/books/muon-kiep-nhan-sinh
+
+### UPDATE BOOK
+PUT {{baseProductUrl}}/books/muon-kiep-nhan-sinh
+Content-Type: application/json
+Authorization: Token {{adminToken}}
+
+{
+  "id": 1,
+  "title": "Muôn Kiếp Nhân Sinh",
+  "author": 3,
+  "genre": 1,
+  "thumbnail": "https://www.vinabook.com/images/thumbnails/product/240x/372174_p93766m366182p93766mp93766e1muonkiepnhansinhphan201.jpg",
+  "price": "99000.00"
+}
+
+### DELETE BOOK
+DELETE {{baseProductUrl}}/books/muon-kiep-nhan-sinh
+Content-Type: application/json
+Authorization: Token {{adminToken}}
+
+####################################################################
+
 ############################ PAYMENT ###############################
 
 ### GET ALL USER ORDER 
@@ -97,8 +141,7 @@ Authorization: Token {{userToken}}
     "is_paid": true,
     "paid_at": "paypal",
     "product": [
-        { "book" : 1, "quantity" : 1},
-        { "book" : 2, "quantity" : 2}
+        { "book" : 1, "quantity" : 2}
     ]
 }
 
