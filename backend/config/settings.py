@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'payment',
     'product',
     'user',
+    'rating',
     'rest_framework.authtoken',
     'corsheaders'
 ]

@@ -24,7 +24,7 @@ class Author(models.Model):
     died = models.DateField(blank=True, null=True)
     nationality = models.CharField(max_length=100, blank=True)
     portrait = models.URLField()
-    about = models.TextField()
+    about = models.TextField(blank=True, null=True)
 
     def __str__(self) -> str:
         return self.name
@@ -39,8 +39,11 @@ class Book(models.Model):
     title = models.CharField(max_length=150, unique=True)
     slug = models.SlugField(unique=True)
     thumbnail = models.URLField()
-    count = models.IntegerField()
+    count = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=8, decimal_places=2)
+    description = models.TextField(blank=True, null=True)
+    discount = models.IntegerField(default=0)
+    release = models.IntegerField(default=0)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
