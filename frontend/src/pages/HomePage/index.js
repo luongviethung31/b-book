@@ -9,6 +9,7 @@ import MiniCard from 'components/Card/MiniCard';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllGenre } from 'redux/reducers/product/action';
+import SpinnerLoading from 'components/SpinnerLoading';
 const dummyData = ['Category1', 'Category2', 'Category3', 'Category4', 'Category5', 'Category6', 'Category7', 'Category8', 'Category9']
 
 const DataBook = [{
@@ -56,103 +57,106 @@ const DataBook = [{
 },]
 const Homepage = () => {
     const dispatch = useDispatch()
-    const {listGenre} = useSelector(store => store.product)
+    const { listGenre, loading } = useSelector(store => store.product)
     useEffect(() => {
-        if(!listGenre.length) dispatch(getAllGenre())
-    },[])
+        if (!listGenre.length) dispatch(getAllGenre())
+    }, [])
 
     return (
         <div className='home-page-container'>
-            <Container fluid className='container-p-4'>
-                <Row className='instoduce-session'>
-                    <Col className='menu-col' lg={3} md={0}>
-                        <ListGroup>
-                            {
-                                listGenre.map((item, index) => (
-                                    <a href='/list-products/12' key={index}>
-
-                                        <ListGroup.Item key={index} action variant="light" style={{textAlign:'left'}}>
-                                            {item.title}
-                                        </ListGroup.Item>
-                                    </a>
-                                ))
-                            }
-                        </ListGroup>
-                    </Col>
-                    <Col className='main-contents-row' lg={9} md={12}>
-                        <CustomSlide />
-                    </Col>
-                </Row>
-                <Row className='new-book-session'>
-                    <NewBookPoster
-                        title={DataBook[0].title}
-                        author={DataBook[0].author}
-                        description={DataBook[0].description}
-                        image={DataBook[0].image}
-                        discount={DataBook[0].discount}
-                        price={DataBook[0].price}
-                    />
-                </Row>
-                <Row className='items-session' style={{ marginTop: '40px' }}>
-                    <Col className='items--left-col' lg={9}>
-                        <Row className='new-book-wrapper'></Row>
-                        <Row className='discount-book-wrapper'>
-                            <Col lg={12}>
-                                <h2>SÁCH BÁN CHẠY</h2>
+            {loading ? <SpinnerLoading /> :
+                <>
+                    <Container fluid className='container-p-4'>
+                        <Row className='instoduce-session'>
+                            <Col className='menu-col' lg={3} md={0}>
+                                <ListGroup>
+                                    {
+                                        listGenre.map((item, index) => (
+                                            <a href={`/list-products/${item.slug}`} key={index}>
+                                                <ListGroup.Item key={index} action variant="light" style={{ textAlign: 'left' }}>
+                                                    {item.title}
+                                                </ListGroup.Item>
+                                            </a>
+                                        ))
+                                    }
+                                </ListGroup>
                             </Col>
-                            {
-                                DataBook.map((item, index) => (
-                                    <Col className='book-card-col' lg={4} key={index}>
-                                        <a href='/book-detail/spread'>
-                                            <BookCart
-                                                title={item.title}
-                                                discount={item.discount}
-                                                price={item.price}
-                                                description={item.description}
-                                                author={item.author}
-                                                image={item.image}
-                                            />
-                                        </a>
-                                    </Col>
-                                ))
-                            }
-                        </Row>
-                        <Row className='discount-book-wrapper' style={{ marginTop: ' 50px' }}>
-                            <Col lg={12}>
-                                <h2>SÁCH DÀNH CHO BẠN</h2>
+                            <Col className='main-contents-row' lg={9} md={12}>
+                                <CustomSlide />
                             </Col>
-                            {
-                                DataBook.map((item, index) => (
-                                    <Col className='book-card-col' lg={4} key={index}>
-                                        <BookCart
-                                            title={item.title}
-                                            discount={item.discount}
-                                            price={item.price}
-                                            description={item.description}
-                                            author={item.author}
-                                            image={item.image}
-                                        />
-                                    </Col>
-                                ))
-                            }
                         </Row>
-                    </Col>
-                    <Col className='items--right-col' lg={3}>
-                        <h2>HOT TRONG TUẦN</h2>
-                        {DataBook.map((item, index) => (
-                            <MiniCard
-                                image={item.image}
-                                title={item.title}
-                                author={item.author}
-                                price={item.price}
-                                key={index}
-                                discount={item.discount}
+                        <Row className='new-book-session'>
+                            <NewBookPoster
+                                title={DataBook[0].title}
+                                author={DataBook[0].author}
+                                description={DataBook[0].description}
+                                image={DataBook[0].image}
+                                discount={DataBook[0].discount}
+                                price={DataBook[0].price}
                             />
-                        ))}
-                    </Col>
-                </Row>
-            </Container>
-            <Policy />
+                        </Row>
+                        <Row className='items-session' style={{ marginTop: '40px' }}>
+                            <Col className='items--left-col' lg={9}>
+                                <Row className='new-book-wrapper'></Row>
+                                <Row className='discount-book-wrapper'>
+                                    <Col lg={12}>
+                                        <h2>SÁCH BÁN CHẠY</h2>
+                                    </Col>
+                                    {
+                                        DataBook.map((item, index) => (
+                                            <Col className='book-card-col' lg={4} key={index}>
+                                                <a href='/book-detail/spread'>
+                                                    <BookCart
+                                                        title={item.title}
+                                                        discount={item.discount}
+                                                        price={item.price}
+                                                        description={item.description}
+                                                        author={item.author}
+                                                        image={item.image}
+                                                    />
+                                                </a>
+                                            </Col>
+                                        ))
+                                    }
+                                </Row>
+                                <Row className='discount-book-wrapper' style={{ marginTop: ' 50px' }}>
+                                    <Col lg={12}>
+                                        <h2>SÁCH DÀNH CHO BẠN</h2>
+                                    </Col>
+                                    {
+                                        DataBook.map((item, index) => (
+                                            <Col className='book-card-col' lg={4} key={index}>
+                                                <BookCart
+                                                    title={item.title}
+                                                    discount={item.discount}
+                                                    price={item.price}
+                                                    description={item.description}
+                                                    author={item.author}
+                                                    image={item.image}
+                                                />
+                                            </Col>
+                                        ))
+                                    }
+                                </Row>
+                            </Col>
+                            <Col className='items--right-col' lg={3}>
+                                <h2>HOT TRONG TUẦN</h2>
+                                {DataBook.map((item, index) => (
+                                    <MiniCard
+                                        image={item.image}
+                                        title={item.title}
+                                        author={item.author}
+                                        price={item.price}
+                                        key={index}
+                                        discount={item.discount}
+                                    />
+                                ))}
+                            </Col>
+                        </Row>
+                    </Container>
+                    <Policy />
+                </>
+            }
         </div>
     );
 };

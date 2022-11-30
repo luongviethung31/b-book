@@ -1,6 +1,7 @@
 import * as types from './types'
 const initialState = {
-    userInfo: {}
+    userInfo: {},
+    loading: false
   }
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -14,6 +15,12 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 userInfo: {}
+            }
+        }
+        case  types.SET_LOADING: {
+            return {
+                ...state,
+                loading: action.payload
             }
         }
         default:

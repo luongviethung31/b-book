@@ -3,6 +3,12 @@ import BookCart from 'components/Card/BookCard'
 import MiniCard from 'components/Card/MiniCard';
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 import ListPagination from 'components/ListPagination';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getListProductGenre } from 'redux/reducers/product/action';
+import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import SpinnerLoading from 'components/SpinnerLoading';
 
 const DataBook = [{
     title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
@@ -49,48 +55,64 @@ const DataBook = [{
 },]
 
 function ListProductsPage() {
+    const dispatch = useDispatch()
+    let { slug } = useParams();
+    const [listBooks, setListBooks] = useState([])
+    const { listProduct, loading, genreTitle } = useSelector(store => store.product)
+
+    useEffect(() => {
+        dispatch(getListProductGenre(slug))
+    }, [slug])
+    console.log({ listProduct });
     return (
         <div className='list-item-session'>
-            <Container fluid className='container-p-4'>
-                <Row className='items-session' style={{ marginTop: '40px' }}>
-                    <Col className='items--right-col' lg={3} style={{ borderRight: '1px solid gray' }}>
-                        <h2>LỌC THEO</h2>
-                        <ListGroup variant="flush">
-                            <ListGroup.Item className='filter-option'>Khuyến mãi</ListGroup.Item>
-                            <ListGroup.Item className='filter-option'>Tác giả</ListGroup.Item>
-                            <ListGroup.Item className='filter-option'>Sách bán chạy</ListGroup.Item>
-                            <ListGroup.Item className='filter-option'>Sách mới</ListGroup.Item>
-                        </ListGroup>
-                    </Col>
-                    <Col className='items--left-col' lg={9}>
-                        <Row className='new-book-wrapper'></Row>
-                        <Row className='discount-book-wrapper'>
-                            <Col lg={12}>
-                                <h2>SÁCH KHOA HỌC</h2>
+            {
+                loading ? <SpinnerLoading /> :
+                    <Container fluid className='container-p-4' style={{minHeight:'330px'}}>
+                        <Row className='items-session' style={{ marginTop: '40px' }}>
+                            <Col className='items--right-col' lg={3} style={{ borderRight: '1px solid gray' }}>
+                                <h2>LỌC THEO</h2>
+                                <ListGroup variant="flush">
+                                    <ListGroup.Item className='filter-option'>Khuyến mãi</ListGroup.Item>
+                                    <ListGroup.Item className='filter-option'>Tác giả</ListGroup.Item>
+                                    <ListGroup.Item className='filter-option'>Sách bán chạy</ListGroup.Item>
+                                    <ListGroup.Item className='filter-option'>Sách mới</ListGroup.Item>
+                                </ListGroup>
                             </Col>
-                            {
-                                DataBook.map((item, index) => (
-                                    <Col className='book-card-col' lg={4} key={index}>
-                                        <BookCart
-                                            title={item.title}
-                                            discount={item.discount}
-                                            price={item.price}
-                                            description={item.description}
-                                            author={item.author}
-                                            image={item.image}
-                                        />
+                            <Col className='items--left-col' lg={9}>
+                                <Row className='new-book-wrapper'></Row>
+                                <Row className='discount-book-wrapper'>
+                                    <Col lg={12}>
+                                        <h2>{genreTitle.toUpperCase()}</h2>
                                     </Col>
-                                ))
-                            }
-                        </Row>
-                        <Row>
-                            <Col sm={12}>
-                                <ListPagination />
+                                    {
+                                        listProduct?.length ?
+                                        listProduct?.map((item, index) => (
+                                            <Col className='book-card-col' lg={4} key={index}>
+                                                {console.log(item)}
+                                                <BookCart
+                                                    title={item.title}
+                                                    discount='10%'
+                                                    price={item.price}
+                                                    description='TẬP 2 của loạt truyện tranh chuyển thể từ tác phẩm'
+                                                    author={item.author.name}
+                                                    image={item.thumbnail}
+                                                />
+                                            </Col>
+                                        ))
+                                        :
+                                        <h4>Không có sản phẩm </h4>
+                                    }
+                                </Row>
+                                <Row>
+                                    <Col sm={12}>
+                                        <ListPagination />
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
-                    </Col>
-                </Row>
-            </Container>
+                    </Container>
+            }
         </div>
     );
 }

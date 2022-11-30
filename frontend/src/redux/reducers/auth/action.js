@@ -19,7 +19,17 @@ const resetAccountInfo = (callback = ()=> {}) => {
     }
 }
 
+const setLoading = (loading) => {
+    return (dispatch) => {
+        dispatch({
+            type: types.SET_LOADING,
+            payload: loading
+        })
+    }
+}
+
 export {
     setAccountInfo,
-    resetAccountInfo
+    resetAccountInfo,
+    setLoading
 }

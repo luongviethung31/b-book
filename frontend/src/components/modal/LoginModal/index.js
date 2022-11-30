@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useForm } from "react-hook-form";
 
 
-const LoginModal = ({ show, handleClose = () => {}, handleLogin = () => {}}) => {
+const LoginModal = ({ show, handleClose = () => { }, handleLogin = () => { } }) => {
   const initState = {
     email: "",
     password: "",
@@ -19,6 +19,7 @@ const LoginModal = ({ show, handleClose = () => {}, handleLogin = () => {}}) => 
     trigger,
   } = useForm();
   const onSubmit = (data) => {
+    console.log(data);
     handleLogin(data)
   }
   return (
@@ -83,7 +84,7 @@ const LoginModal = ({ show, handleClose = () => {}, handleLogin = () => {}}) => 
             <Form.Label column sm={2}>
             </Form.Label>
             <Col sm={4}>
-              <Button type='submit' variant="primary" onClick={handleClose}>
+              <Button type='submit' variant="primary">
                 Đăng nhập
               </Button>
             </Col>

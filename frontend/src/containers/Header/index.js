@@ -10,8 +10,9 @@ import logo from 'assets/icons/bbook-logo.png'
 import userAPI from 'api/userAPI';
 import useNotification from 'hooks/notification';
 import { getAccessToken, removeAccessToken, removeUser, setAccessToken, setUser } from 'hooks/localAuth';
-import { setAccountInfo } from 'redux/reducers/auth/action';
+import { setAccountInfo, setLoading } from 'redux/reducers/auth/action';
 import { useDispatch, useSelector } from 'react-redux';
+import LoadingLogin from 'components/SpinnerLoading/LoadingLogin';
 // import BookCart from 'containers/BookCart';
 const DataBook = [{
     title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
@@ -34,14 +35,16 @@ const DataBook = [{
 const Header = () => {
     const [isShowLoginModal, setIsShowLoginModal] = useState(false)
     // const [isShowBookCart, setIsShowBookCart] = useState(false)
-    const { userInfo } = useSelector((store) => store.auth)
+    const { userInfo, loading } = useSelector((store) => store.auth)
     const dispatch = useDispatch()
     const handleLogin = (data) => {
         console.log(data);
+        dispatch(setLoading(true))
         userAPI.login(data)
             .then(rs => {
                 console.log(rs);
                 if (rs.status === 200) {
+                    dispatch(setLoading(false))
                     setAccessToken(rs.data.token);
                     setUser(JSON.stringify({
                         last_name: rs.data.last_name,
@@ -57,6 +60,7 @@ const Header = () => {
                 }
             })
             .catch(e => {
+                dispatch(setLoading(false))
                 useNotification.Error({
                     title: "ĐĂNG NHẬP KHÔNG THÀNH CÔNG!",
                     message: "Email hoặc mật khẩu không đúng!"
@@ -72,6 +76,7 @@ const Header = () => {
     }
     return (
         <div className='header-panel'>
+            {loading && <LoadingLogin/>}
             <Container fluid className='container-header'>
                 <div className='logo-bbook'>
                     <a href='/'><img src={logo} alt='logo' height={50} /></a>
