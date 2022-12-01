@@ -90,14 +90,16 @@ function ListProductsPage() {
                                         listProduct?.map((item, index) => (
                                             <Col className='book-card-col' lg={4} key={index}>
                                                 {console.log(item)}
-                                                <BookCart
-                                                    title={item.title}
-                                                    discount='10%'
-                                                    price={item.price}
-                                                    description='TẬP 2 của loạt truyện tranh chuyển thể từ tác phẩm'
-                                                    author={item.author.name}
-                                                    image={item.thumbnail}
-                                                />
+                                                <a href={`/book-detail/${item.slug}`}>
+                                                    <BookCart
+                                                        title={item.title}
+                                                        discount={item.discount}
+                                                        price={item.price}
+                                                        description={item.description}
+                                                        author={item.author.name}
+                                                        image={item.thumbnail}
+                                                    />
+                                                </a>
                                             </Col>
                                         ))
                                         :

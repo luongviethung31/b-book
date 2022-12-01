@@ -21,7 +21,7 @@ const BookCard = ({ title, image, description, price, discount, author }) => {
                 </div>
             </div>
             <div className='price-box'>
-                <div className='discount-num'>{discount}%</div>
+                {discount ? <div className='discount-num'>{discount}%</div> : <span style={{width:'30px', height:'32px'}}></span>}
                 <FormatPrice discount={discount} price={price} />
                 {/* <div className='new-price'>{price}</div>
                 <div className='old-price'>{price}</div> */}
