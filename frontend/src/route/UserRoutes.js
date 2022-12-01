@@ -3,14 +3,16 @@ import BookDetail from 'pages/BookDetail';
 import CartDetail from 'pages/CartDetail';
 import ListProductsPage from 'pages/ListProductsPage';
 import RegisterPage from 'pages/RegisterPage';
+import GenrePage from 'pages/GenrePage';
 import React from 'react';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { setAccountInfo } from 'redux/reducers/auth/action';
 import userLayout from '../HOCS/userLayout';
+import adminLayout from '../HOCS/adminLayout';
 import HomePage from '../pages/HomePage'
-import { ROUTE_BOOK_DETAIL, ROUTE_CART_PAGE, ROUTE_HOME, ROUTE_LIST_PRODUCTS, ROUTE_REGISTER} from './Types';
+import { ROUTE_BOOK_DETAIL, ROUTE_CART_PAGE, ROUTE_CONTROL_GENRE, ROUTE_HOME, ROUTE_LIST_PRODUCTS, ROUTE_REGISTER} from './Types';
 
 const UserRoutes = () => {
     const dispatch = useDispatch()
@@ -56,6 +58,13 @@ const UserRoutes = () => {
                 exact
                 element = {userLayout({
                     Component: CartDetail
+                })}
+            />
+            <Route
+                path={ROUTE_CONTROL_GENRE}
+                exact
+                element = {adminLayout({
+                    Component: GenrePage
                 })}
             />
         </Routes>
