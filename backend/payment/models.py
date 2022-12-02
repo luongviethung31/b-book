@@ -20,8 +20,8 @@ class Order(models.Model):
         return "{user} : {id}".format(user=self.user, id=self.pk)
 
 class OrderDetail(models.Model):
-    order = models.ForeignKey(Order, related_name='order', on_delete=models.PROTECT)
-    book = models.ForeignKey(Book, related_name="book", on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name='order', on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, related_name="book", on_delete=models.PROTECT)
     quantity = models.IntegerField(default=1)
     subtotal = models.DecimalField(decimal_places=3, max_digits=10)
 

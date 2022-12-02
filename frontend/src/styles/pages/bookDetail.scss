@@ -14,13 +14,13 @@
       color: green;
     } 
   }
-  .description {
+  .description-content {
     margin-top: 20px;
     display: -webkit-box;
-          -webkit-line-clamp: 4;
-          -webkit-box-orient: vertical;
-          height: 100px;
-          overflow: hidden;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    height: 100px;
+    overflow: hidden;
   }
   .devider {
     width: 100%;

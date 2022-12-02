@@ -5,6 +5,7 @@ from .models import (
     Book,
     Author
 )
+import datetime
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,6 +15,23 @@ class BookSerializer(serializers.ModelSerializer):
             'slug': {'read_only': True}
         }    
     
+    def validate_release(self, value):
+        if value > datetime.date.today().year:
+            raise serializers.ValidationError("Release year can not greater than this year")
+        return value
+
+    def validate_discount(self, value):
+        if value > 100:
+            raise serializers.ValidationError("Discount can not greater than 100")
+        if value < 0:
+            raise serializers.ValidationError("Discount can not less than 0")
+        return value
+
+    def validate_count(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Book quantity can not less than 0")
+        return value
+
     def to_representation(self, instance):
         context = super().to_representation(instance)
         context['genre'] = {
@@ -41,6 +59,10 @@ class RetrieveBookSerializer(serializers.ModelSerializer):
             "genre",
             "thumbnail",
             "price",
+            "count",
+            "discount",
+            "description",
+            "release",
             "created_date",
             "updated_date",
             "related_books",

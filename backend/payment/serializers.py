@@ -8,6 +8,7 @@ from .models import (
 from product.serializers import BookSerializer
 
 class OrderSerializer(serializers.ModelSerializer):
+    order_detail = serializers.SerializerMethodField('get_order_detail')
     class Meta:
         model = Order
         fields = (
@@ -17,17 +18,18 @@ class OrderSerializer(serializers.ModelSerializer):
             "ship_place",
             "note",
             "is_paid",
-            "paid_at"
+            "paid_at",
+            "total",
+            "order_detail",
         )
         extra_kwargs = {
-            'order_date': {'read_only': True},
             'total': {'read_only':True},
             'is_delivered': {'read_only':True},
-            'books': {'read_only':True}
+            'order_detail': {'read_only':True}
         }  
 
-        def get_books(self, obj):
-            return BookSerializer(obj.books.all(), many=True).data
+    def get_order_detail(self, obj):
+        return OrderDetailSerializer(obj.order.all(), many=True).data
 
 class BookOrderedSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,8 +1,8 @@
 // This is file to test api
 
 ######################### Environment variable ##########################x
-@userToken = 9a4bde6950672e42a8c887cdee11de0a01ae4d75
-@adminToken = insert adminToken here
+@userToken = 494bfaf5f44d9021f2db86caeaf79541b0c0fde4
+@adminToken = 101f0009ea536ba8fa50877e691048086ec29744
 @baseUserUrl = http://127.0.0.1:8000/api/v1/bbook/users
 @baseProductUrl = http://127.0.0.1:8000/api/v1/bbook/products
 @basePaymentUrl = http://127.0.0.1:8000/api/v1/bbook/payments
@@ -40,6 +40,16 @@ Content-Type: application/json
     "username": "nguyenanh@gmail.com",
     "password": "Nguyenanh123"
 }
+
+### ADMIN LOGIN
+POST {{baseUserUrl}}/login
+Content-Type: application/json
+
+{
+    "username": "admin_bbook@gmail.com",
+    "password": "admin131"
+}
+
 
 ### LOGOUT
 GET {{baseUserUrl}}/logout
@@ -146,12 +156,12 @@ Authorization: Token {{userToken}}
 }
 
 ### GET ORDER DETAIL
-GET {{basePaymentUrl}}/order/1
+GET {{basePaymentUrl}}/order/15
 Content-Type: application/json
 Authorization: Token {{userToken}}
 
 ### UPDATE ORDER
-PUT {{basePaymentUrl}}/order/1
+PUT {{basePaymentUrl}}/order/15
 Content-Type: application/json
 Authorization: Token {{userToken}}
 
@@ -176,3 +186,21 @@ Authorization: Token {{userToken}}
 DELETE  {{basePaymentUrl}}/order/1
 
 ### GET ALL ORDER
+GET {{basePaymentUrl}}/all-order
+Content-Type: application/json
+Authorization: Token {{adminToken}}
+
+####################################################################
+
+############################ RATING ###############################
+
+### GET ALL COMMENT AND RATING OF BOOK
+
+
+### GET AVERAGE RATING OF BOOK
+
+
+### VOTE AND COMMENT
+
+
+###
