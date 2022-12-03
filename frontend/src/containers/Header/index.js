@@ -36,6 +36,36 @@ const Header = () => {
     // const [isShowBookCart, setIsShowBookCart] = useState(false)
     const { userInfo, loading } = useSelector((store) => store.auth)
     const dispatch = useDispatch()
+    const handleLogin = (data) => {
+        console.log(data);
+        dispatch(setLoading(true))
+        userAPI.login(data)
+            .then(rs => {
+                console.log(rs);
+                if (rs.status === 200) {
+                    dispatch(setLoading(false))
+                    setAccessToken(rs.data.token);
+                    setUser(JSON.stringify({
+                        last_name: rs.data.last_name,
+                        first_name: rs.data.first_name,
+                        is_admin: rs.data.is_admin
+                    }))
+                    dispatch(setAccountInfo({
+                        last_name: rs.data.last_name,
+                        first_name: rs.data.first_name,
+                        is_admin: rs.data.is_admin
+                    }))
+                    // window.location.reload();
+                }
+            })
+            .catch(e => {
+                dispatch(setLoading(false))
+                useNotification.Error({
+                    title: "ĐĂNG NHẬP KHÔNG THÀNH CÔNG!",
+                    message: "Email hoặc mật khẩu không đúng!"
+                })
+            })
+    }
 
     const handleLogout = () => {
         userAPI.logout(getAccessToken()).then(rs => console.log(rs)).catch(e => console.log(e))
