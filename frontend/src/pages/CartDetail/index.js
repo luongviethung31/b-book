@@ -1,43 +1,94 @@
+import paymentAPI from 'api/paymentAPI';
 import LargeCard from 'components/Card/LargeCard';
-import React from 'react';
+import PaymentInfoModal from 'components/modal/PaymentInfoModal';
+import useNotification from 'hooks/notification';
+import numeral from 'numeral';
+import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
-const DataBook = [{
-    title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
-    author: 'Yuval Noah Harari',
-    description: '12tháng trước cả Việt Nam căng mình đối phó với đại dịch COVID-19. TP.HCM và vùng phụ cận bị tổn thương nặng nề, cả xã hội căng thẳng trong trạng thái giãn cách ai ở đâu ngồi yên ở đó. Hệ thống y tế quá tải, các bệnh viện chật kín bệnh nhân. Lực lượng y tế tuyến đầu luôn làm việc trong trạng thái căng thẳng, kiệt sức. Các khu công nghiệp hoặc đóng cửa hoặc thực hiện sản xuất ba tại chỗ cầm chừng. Hoạt động giao thông, vận chuyển hàng hóa giữa các địa phương trên cả nước gần như phong tỏa hoàn toàn nhằm ngăn chặn nguy cơ bùng phát dịch bệnh.',
-    discount: '20%',
-    price: '98000',
-    amount: 2,
-    image: 'https://www.vinabook.com/images/thumbnails/product/115x/372171_sapiens-luoc-su-loai-nguoi-bang-tranh-tap-2-nhung-tru-cot-cua-nen-van-minh.jpg'
-},{
-    title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
-    author: 'Yuval Noah Harari',
-    description: 'TẬP 2 của loạt truyện tranh chuyển thể từ tác phẩm "Sapiens - Lược sử loài người" của tác giả Yuval Noah Harari được chính thức phát hành trên toàn cầu.',
-    discount: '20%',
-    price: '98000',
-    amount: 2,
-    image: 'https://www.vinabook.com/images/thumbnails/product/115x/372171_sapiens-luoc-su-loai-nguoi-bang-tranh-tap-2-nhung-tru-cot-cua-nen-van-minh.jpg'
-},]
 
 const CartDetail = () => {
-    const handleDelete = () => {
+    const [listBook, setListBook] = useState([])
+    const [isShowPayment, setIsShowPayment] = useState(false)
+    useEffect(() => {
+        let listItem = localStorage.getItem('item_payment')
+        let listItemCart = localStorage.getItem('item_cart')
+        if (listItem) {
+            listItem = JSON.parse(listItem)
+            console.log({ listItem });
+            setListBook(listItem)
+        } else {
+            if (listItemCart) {
+                listItemCart = JSON.parse(listItemCart)
+                setListBook(listItemCart)
+            }
+        }
+        // window.addEventListener('beforeunload', localStorage.removeItem('item_payment'))
+    }, [])
+    const handleDelete = (id) => {
+        let listBookTemp = [...listBook]
+        console.log({ id, listBook });
+        listBookTemp = listBookTemp.filter((item) => item.id !== id)
+        setListBook(listBookTemp)
+    }
 
+    const handleChangeAmount = (id, amount) => {
+        let listBookTemp = [...listBook]
+        let book = listBookTemp.find(item => item.id === id)
+        if (book) book.amount = amount
+        setListBook(listBookTemp)
+    }
+    const handlePayment = (data) => {
+        const product = listBook.map(item => {
+            return {
+                book: item.id,
+                quantity: item.amount
+            }
+        })
+        const dataPayment = {
+            ...data,
+            product
+        }
+        console.log({dataPayment});
+        paymentAPI.createOrder(dataPayment)
+        .then(rs => { 
+            if(rs.status === 201){
+                localStorage.removeItem('item_payment')
+                useNotification.Success({
+                    title: "Đặt hàng thành công!",
+                    message:'Bạn đã đặt hàng thành công'
+                })
+                setListBook([])
+            }
+        })
+        .catch(e => {
+            useNotification.Error({
+                title: "LỖI!",
+                message:'Đặt hàng không thành công'
+            })
+        })
     }
     return (
         <div className='cart-detail-wrapper'>
             <Container fluid="">
                 <Row>
                     <Col sm={8} className="list-book-col">
-                        {DataBook.map((item, index) => (
-                            <LargeCard 
-                                key={index} 
-                                title={item.title} 
-                                price={item.price} 
+                        {console.log(listBook)}
+                        {listBook.length ? listBook.map((item, index) => (
+                            <LargeCard
+                                key={index}
+                                id={item.id}
+                                title={item.title}
+                                price={item.price}
                                 amount={item.amount}
-                                image={item.image}
-                                handleDelete={() => handleDelete()}
+                                total={item.count}
+                                image={item.thumbnail}
+                                slug={item.slug}
+                                handleDelete={handleDelete}
+                                handleChangeAmount={handleChangeAmount}
                             />
-                        ))}
+                        )) :
+                            <h2 style={{ marginTop: '200px' }}>Không có sản phẩm nào được chọn</h2>
+                        }
                     </Col>
                     <Col sm={4} className="payment-col">
                         <div className='payment-box'>
@@ -47,7 +98,7 @@ const CartDetail = () => {
                             <div className='payment-content'>
                                 <div className='payment-info'>
                                     <span>Sản phẩm</span>
-                                    <span>2</span>
+                                    <span>{listBook.length ? listBook.reduce((acc, curr) => acc + curr.amount, 0) : 0}</span>
                                 </div>
                                 <div className='payment-info'>
                                     <span>Phí vận chuyển</span>
@@ -55,17 +106,23 @@ const CartDetail = () => {
                                 </div>
                                 <div className='payment-info'>
                                     <span>TẠM TÍNH</span>
-                                    <span>98.000</span>
+                                    <span>₫{listBook.length ? numeral(listBook.reduce((acc, curr) => acc + parseFloat(curr.price) * (100 - parseFloat(curr.discount)) / 100 * parseFloat(curr.amount), 0)).format(0, 0) : 0}</span>
                                 </div>
                             </div>
                             <div className='footer-payment'>
-                                <Button style={{width: '100%', borderRadius:'0'}}>Thanh toán</Button>
+                                <Button 
+                                    style={{ width: '100%', borderRadius: '0' }}
+                                    onClick={() => {
+                                        setIsShowPayment(true)
+                                    }}
+                                    disabled={!listBook.length}
+                                >Thanh toán</Button>
                             </div>
                         </div>
                     </Col>
                 </Row>
             </Container>
-            
+            <PaymentInfoModal show={isShowPayment} handleClose={() => setIsShowPayment(false)} handlePayment={handlePayment}/>
         </div>
     );
 };

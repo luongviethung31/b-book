@@ -11,6 +11,8 @@ import SpinnerLoading from "components/SpinnerLoading";
 import BookCart from 'components/Card/BookCard'
 import Slider from 'react-slick';
 import numeral from "numeral";
+import { useDispatch, useSelector } from "react-redux";
+import { handleShowLoginModal } from "redux/reducers/auth/action";
 
 // const bookDetail = {
 //   title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
@@ -33,11 +35,11 @@ const dataComment = [{
 const BookDetail = () => {
   let { slug } = useParams();
   const [tab, setTab] = useState(1)
-  const [isShowLoginModal, setIsShowLoginModal] = useState(false)
   const [bookDetail, setBookDetail] = useState({})
   const [loading, setLoading] = useState(false)
   const [countBuy, setCountBuy] = useState(1)
-
+  const dispatch = useDispatch()
+  const {userInfo} = useSelector(store => store.auth)
   useEffect(() => {
     setLoading(true)
     bookAPI.getBookDetail(slug)
@@ -75,24 +77,29 @@ const BookDetail = () => {
     // prevArrow: <PreArrow />,
     // nextArrow: <NextArrow />,
     responsive: [
-        {
-            breakpoint: 1080,
-            settings: {
-                slidesToShow: 2,
-                slidesToScroll: 1,
-                initialSlide: 1
-            }
-        },
-        {
-            breakpoint: 710,
-            settings: {
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                initialSlide: 1
-            }
-        },
+      {
+        breakpoint: 1080,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          initialSlide: 1
+        }
+      },
+      {
+        breakpoint: 710,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 1
+        }
+      },
     ]
-};
+  };
+  const handleClickPayment = () => {
+    let product = [{ ...bookDetail, amount: countBuy }]
+    localStorage.setItem('item_payment', JSON.stringify(product))
+    window.open('/cart-page', '_self')
+  }
   return (
     <>
       {loading ? <SpinnerLoading /> : Object.keys(bookDetail).length &&
@@ -102,7 +109,7 @@ const BookDetail = () => {
               <Col sm={9}>
                 <Row>
                   <Col sm={4}>
-                    <img src={bookDetail.thumbnail} alt={bookDetail.title} width="100%" height="auto" style={{boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px'}}/>
+                    <img src={bookDetail.thumbnail} alt={bookDetail.title} width="100%" height="auto" style={{ boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px' }} />
                   </Col>
                   <Col sm={8}>
                     <h4 className="title">{bookDetail.title}</h4>
@@ -156,7 +163,7 @@ const BookDetail = () => {
                     </div>
                     <div className="devider" />
                     <div className="action-btn">
-                      <Button className="mt-2" variant="primary" size="sm">
+                      <Button className="mt-2" variant="primary" size="sm" onClick={handleClickPayment}>
                         Thanh toán
                       </Button>
                     </div>
@@ -219,13 +226,13 @@ const BookDetail = () => {
                 <RatingBook numberRating={5} avarageRating={'5.0'} />
               </Col>
               <Col sm={4}>
-                <div className="btn-login">
+                {userInfo?.last_name && <div className="btn-login">
                   <div>Đăng nhập để gửi nhận xét của bạn!</div>
-                  <Button className="btn btn-login" onClick={() => setIsShowLoginModal(true)}>
+                  <Button className="btn btn-login" onClick={() => dispatch(handleShowLoginModal(true))}>
                     Đăng nhập
                   </Button>
                   <div>Bạn chưa có tài khoản?<a href="/register">Đăng ký </a></div>
-                </div>
+                </div>}
               </Col>
             </Row>
             <Row>
@@ -255,7 +262,6 @@ const BookDetail = () => {
               </div>
             </Row>
           </Container>
-          <LoginModal show={isShowLoginModal} handleClose={() => setIsShowLoginModal(false)} />
         </div>}
     </>
   );

@@ -28,8 +28,18 @@ const setLoading = (loading) => {
     }
 }
 
+const handleShowLoginModal = (isShow) => {
+    return (dispatch) => {
+        dispatch({
+            type: types.HANDLE_SHOW_LOGIN,
+            payload: isShow
+        })
+    }
+}
+
 export {
     setAccountInfo,
     resetAccountInfo,
-    setLoading
+    setLoading,
+    handleShowLoginModal
 }

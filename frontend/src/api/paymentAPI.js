@@ -6,9 +6,29 @@ import { getHeaderWithToken } from "./getHeaderWithToken";
 //     return axiosClient.get(url);
 // }
 
-const createPayment = (data) => {
+const createOrder = (data) => {
     let url ='payments/order';
     return axiosClient.post(url, data, {headers: getHeaderWithToken()});
+}
+const getAllUserOrder = (data) => {
+    let url ='payments/order';
+    return axiosClient.get(url, data, {headers: getHeaderWithToken()});
+}
+const getAllOrderDetail = (id) => {
+    let url =`payments/order/${id}`;
+    return axiosClient.get(url, {headers: getHeaderWithToken()});
+}
+const updateOrder = (id, data) => {
+    let url =`payments/order/${id}`;
+    return axiosClient.put(url, data, {headers: getHeaderWithToken()});
+}
+const deleteOder = (id) => {
+    let url =`payments/order/${id}`;
+    return axiosClient.delete(url, {headers: getHeaderWithToken()});
+}
+const allOrder = () => {
+    let url ='payments/order/all-order';
+    return axiosClient.get(url, {headers: getHeaderWithToken()});
 }
 
 // const retrieveGenre = (slug) => {
@@ -20,7 +40,15 @@ const createPayment = (data) => {
 //     let url =`products/genres/${slug}`;
 //     return axiosClient.delete(url);
 // }
+// const createOrder = ({data}) => {
+
+// }
 
 export default {
-    createPayment
+    getAllUserOrder,
+    createOrder,
+    getAllOrderDetail,
+    updateOrder,
+    allOrder,
+    deleteOder
 }

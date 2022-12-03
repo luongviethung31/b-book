@@ -89,7 +89,6 @@ function ListProductsPage() {
                                         listProduct?.length ?
                                         listProduct?.map((item, index) => (
                                             <Col className='book-card-col' lg={4} key={index}>
-                                                {console.log(item)}
                                                 <a href={`/book-detail/${item.slug}`}>
                                                     <BookCart
                                                         title={item.title}

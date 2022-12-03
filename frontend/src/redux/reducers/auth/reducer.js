@@ -1,7 +1,8 @@
 import * as types from './types'
 const initialState = {
     userInfo: {},
-    loading: false
+    loading: false,
+    isShowLoginModal: false
   }
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -23,6 +24,11 @@ export const reducer = (state = initialState, action) => {
                 loading: action.payload
             }
         }
+        case types.HANDLE_SHOW_LOGIN:
+            return {
+                ...state,
+                isShowLoginModal: action.payload
+            }
         default:
             return state
     }

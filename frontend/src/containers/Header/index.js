@@ -10,7 +10,7 @@ import logo from 'assets/icons/bbook-logo.png'
 import userAPI from 'api/userAPI';
 import useNotification from 'hooks/notification';
 import { getAccessToken, removeAccessToken, removeUser, setAccessToken, setUser } from 'hooks/localAuth';
-import { setAccountInfo, setLoading } from 'redux/reducers/auth/action';
+import { handleShowLoginModal, setAccountInfo, setLoading } from 'redux/reducers/auth/action';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingLogin from 'components/SpinnerLoading/LoadingLogin';
 // import BookCart from 'containers/BookCart';
@@ -33,40 +33,9 @@ const DataBook = [{
 },]
 
 const Header = () => {
-    const [isShowLoginModal, setIsShowLoginModal] = useState(false)
     // const [isShowBookCart, setIsShowBookCart] = useState(false)
     const { userInfo, loading } = useSelector((store) => store.auth)
     const dispatch = useDispatch()
-    const handleLogin = (data) => {
-        console.log(data);
-        dispatch(setLoading(true))
-        userAPI.login(data)
-            .then(rs => {
-                console.log(rs);
-                if (rs.status === 200) {
-                    dispatch(setLoading(false))
-                    setAccessToken(rs.data.token);
-                    setUser(JSON.stringify({
-                        last_name: rs.data.last_name,
-                        first_name: rs.data.first_name,
-                        is_admin: rs.data.is_admin
-                    }))
-                    dispatch(setAccountInfo({
-                        last_name: rs.data.last_name,
-                        first_name: rs.data.first_name,
-                        is_admin: rs.data.is_admin
-                    }))
-                    window.location.reload();
-                }
-            })
-            .catch(e => {
-                dispatch(setLoading(false))
-                useNotification.Error({
-                    title: "ĐĂNG NHẬP KHÔNG THÀNH CÔNG!",
-                    message: "Email hoặc mật khẩu không đúng!"
-                })
-            })
-    }
 
     const handleLogout = () => {
         userAPI.logout(getAccessToken()).then(rs => console.log(rs)).catch(e => console.log(e))
@@ -106,7 +75,7 @@ const Header = () => {
                         :
                         <div
                             className='action-header login-icon'
-                            onClick={() => setIsShowLoginModal(true)}
+                            onClick={() => dispatch(handleShowLoginModal(true))}
                         >
                             <img src={LoginIcon} alt='login icon' />
                         </div>
@@ -162,7 +131,6 @@ const Header = () => {
                     </div>
                 </div>
             </div>
-            <LoginModal show={isShowLoginModal} handleClose={() => setIsShowLoginModal(false)} handleLogin={handleLogin} />
         </div>
     );
 };
