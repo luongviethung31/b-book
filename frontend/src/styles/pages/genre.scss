@@ -1,0 +1,20 @@
+.table-genre-wrap {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  .table-genre {
+    width: 100%;
+    text-align: left;
+    margin-top: 2%;
+    &__id {
+      text-align: center;
+    }
+    &__action {
+      text-align: center;
+    }
+    
+  }
+}

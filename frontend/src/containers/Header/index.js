@@ -56,7 +56,7 @@ const Header = () => {
                         first_name: rs.data.first_name,
                         is_admin: rs.data.is_admin
                     }))
-                    window.location.reload();
+                    // window.location.reload();
                 }
             })
             .catch(e => {

@@ -6,6 +6,11 @@ const getBookDetail = (slug) => {
     return axiosClient.get(url);
 }
 
+const getAllBooks = (page) => {
+    let url = `products/books?page=${page}`;
+    return axiosClient.get(url);
+}
+
 // const createGenre = (data) => {
 //     let url ='products/genres';
 //     return axiosClient.post(url, data);
@@ -22,5 +27,6 @@ const getBookDetail = (slug) => {
 // }
 
 export default {
-    getBookDetail
+    getBookDetail,
+    getAllBooks
 }
