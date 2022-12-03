@@ -3,67 +3,40 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Table, Button } from "react-bootstrap";
 
-import { getAllGenre } from "redux/reducers/product/action";
+import { addGenre, deleteGenre, getAllGenre } from "redux/reducers/product/action";
 import SpinnerLoading from "components/SpinnerLoading";
-import AddGenreModal from "components/modal/GenreModal/addGenre";
 import EditGenreModal from "components/modal/GenreModal/editGenre";
+import genreAPI from "api/genreAPI";
 
 const GenrePage = () => {
-  const dummyData = [
-    {
-      id: "1",
-      title: "Sách thiếu nhi",
-      slug: "sach-thieu-nhi",
-      description: "Tổng hợp sách dành cho thiếu nhi",
-    },
-    {
-      id: "2",
-      title: "Sách thiếu nhi2",
-      slug: "sach-thieu-nhi2",
-      description: "Tổng hợp sách dành cho thiếu nhi",
-    },
-    {
-      id: "3",
-      title: "Sách thiếu nhi3",
-      slug: "sach-thieu-nhi3",
-      description: "Tổng hợp sách dành cho thiếu nhi",
-    },
-    {
-      id: "4",
-      title: "Sách thiếu nhi4",
-      slug: "sach-thieu-nhi4",
-      description: "Tổng hợp sách dành cho thiếu nhi",
-    },
-    {
-      id: "5",
-      title: "Sách thiếu nhi5",
-      slug: "sach-thieu-nhi5",
-      description: "Tổng hợp sách dành cho thiếu nhi",
-    },
-    {
-      id: "6",
-      title: "Sách thiếu nhi 6",
-      slug: "sach-thieu-nhi6",
-      description: "Tổng hợp sách dành cho thiếu nhi",
-    },
-    {
-      id: "7",
-      title: "Sách thiếu nhi 7",
-      slug: "sach-thieu-nhi7",
-      description: "Tổng hợp sách dành cho thiếu nhi",
-    },
-  ];
   const [isShowAddGenreModal, setIsShowAddGenreModal] = useState(false);
   const [isShowEditGenreModal, setIsShowEditGenreModal] = useState(false);
-  const handleDeleteGenre = () => {
-    alert('delete?');
-  }
-
+  const [data, setData] = useState({});
+  
   const dispatch = useDispatch();
   const { listGenre, loading } = useSelector((store) => store.product);
   useEffect(() => {
     if (!listGenre.length) dispatch(getAllGenre());
   }, []);
+  
+  const handleDeleteGenre = (item) => {
+    dispatch(deleteGenre(item));
+  };
+  const handleEditGenre = (data, slug) => {
+    if (!data.title.trim() || !data.description.trim()) return;
+    genreAPI
+      .updateGenre(slug, data)
+      .then((e) => {
+        console.log(e);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+  const handleAddGenre = (data) => {
+    if (!data.title.trim() || !data.description.trim()) return;
+    dispatch(addGenre(data, () => setIsShowAddGenreModal(false)));
+  };
   return (
     <div className="table-genre-wrap">
       {loading ? (
@@ -72,18 +45,13 @@ const GenrePage = () => {
         <>
           <Button
             variant="primary"
-            onClick={() => setIsShowAddGenreModal(true)}
+            onClick={() => {
+              setIsShowAddGenreModal(true);
+            }}
           >
             Thêm Thể loại
           </Button>
-          <AddGenreModal
-            show={isShowAddGenreModal}
-            handleClose={() => setIsShowAddGenreModal(false)}
-          />
-          <EditGenreModal
-            show={isShowEditGenreModal}
-            handleClose={() => setIsShowEditGenreModal(false)}
-          />
+
           <Table striped bordered hover className="table-genre">
             <thead>
               <tr>
@@ -94,20 +62,33 @@ const GenrePage = () => {
               </tr>
             </thead>
             <tbody>
-              {dummyData.map((item, index) => {
+              {listGenre.map((item, index) => {
+                console.log({ item });
                 return (
                   <tr key={index}>
-                    <td className="table-genre__id">{item.id}</td>
+                    <td className="table-genre__id">{index + 1}</td>
                     <td>{item.title}</td>
                     <td>{item.description}</td>
                     <td className="table-genre__action">
                       <Button
                         variant="warning"
-                        onClick={() => setIsShowEditGenreModal(true)}
+                        onClick={() => {
+                          setIsShowEditGenreModal(true);
+                          setData({
+                            ...item,
+                            action: "edit",
+                          });
+                        }}
                       >
                         Sửa
                       </Button>{" "}
-                      | <Button variant="danger" onClick={() => handleDeleteGenre()} >Xóa</Button>
+                      |{" "}
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDeleteGenre(item)}
+                      >
+                        Xóa
+                      </Button>
                     </td>
                   </tr>
                 );
@@ -116,6 +97,19 @@ const GenrePage = () => {
           </Table>
         </>
       )}
+      <EditGenreModal
+        show={isShowEditGenreModal}
+        handleClose={() => setIsShowEditGenreModal(false)}
+        data={data}
+        handleEditGenre={handleEditGenre}
+        header="CẬP NHẬT THỂ LOẠI"
+      />
+      <EditGenreModal
+        show={isShowAddGenreModal}
+        handleClose={() => setIsShowAddGenreModal(false)}
+        handleEditGenre={handleAddGenre}
+        header="THÊM THỂ LOẠI"
+      />
     </div>
   );
 };

@@ -46,6 +46,21 @@ export const reducer = (state = initialState, action) => {
                 loading: false
             }
         }
+        case  types.DELETE_GENRE: {
+            return {
+                ...state,
+                listGenre: state.listGenre.filter((item) => item.slug !== action.payload)
+            }
+        }
+        case  types.ADD_GENRE: {
+            console.log(action.payload)
+            let list = [...state.listGenre]
+            list.push(action.payload)
+            return {
+                ...state,
+                listGenre: list,
+            }
+        }
         default:
             return state
     }

@@ -1,4 +1,6 @@
 import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -6,21 +8,21 @@ import Modal from 'react-bootstrap/Modal';
 import { useForm } from "react-hook-form";
 
 
-const EditGenreModal = ({ show, handleClose = () => { }, handleEditGenre = () => { } }) => {
-  const {
-    handleSubmit,
-  } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
-    handleEditGenre(data)
-  }
+const EditGenreModal = ({ show, handleClose = () => { }, handleEditGenre = () => { }, data = {}, header=''}) => {
+  const [genreValue, setGenreValue] = useState('')
+  const [desValue, setDesValue] = useState('')
+  useEffect(() => {
+    setGenreValue(data?.title || '')
+    setDesValue(data?.description || '')
+  }, [data.slug])
+  
   return (
     <Modal className='edit-genre' show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Sửa Thể loại</Modal.Title>
+        <Modal.Title>{header}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit(onSubmit)}>
+        <Form >
           <Form.Group as={Row} className="mb-3">
             <Form.Label column sm={2}>
               Thể loại:
@@ -29,6 +31,11 @@ const EditGenreModal = ({ show, handleClose = () => { }, handleEditGenre = () =>
               <Form.Control
                 type="text"
                 required
+                value={genreValue}
+                onChange={(e) => {
+                  setGenreValue(e.target.value);
+                  console.log(e);
+                }}
               />
             </Col>
           </Form.Group>
@@ -39,14 +46,19 @@ const EditGenreModal = ({ show, handleClose = () => { }, handleEditGenre = () =>
             <Col sm={10}>
               <Form.Control
                 type="text"
+                as='textarea'
                 required
                 className="edit-genre__description"
+                value={desValue}
+                onChange={(e) => {
+                  setDesValue(e.target.value);
+                }}
               />
             </Col>
           </Form.Group>
           <Form.Group as={Row} className="mb-3 edit-genre__save-wrap">
             <Col sm={4} className="edit-genre__save-wrap--button">
-              <Button type='submit' variant="primary">
+              <Button onClick={() => { handleEditGenre({title:genreValue, description:desValue}, data.slug)}} variant="primary">
                 Lưu
               </Button>
             </Col>

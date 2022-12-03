@@ -12,7 +12,8 @@ import { setAccountInfo } from 'redux/reducers/auth/action';
 import userLayout from '../HOCS/userLayout';
 import adminLayout from '../HOCS/adminLayout';
 import HomePage from '../pages/HomePage'
-import { ROUTE_BOOK_DETAIL, ROUTE_CART_PAGE, ROUTE_CONTROL_GENRE, ROUTE_HOME, ROUTE_LIST_PRODUCTS, ROUTE_REGISTER} from './Types';
+import { ROUTE_BOOK_DETAIL, ROUTE_CART_PAGE, ROUTE_CONTROL_GENRE, ROUTE_HOME, ROUTE_LIST_PRODUCTS, ROUTE_REGISTER, ROUTE_PRODUCT_BOOK} from './Types';
+import ProductBookPage from 'pages/ProductBook';
 
 const UserRoutes = () => {
     const dispatch = useDispatch()
@@ -65,6 +66,13 @@ const UserRoutes = () => {
                 exact
                 element = {adminLayout({
                     Component: GenrePage
+                })}
+            />
+            <Route
+                path={ROUTE_PRODUCT_BOOK}
+                exact
+                element = {adminLayout({
+                    Component: ProductBookPage
                 })}
             />
         </Routes>
