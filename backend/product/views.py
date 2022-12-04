@@ -13,6 +13,8 @@ from .models import (
     Author
 )
 
+from rating.models import Rating
+
 from .serializers import (
     GenreSerializer,
     BookSerializer,
@@ -20,8 +22,9 @@ from .serializers import (
     RetrieveBookSerializer,
     RetrieveGenreSerializer,
     RetrieveAuthorSerializer,
-    BookIdSerializer
 )
+
+from django.db.models import Avg
 
 ### CUSTOM PERMISSION ### 
 
@@ -173,8 +176,11 @@ class RetrieveUpdateDeleteBookView(views.APIView):
         # Get a book with detail
         try: 
             book = Book.objects.get(slug=slug)
+            average_rating = Rating.objects.filter(book=book.id).aggregate(average_rating=Avg("rating"))
+            print(average_rating)
             serializer = RetrieveBookSerializer(book)
-            return response.Response(serializer.data, status=status.HTTP_200_OK)
+            average_rating.update(serializer.data)
+            return response.Response(average_rating, status=status.HTTP_200_OK)
         except Book.DoesNotExist:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
@@ -207,7 +213,6 @@ class RetrieveUpdateDeleteBookView(views.APIView):
 class GetAllBookWithId(views.APIView):
     def get(self, request):
         books = Book.objects.all().values("id")
-        #serializer = BookIdSerializer(books, many=True)
         return response.Response({"list_id": books}, status=status.HTTP_200_OK)
     def post(self, request):
         print()

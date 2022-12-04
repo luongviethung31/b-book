@@ -123,7 +123,7 @@ Authorization: Token {{adminToken}}
 }
 
 ### RETRIEVE BOOK
-GET {{baseProductUrl}}/books/product-0
+GET {{baseProductUrl}}/books/product-1
 
 ### UPDATE BOOK
 PUT {{baseProductUrl}}/books/product-0
@@ -215,13 +215,13 @@ Authorization: Token {{adminToken}}
 
 
 ### VOTE AND COMMENT
-POST {{baseProductUrl}}/books/muon-kiep-nhan-sinh/rating
+POST {{baseProductUrl}}/books/product-2/rating
 Content-Type: application/json
 Authorization: Token {{userToken}}
 
 {
     "rating": 4,
-    "comment": "Sách này hay quá"
+    "comment": "Sách này còn không ta"
 }
 
 ### GET ALL COMMENT AND RATING
@@ -229,6 +229,10 @@ Authorization: Token {{userToken}}
 GET {{baseProductUrl}}/books/muon-kiep-nhan-sinh/rating
 Content-Type: application/json
 
+### GET RATING STATISTIC
+GET {{baseProductUrl}}/books/product-2/rating-statistics
+Content-Type: application/json
 
 ### GET AVERAGE RATE
 
+#rating-statistics

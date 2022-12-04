@@ -8,4 +8,3 @@ class RatingSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'created_date': {'read_only': True},
         }  
-        
