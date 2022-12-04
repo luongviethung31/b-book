@@ -87,6 +87,34 @@ Authorization: Token {{adminToken}}
 ### DELETE GENRE
 DELETE  {{baseProductUrl}}/genres/sach-thieu-nhi
 
+############################# AUTHOR ###############################
+### GET ALL AUTHOR 
+GET {{baseProductUrl}}/authors
+
+### CREATE AUTHOR
+POST {{baseProductUrl}}/authors
+Content-Type: application/json
+Authorization: Token {{adminToken}}
+
+{
+    "sinh": "sinh"
+}
+
+### RETRIEVE AUTHOR
+GET {{baseProductUrl}}/authors/sach-thieu-nhi
+
+### UPDATE AUTHOR
+PUT {{baseProductUrl}}/authors/sach-thieu-nhi
+Content-Type: application/json
+Authorization: Token {{adminToken}}
+
+{
+    
+}
+
+### DELETE AUTHOR
+DELETE  {{baseProductUrl}}/authors/sach-thieu-nhi
+
 ####################################################################
 
 ############################# BOOK #################################
@@ -107,6 +135,19 @@ Content-Type: application/json
 {
     "list_recommend_book": [1,2,3,4,5,6,9,7]
 }
+
+###  GET BOOKS WITH GENRE 
+GET {{baseProductUrl}}/genres/sach-thieu-nhi/books
+
+### 
+GET {{baseProductUrl}}/genres/sach-thieu-nhi/books?limit=24&offset=0
+
+###  GET BOOKS WITH AUTHOR 
+GET {{baseProductUrl}}/authors/ahn-yujin/books
+
+### 
+GET {{baseProductUrl}}/authors/ahn-yujin/books?limit=24&offset=24
+
 
 ### CREATE BOOK
 POST {{baseProductUrl}}/books
