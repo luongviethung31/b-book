@@ -3,7 +3,8 @@ from rest_framework import (
     permissions,
     views,
     response,
-    status
+    status,
+    pagination
 )
 
 from .models import (
@@ -12,14 +13,18 @@ from .models import (
     Author
 )
 
+from rating.models import Rating
+
 from .serializers import (
     GenreSerializer,
     BookSerializer,
     AuthorSerializer,
     RetrieveBookSerializer,
     RetrieveGenreSerializer,
-    RetrieveAuthorSerializer
+    RetrieveAuthorSerializer,
 )
+
+from django.db.models import Avg
 
 ### CUSTOM PERMISSION ### 
 
@@ -145,29 +150,42 @@ class ListCreateBookView(views.APIView):
     def get(self, request, *args, **kwargs):
         # Get all book
         # TODO: need to paginate
-        books = Book.objects.all()
-        serializer = BookSerializer(books, many=True)
-        return response.Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            books = Book.objects.all()
+            paginator = pagination.LimitOffsetPagination()
+            paginator.max_limit = 100
+            books_data = paginator.paginate_queryset(books, request)
+            serializer = BookSerializer(books_data, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        except Exception as e:
+            print(e)
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     def post(self, request, *args, **kwargs):
         # Create a book
-        serializer = BookSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return response.Response(serializer.data, status=status.HTTP_201_CREATED)
-        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        try: 
+            serializer = BookSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return response.Response(serializer.data, status=status.HTTP_201_CREATED)
+            return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 class RetrieveUpdateDeleteBookView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
     def get(self, request, slug):
         # Get a book with detail
         try: 
             book = Book.objects.get(slug=slug)
+            average_rating = Rating.objects.filter(book=book.id).aggregate(average_rating=Avg("rating"))
+            print(average_rating)
             serializer = RetrieveBookSerializer(book)
-            return response.Response(serializer.data, status=status.HTTP_200_OK)
+            average_rating.update(serializer.data)
+            return response.Response(average_rating, status=status.HTTP_200_OK)
         except Book.DoesNotExist:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
-        except:
-            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            print(e)
+            return response.Response(status=status.HTTP_502_BAD_GATEWAY)
 
     def put(self, request, slug):
         # Update a book by send all field
@@ -191,5 +209,17 @@ class RetrieveUpdateDeleteBookView(views.APIView):
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except:
             return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class GetAllBookWithId(views.APIView):
+    def get(self, request):
+        books = Book.objects.all().values("id")
+        return response.Response({"list_id": books}, status=status.HTTP_200_OK)
+    def post(self, request):
+        print()
+        list_book_id = request.data.get("list_recommend_book")
+        books = Book.objects.filter(id__in=list_book_id)
+        serializer = BookSerializer(books, many=True)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
+
 
 ### !BOOK ###
