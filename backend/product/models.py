@@ -56,8 +56,8 @@ class Book(models.Model):
 
     @property
     def same_genre(self):
-        return self.genre.books.all().exclude(id=self.id)
+        return self.genre.books.all().exclude(id=self.id)[:5]
 
     @property
     def same_author(self):
-        return self.author.work.all().exclude(id=self.id)
+        return self.author.work.all().exclude(id=self.id)[:5]

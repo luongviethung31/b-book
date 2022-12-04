@@ -91,8 +91,22 @@ DELETE  {{baseProductUrl}}/genres/sach-thieu-nhi
 
 ############################# BOOK #################################
 
-### GET ALL BOOK
+### GET ALL BOOK WITH QUERY PARAM
+GET {{baseProductUrl}}/books?limit=3&offset=10
+
+### GET BOOK DYNAMIC
 GET {{baseProductUrl}}/books
+
+### GET ALL BOOK ID
+GET {{baseProductUrl}}/all-book-id
+
+### GET BOOK FROM LIST ID
+POST {{baseProductUrl}}/all-book-id
+Content-Type: application/json
+
+{
+    "list_recommend_book": [1,2,3,4,5,6,9,7]
+}
 
 ### CREATE BOOK
 POST {{baseProductUrl}}/books
@@ -109,10 +123,10 @@ Authorization: Token {{adminToken}}
 }
 
 ### RETRIEVE BOOK
-GET {{baseProductUrl}}/books/muon-kiep-nhan-sinh
+GET {{baseProductUrl}}/books/product-1
 
 ### UPDATE BOOK
-PUT {{baseProductUrl}}/books/muon-kiep-nhan-sinh
+PUT {{baseProductUrl}}/books/product-0
 Content-Type: application/json
 Authorization: Token {{adminToken}}
 
@@ -201,6 +215,24 @@ Authorization: Token {{adminToken}}
 
 
 ### VOTE AND COMMENT
+POST {{baseProductUrl}}/books/product-2/rating
+Content-Type: application/json
+Authorization: Token {{userToken}}
 
+{
+    "rating": 4,
+    "comment": "Sách này còn không ta"
+}
 
-###
+### GET ALL COMMENT AND RATING
+### To count number of specific vote point. FE need to sort this
+GET {{baseProductUrl}}/books/muon-kiep-nhan-sinh/rating
+Content-Type: application/json
+
+### GET RATING STATISTIC
+GET {{baseProductUrl}}/books/product-2/rating-statistics
+Content-Type: application/json
+
+### GET AVERAGE RATE
+
+#rating-statistics
