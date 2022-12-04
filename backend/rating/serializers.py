@@ -6,5 +6,6 @@ class RatingSerializer(serializers.ModelSerializer):
         model = Rating
         fields = "__all__"
         extra_kwargs = {
-            'created_date': {'read_only': True}
+            'created_date': {'read_only': True},
         }  
+        

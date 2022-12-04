@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from .views import (
     ListCreateGenreView,
@@ -7,6 +7,7 @@ from .views import (
     RetrieveUpdateDeleteAuthorView,
     ListCreateBookView,
     RetrieveUpdateDeleteBookView,
+    GetAllBookWithId
 )
 
 urlpatterns = [
@@ -16,5 +17,7 @@ urlpatterns = [
     path('authors', ListCreateAuthorView.as_view(), name='ListCreateAuthor'),
     path('books/<str:slug>', RetrieveUpdateDeleteBookView.as_view(), name='RetrieveUpdateDeleteBook'),
     path('books', ListCreateBookView.as_view(), name='ListCreateBook'),
+    path('all-book-id', GetAllBookWithId.as_view(), name="GetAllBookId"),
+    path('', include('rating.urls')),
 ]
  

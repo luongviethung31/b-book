@@ -121,7 +121,7 @@ class RetrieveGenreSerializer(serializers.ModelSerializer):
         }
     
     def get_books(self, obj):
-        return BookSerializer(obj.books.all(), many=True).data
+        return BookSerializer(obj.books.all()[:10], many=True).data
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -150,5 +150,9 @@ class RetrieveAuthorSerializer(serializers.ModelSerializer):
         }
     
     def get_books(self, obj):
-        return BookSerializer(obj.work.all(), many=True).data
+        return BookSerializer(obj.work.all()[:10], many=True).data
 
+class BookIdSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = ("id",)

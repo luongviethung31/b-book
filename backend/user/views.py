@@ -46,6 +46,7 @@ class LoginView(views.APIView):
                     return response.Response({
                         "token": token.key,
                         "is_admin": user.is_staff,
+                        "user_id": user.id,
                         "first_name": user.first_name,
                         "last_name": user.last_name
                         }, status=status.HTTP_200_OK)

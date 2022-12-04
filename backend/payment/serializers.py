@@ -46,3 +46,12 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         extra_kwargs = { 
             'subtotal': {'read_only': True},
         }
+    def to_representation(self, instance):
+        context = super().to_representation(instance)
+        context['book'] = {
+            "id": instance.book.id,
+            "title": instance.book.title,
+            "slug": instance.book.slug,
+            "price": instance.book.price
+        }
+        return context
