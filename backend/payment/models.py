@@ -28,6 +28,9 @@ class OrderDetail(models.Model):
     def __str__(self) -> str:
         return "{order} : {book}".format(order=self.order_id, book=self.book_id)
 
+class Cart(models.Model):
+    pass
+
 @receiver(pre_save, sender=OrderDetail)
 def my_handler(sender, **kwargs):
     order_detail = kwargs['instance']

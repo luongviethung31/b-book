@@ -1,5 +1,4 @@
 from rest_framework import (
-    generics,
     permissions,
     views,
     response,
@@ -215,11 +214,37 @@ class GetAllBookWithId(views.APIView):
         books = Book.objects.all().values("id")
         return response.Response({"list_id": books}, status=status.HTTP_200_OK)
     def post(self, request):
-        print()
         list_book_id = request.data.get("list_recommend_book")
         books = Book.objects.filter(id__in=list_book_id)
         serializer = BookSerializer(books, many=True)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
 
+class GetBooksWithGenre(views.APIView):
+    def get(self, request, slug):
+        try:
+            books = Book.objects.filter(genre__slug=slug)
+            paginator = pagination.LimitOffsetPagination()
+            paginator.max_limit = 100
+            books_data = paginator.paginate_queryset(books, request)
+            serializer = BookSerializer(books_data, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        except Book.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND) 
+        except:
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class GetBooksWithAuthor(views.APIView):
+    def get(self, request, slug):
+        try:
+            books = Book.objects.filter(author__slug = slug)
+            paginator = pagination.LimitOffsetPagination()
+            paginator.max_limit = 100
+            books_data = paginator.paginate_queryset(books, request)
+            serializer = BookSerializer(books_data, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        except Book.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND) 
+        except:
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 ### !BOOK ###
