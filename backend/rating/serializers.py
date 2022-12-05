@@ -8,3 +8,11 @@ class RatingSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'created_date': {'read_only': True},
         }  
+    def to_representation(self, instance):
+        context = super().to_representation(instance)
+        context['user'] = {
+            "id": instance.user.id,
+            "username": instance.user.username,
+            "email": instance.user.email
+        }
+        return context
