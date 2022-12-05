@@ -1,7 +1,7 @@
 // This is file to test api
 
 ######################### Environment variable ##########################x
-@userToken = 494bfaf5f44d9021f2db86caeaf79541b0c0fde4
+@userToken = fc5d16e72046d029394e7b59cc0e375e1b08575a
 @adminToken = 101f0009ea536ba8fa50877e691048086ec29744
 @baseUserUrl = http://127.0.0.1:8000/api/v1/bbook/users
 @baseProductUrl = http://127.0.0.1:8000/api/v1/bbook/products
@@ -261,13 +261,13 @@ Content-Type: application/json
 Authorization: Token {{userToken}}
 
 {
-    "rating": 4,
-    "comment": "Sách này còn không ta"
+    "rating": 5,
+    "comment": "Thực sự hay"
 }
 
 ### GET ALL COMMENT AND RATING
 ### To count number of specific vote point. FE need to sort this
-GET {{baseProductUrl}}/books/muon-kiep-nhan-sinh/rating
+GET {{baseProductUrl}}/books/product-2/rating
 Content-Type: application/json
 
 ### GET RATING STATISTIC
