@@ -98,4 +98,3 @@ class UserView(views.APIView):
         users = User.objects.all()
         serializer = UserSerializer(data=users, many=True)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
-    

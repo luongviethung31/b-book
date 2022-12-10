@@ -54,9 +54,6 @@ class RatingStatistic(views.APIView):
     def get(self, request, slug):
         try:
             book = Book.objects.get(slug=slug)
-            ##response_data = []
-            ##fourStar = Rating.objects.filter(book=book.id, rating=star).count()
-            ##fourStar = Rating.objects.filter(book=book.id, rating=star).count()
             rating_data = Rating.objects.filter(book=book.id).values('rating').order_by('rating').annotate(quantity=Count('rating'))
             return response.Response(rating_data,status=status.HTTP_200_OK)
         except Book.DoesNotExist:

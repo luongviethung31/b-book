@@ -8,7 +8,9 @@ from rest_framework import (
 
 from .models import (
     OrderDetail,
-    Order
+    Order,
+    ShoppingSession,
+    CartItem
 )
 
 from product.models import Book
@@ -16,7 +18,9 @@ from product.models import Book
 from .serializers import (
     OrderSerializer,
     OrderDetailSerializer,
-    BookOrderedSerializer
+    BookOrderedSerializer,
+    ShoppingSessionSerializer,
+    CartItemSerializer
 )
 
 import sys
@@ -125,12 +129,96 @@ class OrderView(views.APIView):
         # get all current order of user
         # TODO need to paginate
         try:
-            print("here")
             order = Order.objects.all()
             serializer = OrderSerializer(order, many=True) 
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
 
+# Get current session (get or create)
+# Add/Remove Cart item (update shopping session)
 
+class CurrentShoppingSession(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request):
+        # Get or create current shopping session
+        shopping_session, created = ShoppingSession.objects.get_or_create(user=request.user)
+        serializer = ShoppingSessionSerializer(shopping_session)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        # Clear shopping session
+        shopping_session, created = ShoppingSession.objects.get_or_create(user=request.user)
+        cart_items = CartItem.objects.filter(shopping_session=shopping_session)
+        for item in cart_items:
+            item.delete()
+        shopping_session.total = 0 
+        shopping_session.save()
+        serializer = ShoppingSessionSerializer(shopping_session)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
 
+class UpdateShoppingSession(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def post(self, request):
+        # Add Cart item
+        shopping_session, created = ShoppingSession.objects.get_or_create(user=request.user)
+        try:
+            book = Book.objects.get(pk=request.data['book'])
+            quantity = int(request.data['quantity'])
+        except Exception as e:
+            print(e)
+            return response.Response({
+                "message": "Request data is not valid"
+            },status=status.HTTP_400_BAD_REQUEST)
+        if book.count <= 0 or book.count - quantity < 0:
+            print("Not enough book")
+            return response.Response({
+                "message": "The number of books remaining is not enough"
+            }, status=status.HTTP_400_BAD_REQUEST)
+        existing_cart_item = CartItem.objects.filter(book=book.id, shopping_session=shopping_session).first()
+        if existing_cart_item:
+            existing_cart_item.quantity += quantity
+            existing_cart_item.save()
+            shopping_session.total += existing_cart_item.book.price * quantity
+        else:
+            new_cart_item = CartItem(book=book, shopping_session=shopping_session, quantity=quantity)
+            new_cart_item.save()
+            shopping_session.total += new_cart_item.book.price * quantity
+        
+        shopping_session.save()
+        serializer = ShoppingSessionSerializer(shopping_session)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def put(self, request):
+        # Remove Cart item
+        shopping_session, created = ShoppingSession.objects.get_or_create(user=request.user)
+        try:
+            book = Book.objects.get(pk=request.data['book'])
+            quantity = int(request.data['quantity'])
+        except Exception as e:
+            print(e)
+            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            existing_cart_item = CartItem.objects.get(book=book.id, shopping_session=shopping_session)
+        except Exception as e:
+            print(e)
+            return response.Response({
+                "message": "This book is not exist in your cart"
+            },status=status.HTTP_400_BAD_REQUEST)
+        if existing_cart_item.quantity == 1 or existing_cart_item.quantity <= quantity:
+            existing_cart_item.delete()
+            shopping_session.total -= existing_cart_item.book.price * existing_cart_item.quantity
+            if shopping_session.total < 0:
+                shopping_session.total = 0
+        else:
+            existing_cart_item.quantity -= quantity
+            existing_cart_item.save()
+            shopping_session.total -= existing_cart_item.book.price * quantity
+            if shopping_session.total < 0:
+                shopping_session.total = 0
+
+        shopping_session.save()
+        serializer = ShoppingSessionSerializer(shopping_session)
+        return response.Response(serializer.data, status=status.HTTP_200_OK)
+        

@@ -1,7 +1,7 @@
 // This is file to test api
 
 ######################### Environment variable ##########################x
-@userToken = fc5d16e72046d029394e7b59cc0e375e1b08575a
+@userToken = 89949cc62719d22c50acac73c9b8f5ec814c14dd
 @adminToken = 101f0009ea536ba8fa50877e691048086ec29744
 @baseUserUrl = http://127.0.0.1:8000/api/v1/bbook/users
 @baseProductUrl = http://127.0.0.1:8000/api/v1/bbook/products
@@ -274,6 +274,42 @@ Content-Type: application/json
 GET {{baseProductUrl}}/books/product-2/rating-statistics
 Content-Type: application/json
 
-### GET AVERAGE RATE
+######################################################################
 
-#rating-statistics
+############################### CART #################################
+
+### GET CART INFO 
+GET {{basePaymentUrl}}/cart
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+### CLEAR SHOPPING_SESSION
+POST {{basePaymentUrl}}/cart
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+
+### ADD BOOK TO CART
+POST {{basePaymentUrl}}/cart/update
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+{
+    "book": 18,
+    "quantity": 3
+}
+
+### REMOVE BOOK AWAY FROM CART
+PUT {{basePaymentUrl}}/cart/update
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+{
+    "book": 15,
+    "quantity": 3
+}
+
+#add total, 
+# remove item
+# get shopping session serializer return cart items
+

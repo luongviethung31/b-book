@@ -2,7 +2,9 @@ from rest_framework import serializers
 
 from .models import (
     Order, 
-    OrderDetail
+    OrderDetail,
+    ShoppingSession,
+    CartItem
 )
 
 from product.serializers import BookSerializer
@@ -46,6 +48,45 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         extra_kwargs = { 
             'subtotal': {'read_only': True},
         }
+    def to_representation(self, instance):
+        context = super().to_representation(instance)
+        context['book'] = {
+            "id": instance.book.id,
+            "title": instance.book.title,
+            "slug": instance.book.slug,
+            "price": instance.book.price
+        }
+        return context
+        
+class ShoppingSessionSerializer(serializers.ModelSerializer):
+    cart_item = serializers.SerializerMethodField('get_cart_item')
+    class Meta:
+        model = ShoppingSession
+        fields = (
+            "user",
+            "total",
+            "updated",
+            "cart_item"
+        )
+        extra_kwargs = { 
+            'created': {'read_only': True},
+            'updated': {'read_only': True},
+            'cart_item': {'read_only': True},
+        }
+    
+    def get_cart_item(self, obj):
+        return CartItemSerializer(obj.shopping_session.all(), many=True).data
+    
+
+class CartItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = "__all__"
+        extra_kwargs = { 
+            'created': {'read_only': True},
+            'updated': {'read_only': True},
+        }
+    
     def to_representation(self, instance):
         context = super().to_representation(instance)
         context['book'] = {
