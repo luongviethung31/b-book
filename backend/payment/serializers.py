@@ -28,6 +28,15 @@ class OrderSerializer(serializers.ModelSerializer):
             'order_detail': {'read_only':True}
         }  
 
+    def to_representation(self, instance):
+        context = super().to_representation(instance)
+        context['user'] = {
+            "id": instance.user.id,
+            "username": instance.user.username,
+            "email": instance.user.email,
+        }
+        return context
+
     def get_order_detail(self, obj):
         return OrderDetailSerializer(obj.order.all(), many=True).data
 
