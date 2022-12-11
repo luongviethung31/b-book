@@ -16,14 +16,34 @@ const retrieveGenre = (slug) => {
     return axiosClient.get(url);
 }
 
-const deleteGenere = (slug) => {
+const deleteGenre = (slug) => {
     let url =`products/genres/${slug}`;
-    return axiosClient.delete(url);
+    return axiosClient.delete(url, {headers: getHeaderWithToken()});
+}
+const updateGenre = (slug, data) => {
+    let url =`products/genres/${slug}`;
+    return axiosClient.put(url, data, {headers: getHeaderWithToken()});
+}
+const addGenre = (data) => {
+    let url =`products/genres`;
+    return axiosClient.post(url, data, {headers: getHeaderWithToken()});
+}
+const getAllAuthors = () => {
+    let url = 'products/authors';
+    return axiosClient.get(url);
+}
+const getListProduct = (by, slug, page) => {
+    let url =`products/${by}/${slug}/books?limit=24&offset=${page}`;
+    return axiosClient.get(url)
 }
 
 export default {
     getAllGenre,
     createGenre,
     retrieveGenre,
-    deleteGenere
+    deleteGenre,
+    updateGenre,
+    addGenre,
+    getAllAuthors,
+    getListProduct
 }

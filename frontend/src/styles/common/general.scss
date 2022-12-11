@@ -1,6 +1,6 @@
 .container-p-4 {
-    padding-left: 40px !important;
-    padding-right: 40px !important;
+    padding-left: 80px !important;
+    padding-right: 80px !important;
 }
 button,button:hover {
     color:#fff !important;
@@ -28,4 +28,31 @@ h2 {
 }
 .filter-option {
     text-align: left;
+}
+.recommend-books {
+    .slick-list {
+        padding: 30px 0 !important;
+        .slick-slide {
+            padding: 5px !important;
+        }
+    }
+}
+.nav-item {
+    .nav-link {
+        color: #2b6777 !important
+    ;}
+}
+.menu-col {
+    .list-group {
+        a {
+            text-decoration: none;
+            .list-group-item-action {
+                font-size: 13px;
+                padding: 5px 20px;
+                &:hover {
+                    color: #2b6777 !important;
+                }
+            }
+        }
+    }
 }

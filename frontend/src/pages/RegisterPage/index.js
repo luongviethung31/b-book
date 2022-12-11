@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Col, Row, Form, Button } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import UserAPI from 'api/UserAPI'
+import userAPI from 'api/userAPI'
 import useNotification from "hooks/notification";
 
 const RegisterPage = () => {
@@ -14,9 +14,8 @@ const RegisterPage = () => {
     } = useForm();
 
     const onSubmit = (data) => {
-        console.log(data);
         delete data.password_confirm
-        UserAPI.registerUser(data)
+        userAPI.registerUser(data)
         .then((rs) => {
             if(rs.status === 201) {
                 useNotification.Success({

@@ -3,7 +3,8 @@ from rest_framework import (
     permissions,
     views,
     response,
-    status
+    status,
+    pagination
 )
 
 from .models import (
@@ -30,8 +31,12 @@ class RatingView(views.APIView):
         try:
             book = Book.objects.get(slug=slug)
             all_rating = Rating.objects.filter(book=book.id)
-            serializer = RatingSerializer(all_rating, many=True)
-            return response.Response(serializer.data, status=status.HTTP_200_OK)
+            count = all_rating.count()
+            paginator = pagination.LimitOffsetPagination()
+            paginator.max_limit = 100
+            rating_data = paginator.paginate_queryset(all_rating, request)
+            serializer = RatingSerializer(rating_data, many=True)
+            return response.Response({'count' : count, 'results':serializer.data}, status=status.HTTP_200_OK)
         except Book.DoesNotExist:
             return response.Response({"message": "This book is not exist"} ,status=status.HTTP_400_BAD_REQUEST)
         except:

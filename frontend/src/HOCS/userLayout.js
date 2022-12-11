@@ -1,5 +1,7 @@
 import Footer from 'containers/Footer';
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { ROUTE_CONTROL_GENRE } from 'route/Types';
 import Header from '../containers/Header'
 
 const userLayout = ({

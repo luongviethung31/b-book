@@ -2,7 +2,7 @@ import React from 'react';
 import UserIcon from 'assets/icons/user.svg'
 import { Rating } from 'react-simple-star-rating';
 
-const Comment = ({user, comment, date, rating}) => {
+const Comment = ({user='user@gmail.com', comment, date, rating}) => {
     return (
         <div className='comment-box'>
             <div className='image-user'>
@@ -15,8 +15,8 @@ const Comment = ({user, comment, date, rating}) => {
                     readonly
                     size={20}
                 />
-                <div className='coment'>{comment}</div>
-                <div className='date'>{date}</div>
+                <div className='comment'>{comment}</div>
+                <div className='date'>{new Date(date).toLocaleString('en-GB', { timeZone: 'UTC' })}</div>
             </div>
         </div>
     );

@@ -1,0 +1,14 @@
+.edit-genre {
+  &__description {
+    min-height: 200px;
+    overflow-y: scroll;
+  }
+  &__save-wrap {
+    display: flex;
+    justify-content: center;
+    &--button {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}

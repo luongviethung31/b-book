@@ -161,6 +161,7 @@ class ListCreateBookView(views.APIView):
                    books = Book.objects.all().order_by("-price") 
             else:
                 books = Book.objects.all()
+                
             paginator = pagination.LimitOffsetPagination()
             paginator.max_limit = 100
             books_data = paginator.paginate_queryset(books, request)

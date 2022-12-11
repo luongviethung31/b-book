@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useForm } from "react-hook-form";
 
 
-const LoginModal = ({ show, handleClose = () => { } }) => {
+const LoginModal = ({ show, handleClose = () => { }, handleLogin = () => { } }) => {
   const initState = {
     email: "",
     password: "",
@@ -18,8 +18,8 @@ const LoginModal = ({ show, handleClose = () => { } }) => {
     reset,
     trigger,
   } = useForm();
-  const onSubmit = () => {
-
+  const onSubmit = (data) => {
+    handleLogin(data)
   }
   return (
     <Modal className='login-modal' show={show} onHide={handleClose} centered>
@@ -35,11 +35,11 @@ const LoginModal = ({ show, handleClose = () => { } }) => {
             <Col sm={10}>
               <Form.Control
                 className={`${errors.email && "invalid"}`}
-                type="email"
+                type="username"
                 required
                 placeholder="Nhập email của bạn..."
                 pattern='^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$'
-                {...register("email", {
+                {...register("username", {
                   required: "Email là bắt buộc!",
                   pattern: {
                     value: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
@@ -83,7 +83,7 @@ const LoginModal = ({ show, handleClose = () => { } }) => {
             <Form.Label column sm={2}>
             </Form.Label>
             <Col sm={4}>
-              <Button type='submit' variant="primary" onClick={handleClose}>
+              <Button type='submit' variant="primary">
                 Đăng nhập
               </Button>
             </Col>
