@@ -45,16 +45,21 @@ class CreateOrderView(views.APIView):
     def post(self, request):
         # create new order
         try:
-            books = request.data.get('product')
-            order = {
-                "ship_date": request.data.get("ship_date"),
-                "ship_place": request.data.get("ship_place"),
-                "note": request.data.get("note"),
-                "is_paid": request.data.get("is_paid"),
-                "paid_at": request.data.get("paid_at"),
-                "user": request.user.id
-            }
-            orderSerializer = OrderSerializer(data=order)
+            try:
+                books = request.data.get('product')
+                order = {
+                    "ship_date": request.data.get("ship_date"),
+                    "ship_place": request.data.get("ship_place"),
+                    "note": request.data.get("note"),
+                    "is_paid": request.data.get("is_paid"),
+                    "paid_at": request.data.get("paid_at"),
+                    "user": request.user.id
+                }
+                orderSerializer = OrderSerializer(data=order)
+            except Exception as e:
+                return response.Response({
+                    "message": e
+                }, status=status.HTTP_400_BAD_REQUEST)
             if not orderSerializer.is_valid():
                 return response.Response(orderSerializer.errors, status=status.HTTP_400_BAD_REQUEST)
             errorlist = []
@@ -98,6 +103,10 @@ class RetrieveOrderView(views.APIView):
     def put(self, request, id):
         # update order data by id 
         try: 
+            """
+            Hiện tại, theo các trang TMĐT hiện tại, tính năng cập nhật đơn hàng đều k được triển khai
+            người dùng muốn tạo đơn hàng mới thì xóa và tạo lại.
+            """
             return response.Response({"message": "this function is not available"},status=status.HTTP_501_NOT_IMPLEMENTED)
             order = Order.objects.get(pk=id)
             if order.user.pk != request.user.id and not request.user.is_staff:
@@ -126,17 +135,12 @@ class RetrieveOrderView(views.APIView):
 class OrderView(views.APIView):
     permission_classes = [permissions.IsAdminUser]
     def get(self,request):
-        # get all current order of user
-        # TODO need to paginate
         try:
             order = Order.objects.all()
             serializer = OrderSerializer(order, many=True) 
             return response.Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
-
-# Get current session (get or create)
-# Add/Remove Cart item (update shopping session)
 
 class CurrentShoppingSession(views.APIView):
     permission_classes = [permissions.IsAuthenticated]

@@ -118,12 +118,20 @@ DELETE  {{baseProductUrl}}/authors/sach-thieu-nhi
 ####################################################################
 
 ############################# BOOK #################################
+###
+GET {{baseProductUrl}}/search?title=m
 
 ### GET ALL BOOK WITH QUERY PARAM
-GET {{baseProductUrl}}/books?limit=3&offset=10
+GET {{baseProductUrl}}/books?limit=20&offset=10
 
 ### GET BOOK DYNAMIC
 GET {{baseProductUrl}}/books
+
+### GET BOOK WITH SORT DESC
+Đối với sort, có 4 options: desc_alphabet, asc_alphabet, asc_alphabet, max_price
+set vào params order của route {{baseProductUrl}}/books
+###
+GET {{baseProductUrl}}/books?order=max_price&limit=10&offset=10
 
 ### GET ALL BOOK ID
 GET {{baseProductUrl}}/all-book-id
@@ -309,7 +317,4 @@ Authorization: Token {{userToken}}
     "quantity": 3
 }
 
-#add total, 
-# remove item
-# get shopping session serializer return cart items
 

@@ -7,6 +7,7 @@ from .views import (
     RetrieveUpdateDeleteAuthorView,
     ListCreateBookView,
     RetrieveUpdateDeleteBookView,
+    SearchBookView,
     GetAllBookWithId,
     GetBooksWithGenre,
     GetBooksWithAuthor
@@ -21,6 +22,7 @@ urlpatterns = [
     path('authors/<str:slug>/books', GetBooksWithAuthor.as_view(), name='BookWithAuthor'),
     path('books/<str:slug>', RetrieveUpdateDeleteBookView.as_view(), name='RetrieveUpdateDeleteBook'),
     path('books', ListCreateBookView.as_view(), name='ListCreateBook'),
+    path('search', SearchBookView.as_view(), name='SearchBook'),
     path('all-book-id', GetAllBookWithId.as_view(), name="GetAllBookId"),
     path('', include('rating.urls')),
 ]

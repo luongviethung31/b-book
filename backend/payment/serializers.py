@@ -7,8 +7,6 @@ from .models import (
     CartItem
 )
 
-from product.serializers import BookSerializer
-
 class OrderSerializer(serializers.ModelSerializer):
     order_detail = serializers.SerializerMethodField('get_order_detail')
     class Meta:
@@ -54,7 +52,8 @@ class OrderDetailSerializer(serializers.ModelSerializer):
             "id": instance.book.id,
             "title": instance.book.title,
             "slug": instance.book.slug,
-            "price": instance.book.price
+            "price": instance.book.price,
+            "thumbnail": instance.book.thumbnail
         }
         return context
         
@@ -93,6 +92,7 @@ class CartItemSerializer(serializers.ModelSerializer):
             "id": instance.book.id,
             "title": instance.book.title,
             "slug": instance.book.slug,
-            "price": instance.book.price
+            "price": instance.book.price,
+            "thumbnail": instance.book.thumbnail
         }
         return context

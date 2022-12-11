@@ -53,7 +53,7 @@ class CartItem(models.Model):
 def my_handler(sender, **kwargs):
     order_detail = kwargs['instance']
     book = Book.objects.get(id=order_detail.book.id)
-    order_detail.subtotal = book.price * order_detail.quantity
+    order_detail.subtotal = book.price * order_detail.quantity * (book.discount/100)
 
 @receiver(post_save , sender = OrderDetail)
 def update_order(sender , **kwargs):
