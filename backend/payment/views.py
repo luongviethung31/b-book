@@ -82,7 +82,8 @@ class CreateOrderView(views.APIView):
             return response.Response(orderSerializer.data, status=status.HTTP_201_CREATED)
         except Book.DoesNotExist:
             return response.Response({"message": "Not found this book"}, status=status.HTTP_400_BAD_REQUEST)
-        except:
+        except Exception as e:
+            print(e)
             return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class RetrieveOrderView(views.APIView):

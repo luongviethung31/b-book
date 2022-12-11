@@ -208,13 +208,13 @@ Content-Type: application/json
 Authorization: Token {{userToken}}
 
 {
-    "ship_date": "2022-12-23 12:00",
+    "ship_date": "2022-12-12 12:00",
     "ship_place": "HCM",
     "note" : "giao hang tan noi",
     "is_paid": true,
     "paid_at": "paypal",
     "product": [
-        { "book" : 1, "quantity" : 2}
+        { "book" : 3, "quantity" : 2}
     ]
 }
 
@@ -270,7 +270,7 @@ Authorization: Token {{userToken}}
 
 {
     "rating": 5,
-    "comment": "Thực sự hay"
+    "comment": "Sách rất hay nha mọi người"
 }
 
 ### GET ALL COMMENT AND RATING

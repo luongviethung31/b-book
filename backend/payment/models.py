@@ -3,6 +3,7 @@ from user.models import User
 from product.models import Book
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+import decimal
 
 class Order(models.Model):
     user = models.ForeignKey(User, related_name='owner', on_delete=models.CASCADE)
@@ -53,7 +54,7 @@ class CartItem(models.Model):
 def my_handler(sender, **kwargs):
     order_detail = kwargs['instance']
     book = Book.objects.get(id=order_detail.book.id)
-    order_detail.subtotal = book.price * order_detail.quantity * (book.discount/100)
+    order_detail.subtotal = decimal.Decimal(book.price * order_detail.quantity * decimal.Decimal(book.discount/100))
 
 @receiver(post_save , sender = OrderDetail)
 def update_order(sender , **kwargs):

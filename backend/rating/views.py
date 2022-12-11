@@ -14,6 +14,8 @@ from product.models import (
     Book
 )
 
+from payment.models import OrderDetail
+
 from .serializers import (
     RatingSerializer
 )
@@ -40,6 +42,11 @@ class RatingView(views.APIView):
             book = Book.objects.get(slug=slug)
             request.data["user"] = request.user.id
             request.data["book"] = book.id
+            check_condition_to_vote = OrderDetail.objects.filter(order__user=request.user.id, book=book.id).first()
+            if not check_condition_to_vote:
+                return response.Response({
+                    "message": "You must buy this book first"
+                }, status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = RatingSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
