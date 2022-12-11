@@ -172,7 +172,7 @@ Authorization: Token {{adminToken}}
 }
 
 ### RETRIEVE BOOK
-GET {{baseProductUrl}}/books/product-1
+GET {{baseProductUrl}}/books/product-2
 
 ### UPDATE BOOK
 PUT {{baseProductUrl}}/books/product-0

@@ -108,10 +108,11 @@ class RetrieveOrderView(views.APIView):
             Hiện tại, theo các trang TMĐT hiện tại, tính năng cập nhật đơn hàng đều k được triển khai
             người dùng muốn tạo đơn hàng mới thì xóa và tạo lại.
             """
-            return response.Response({"message": "this function is not available"},status=status.HTTP_501_NOT_IMPLEMENTED)
+            #return response.Response({"message": "this function is not available"},status=status.HTTP_501_NOT_IMPLEMENTED)
             order = Order.objects.get(pk=id)
             if order.user.pk != request.user.id and not request.user.is_staff:
                 return response.Response(status=status.HTTP_403_FORBIDDEN)
+            request.data["user"] = request.user.id
             serializer = OrderSerializer(data=request.data, instance=order)
             if serializer.is_valid():
                 serializer.save()
