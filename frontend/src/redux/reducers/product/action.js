@@ -26,7 +26,7 @@ const getAllGenre = (callback = () => { }) => {
     }
 }
 
-const deleteGenre = (data) => {
+const deleteGenre = (data, callback = () => {}) => {
     return (dispatch) => {
         genreAPI.deleteGenre(data.slug)
             .then(rs => {
@@ -39,6 +39,7 @@ const deleteGenre = (data) => {
                         title: "XÓA THÀNH CÔNG!",
                         message: `Đã xóa ${data.title}`
                     })
+                    callback()
                 }
             })
             .catch(() => {

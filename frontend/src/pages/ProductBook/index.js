@@ -71,7 +71,7 @@ const ProductBookPage = () => {
   useEffect(() => {
     setLoading(true);
     bookAPI
-      .getAllBooks(page, 50)
+      .getAllBooks(page, 100)
       .then((rs) => {
         if (rs.status === 200) {
           setData(rs.data.results);
@@ -107,6 +107,7 @@ const ProductBookPage = () => {
             Thêm Sách
           </Button>
 
+          <div className="table-wrap">
           <Table striped bordered hover className="table-genre" style={{fontSize:'12px'}}>
             <thead>
               <tr>
@@ -158,7 +159,10 @@ const ProductBookPage = () => {
               })}
             </tbody>
           </Table>
-          <PaginationCustom onChangePage={(page) => setPage(page)} currentPage={page} totalPage={totalPage/50} />
+
+          </div>
+
+          <PaginationCustom className="table-genre-pagination" onChangePage={(page) => setPage(page)} currentPage={page} totalPage={totalPage/10} />
         </>
       )}
       <ProductBookModal
