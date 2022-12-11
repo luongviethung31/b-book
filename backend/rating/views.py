@@ -15,6 +15,8 @@ from product.models import (
     Book
 )
 
+from payment.models import OrderDetail
+
 from .serializers import (
     RatingSerializer
 )
@@ -45,6 +47,11 @@ class RatingView(views.APIView):
             book = Book.objects.get(slug=slug)
             request.data["user"] = request.user.id
             request.data["book"] = book.id
+            check_condition_to_vote = OrderDetail.objects.filter(order__user=request.user.id, book=book.id).first()
+            if not check_condition_to_vote:
+                return response.Response({
+                    "message": "You must buy this book first"
+                }, status=status.HTTP_406_NOT_ACCEPTABLE)
             serializer = RatingSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -59,9 +66,6 @@ class RatingStatistic(views.APIView):
     def get(self, request, slug):
         try:
             book = Book.objects.get(slug=slug)
-            ##response_data = []
-            ##fourStar = Rating.objects.filter(book=book.id, rating=star).count()
-            ##fourStar = Rating.objects.filter(book=book.id, rating=star).count()
             rating_data = Rating.objects.filter(book=book.id).values('rating').order_by('rating').annotate(quantity=Count('rating'))
             return response.Response(rating_data,status=status.HTTP_200_OK)
         except Book.DoesNotExist:

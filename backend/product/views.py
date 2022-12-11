@@ -24,6 +24,7 @@ from .serializers import (
 )
 
 from django.db.models import Avg
+from django.http import HttpResponseRedirect
 
 ### CUSTOM PERMISSION ### 
 
@@ -38,8 +39,6 @@ class IsAdminUserOrReadOnly(permissions.BasePermission):
 class ListCreateGenreView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
     def get(self, request, *args, **kwargs):
-        # Get all genre
-        # TODO: need to paginate
         genres = Genre.objects.all()
         serializer = GenreSerializer(genres,many=True)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
@@ -143,14 +142,26 @@ class RetrieveUpdateDeleteAuthorView(views.APIView):
 ### !AUTHOR ###
 
 ### BOOK ###
-
+ 
 class ListCreateBookView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
     def get(self, request, *args, **kwargs):
         # Get all book
         # TODO: need to paginate
         try:
-            books = Book.objects.all().order_by('created_date')
+            sort_kw = ["desc_alphabet", "asc_alphabet", "min_price", "max_price"]
+            if request.query_params.get('order') and request.query_params.get('order') in sort_kw:
+                if request.query_params.get('order') == "asc_alphabet":
+                   books = Book.objects.all().order_by("title") 
+                elif request.query_params.get('order') == "desc_alphabet":
+                   books = Book.objects.all().order_by("-title") 
+                elif request.query_params.get('order') == "min_price":
+                   books = Book.objects.all().order_by("price") 
+                elif request.query_params.get('order') == "max_price":
+                   books = Book.objects.all().order_by("-price") 
+            else:
+                books = Book.objects.all()
+                
             paginator = pagination.LimitOffsetPagination()
             paginator.max_limit = 100
             books_data = paginator.paginate_queryset(books, request)
@@ -205,6 +216,23 @@ class RetrieveUpdateDeleteBookView(views.APIView):
             book.delete()
             return response.Response(status=status.HTTP_204_NO_CONTENT)
         except Author.DoesNotExist:
+            return response.Response(status=status.HTTP_404_NOT_FOUND)
+        except:
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class SearchBookView(views.APIView):
+    def get(self, request):
+        try: 
+            query_string = request.query_params.get('title')
+            if query_string == None:
+                return HttpResponseRedirect(redirect_to="/api/v1/bbook/products/books")
+            books = Book.objects.filter(title__icontains=query_string)
+            paginator = pagination.LimitOffsetPagination()
+            paginator.max_limit = 100
+            books_data = paginator.paginate_queryset(books, request)
+            serializer = BookSerializer(books_data, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        except Book.DoesNotExist:
             return response.Response(status=status.HTTP_404_NOT_FOUND)
         except:
             return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)

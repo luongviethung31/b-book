@@ -1,7 +1,7 @@
 // This is file to test api
 
 ######################### Environment variable ##########################x
-@userToken = fc5d16e72046d029394e7b59cc0e375e1b08575a
+@userToken = 89949cc62719d22c50acac73c9b8f5ec814c14dd
 @adminToken = 101f0009ea536ba8fa50877e691048086ec29744
 @baseUserUrl = http://127.0.0.1:8000/api/v1/bbook/users
 @baseProductUrl = http://127.0.0.1:8000/api/v1/bbook/products
@@ -118,12 +118,20 @@ DELETE  {{baseProductUrl}}/authors/sach-thieu-nhi
 ####################################################################
 
 ############################# BOOK #################################
+###
+GET {{baseProductUrl}}/search?title=m
 
 ### GET ALL BOOK WITH QUERY PARAM
-GET {{baseProductUrl}}/books?limit=3&offset=10
+GET {{baseProductUrl}}/books?limit=20&offset=10
 
 ### GET BOOK DYNAMIC
 GET {{baseProductUrl}}/books
+
+### GET BOOK WITH SORT DESC
+Đối với sort, có 4 options: desc_alphabet, asc_alphabet, asc_alphabet, max_price
+set vào params order của route {{baseProductUrl}}/books
+###
+GET {{baseProductUrl}}/books?order=max_price&limit=10&offset=10
 
 ### GET ALL BOOK ID
 GET {{baseProductUrl}}/all-book-id
@@ -200,13 +208,13 @@ Content-Type: application/json
 Authorization: Token {{userToken}}
 
 {
-    "ship_date": "2022-12-23 12:00",
+    "ship_date": "2022-12-12 12:00",
     "ship_place": "HCM",
     "note" : "giao hang tan noi",
     "is_paid": true,
     "paid_at": "paypal",
     "product": [
-        { "book" : 1, "quantity" : 2}
+        { "book" : 3, "quantity" : 2}
     ]
 }
 
@@ -262,7 +270,7 @@ Authorization: Token {{userToken}}
 
 {
     "rating": 5,
-    "comment": "Thực sự hay"
+    "comment": "Sách rất hay nha mọi người"
 }
 
 ### GET ALL COMMENT AND RATING
@@ -274,6 +282,39 @@ Content-Type: application/json
 GET {{baseProductUrl}}/books/product-2/rating-statistics
 Content-Type: application/json
 
-### GET AVERAGE RATE
+######################################################################
 
-#rating-statistics
+############################### CART #################################
+
+### GET CART INFO 
+GET {{basePaymentUrl}}/cart
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+### CLEAR SHOPPING_SESSION
+POST {{basePaymentUrl}}/cart
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+
+### ADD BOOK TO CART
+POST {{basePaymentUrl}}/cart/update
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+{
+    "book": 18,
+    "quantity": 3
+}
+
+### REMOVE BOOK AWAY FROM CART
+PUT {{basePaymentUrl}}/cart/update
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+{
+    "book": 15,
+    "quantity": 3
+}
+
+
