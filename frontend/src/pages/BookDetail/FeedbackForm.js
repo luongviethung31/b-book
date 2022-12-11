@@ -10,7 +10,7 @@ const styleForm = {
     alignItems: 'start'
 }
 function FeedbackForm({ handleSendFeedback = () => { } }) {
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(1);
     const {
         register,
         handleSubmit,
@@ -19,7 +19,6 @@ function FeedbackForm({ handleSendFeedback = () => { } }) {
         formState: { errors },
     } = useForm();
     const onHandleSubmit = async (data) => {
-        console.log({ data });
         handleSendFeedback(data);
         setRating(0);
         reset();
@@ -33,14 +32,13 @@ function FeedbackForm({ handleSendFeedback = () => { } }) {
                         <Controller
                             name="rating"
                             control={control}
-                            defaultValue={0}
+                            defaultValue={1}
                             render={({ field }) => (
                                 <Rating
-                                    initialValue={0}
+                                    initialValue={1}
                                     emptyColor='gray'
                                     ratingValue={rating}
                                     onClick={(newValue) => {
-                                        console.log({newValue});
                                         field.onChange(newValue)
                                         setRating(newValue)
                                     }}

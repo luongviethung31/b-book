@@ -32,6 +32,10 @@ const getAllAuthors = () => {
     let url = 'products/authors';
     return axiosClient.get(url);
 }
+const getListProduct = (by, slug, page) => {
+    let url =`products/${by}/${slug}/books?limit=24&offset=${page}`;
+    return axiosClient.get(url)
+}
 
 export default {
     getAllGenre,
@@ -40,5 +44,6 @@ export default {
     deleteGenre,
     updateGenre,
     addGenre,
-    getAllAuthors
+    getAllAuthors,
+    getListProduct
 }

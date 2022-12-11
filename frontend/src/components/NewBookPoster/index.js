@@ -1,13 +1,14 @@
+import FormatPrice from 'components/FormatPrice';
 import React from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 
-const NewBookPoster = ({ title, image, description, price, discount, author }) => {
+const NewBookPoster = ({ title, image, description, price, discount, author, slug }) => {
     return (
         <div className='new-book-poster'>
             <Container fluid='lg'>
                 <Row>
                     <Col lg={4} className='image-instroduce'>
-                        <img src={image} alt={title}/>
+                        <img src={image} alt={title} />
                     </Col>
                     <Col lg={8} className='text-info'>
                         <div className='title-container'>
@@ -21,13 +22,14 @@ const NewBookPoster = ({ title, image, description, price, discount, author }) =
                         </div>
                         <div className='price-info'>
                             <div className='price-wrapper'>
-                                <div className='discount-num'>{discount}</div>
-                                <div className='old-price'>{price}</div>
-                                <div className='new-price'>{price}</div>
+                                <div className='discount-num'>{discount}%</div>
+                                <FormatPrice discount={discount} price={price} />
                             </div>
                         </div>
                         <div className='action-button'>
-                            <Button>Mua ngay</Button>
+                            <a href={`/book-detail/${slug}`} style={{textDecoration:'none'}}>
+                                <Button>Mua ngay</Button>
+                            </a>
                         </div>
                     </Col>
                 </Row>

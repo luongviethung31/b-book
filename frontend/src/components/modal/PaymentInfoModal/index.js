@@ -27,7 +27,7 @@ const PaymentInfoModal = ({ show, handleClose = () => { }, handlePayment = () =>
         if (!provice || !district || !ward) return
         const paymentData = {
             ...data,
-            ship_date: new Date().toISOString(),
+            ship_date: new Date(new Date().getTime() + (24 * 60 * 60 * 1000)).toISOString(),
             ship_place: `${ward}, ${district}, ${provice}`,
             paid_at: paidAt,
             is_paid: !(paidAt === 'ship_code')
@@ -49,7 +49,6 @@ const PaymentInfoModal = ({ show, handleClose = () => { }, handlePayment = () =>
     useEffect(() => {
         axios.get('https://provinces.open-api.vn/api/?depth=3')
             .then(rs => {
-                console.log(rs);
                 if (rs.status === 200) {
                     setDataVie(rs.data)
                 }
@@ -132,7 +131,6 @@ const PaymentInfoModal = ({ show, handleClose = () => { }, handlePayment = () =>
                                             name='tramy'
                                             required
                                             {...register("note")}
-                                            onChange={e => console.log(e)}
                                         />
                                     </Col>
                                 </Form.Group>

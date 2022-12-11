@@ -14,7 +14,6 @@ const RegisterPage = () => {
     } = useForm();
 
     const onSubmit = (data) => {
-        console.log(data);
         delete data.password_confirm
         userAPI.registerUser(data)
         .then((rs) => {

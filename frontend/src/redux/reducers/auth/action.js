@@ -22,7 +22,7 @@ const resetAccountInfo = (callback = ()=> {}) => {
 const setLoading = (loading) => {
     return (dispatch) => {
         dispatch({
-            type: types.SET_LOADING,
+            type: types.SET_LOADING_AI,
             payload: loading
         })
     }

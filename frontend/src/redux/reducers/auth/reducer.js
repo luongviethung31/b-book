@@ -18,7 +18,7 @@ export const reducer = (state = initialState, action) => {
                 userInfo: {}
             }
         }
-        case  types.SET_LOADING: {
+        case  types.SET_LOADING_AI: {
             return {
                 ...state,
                 loading: action.payload

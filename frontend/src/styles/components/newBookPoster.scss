@@ -2,7 +2,8 @@
     margin-top: 50px !important;
     .row {
         background-color: #2b6777;
-        padding: 40px;
+        padding: 20px;
+        align-items: center;
         .image-instroduce {
             border-radius: 50%;
             aspect-ratio: 1;
@@ -10,6 +11,9 @@
             align-items: center;
             justify-content: center;
             background: #c8d8e4;
+            aspect-ratio: 1;
+            width: 350px;
+            height: 350px;
             img {
                 width: 50%;
             }
@@ -42,9 +46,9 @@
                     display: -webkit-box;
                     -webkit-line-clamp: 7;
                     -webkit-box-orient: vertical;
-                    height: 190px;
+                    height: 130px;
                     overflow: hidden;
-                    font-size: 18px;
+                    font-size: 14px;
                 }
             }
             .price-info {

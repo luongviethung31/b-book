@@ -38,7 +38,6 @@ const ProductBookModal = ({
     genreAPI
       .getAllAuthors()
       .then((rs) => {
-        console.log(rs);
         if (rs.status === 200) {
           setAllAuthors(rs.data);
         }
@@ -52,7 +51,6 @@ const ProductBookModal = ({
       [e.target.name]: e.target.value,
     });
   };
-  console.log(allData);
   return (
     <Modal className="edit-genre" show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>

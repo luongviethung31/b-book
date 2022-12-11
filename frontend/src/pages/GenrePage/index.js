@@ -12,13 +12,13 @@ const GenrePage = () => {
   const [isShowAddGenreModal, setIsShowAddGenreModal] = useState(false);
   const [isShowEditGenreModal, setIsShowEditGenreModal] = useState(false);
   const [data, setData] = useState({});
-  
+
   const dispatch = useDispatch();
   const { listGenre, loading } = useSelector((store) => store.product);
   useEffect(() => {
     if (!listGenre.length) dispatch(getAllGenre());
   }, []);
-  
+
   const handleDeleteGenre = (item) => {
     dispatch(deleteGenre(item));
   };
@@ -49,10 +49,10 @@ const GenrePage = () => {
               setIsShowAddGenreModal(true);
             }}
           >
-            Thêm Thể loại
+            Thêm thể loại
           </Button>
 
-          <Table striped bordered hover className="table-genre">
+          <Table striped bordered hover className="table-genre" style={{ fontSize: '14px' }}>
             <thead>
               <tr>
                 <th className="table-genre__id">STT</th>
@@ -71,6 +71,7 @@ const GenrePage = () => {
                     <td>{item.description}</td>
                     <td className="table-genre__action">
                       <Button
+                        size="sm"
                         variant="warning"
                         onClick={() => {
                           setIsShowEditGenreModal(true);
@@ -81,9 +82,9 @@ const GenrePage = () => {
                         }}
                       >
                         Sửa
-                      </Button>{" "}
-                      |{" "}
+                      </Button>
                       <Button
+                        size="sm"
                         variant="danger"
                         onClick={() => handleDeleteGenre(item)}
                       >

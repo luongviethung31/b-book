@@ -19,7 +19,6 @@ const LoginModal = ({ show, handleClose = () => { }, handleLogin = () => { } }) 
     trigger,
   } = useForm();
   const onSubmit = (data) => {
-    console.log(data);
     handleLogin(data)
   }
   return (

@@ -150,7 +150,7 @@ class ListCreateBookView(views.APIView):
         # Get all book
         # TODO: need to paginate
         try:
-            books = Book.objects.all()
+            books = Book.objects.all().order_by('created_date')
             paginator = pagination.LimitOffsetPagination()
             paginator.max_limit = 100
             books_data = paginator.paginate_queryset(books, request)

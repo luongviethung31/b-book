@@ -42,8 +42,6 @@ const CustomSlide = () => {
         return (
           <div className="custom-slide" key={idx}>
             <img src={item.image} alt="slide-banner" />
-            <p>{item.title}</p>
-
           </div>
         )
       })}

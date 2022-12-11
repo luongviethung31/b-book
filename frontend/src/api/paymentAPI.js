@@ -10,10 +10,6 @@ const createOrder = (data) => {
     let url ='payments/order';
     return axiosClient.post(url, data, {headers: getHeaderWithToken()});
 }
-const getAllUserOrder = (data) => {
-    let url ='payments/order';
-    return axiosClient.get(url, data, {headers: getHeaderWithToken()});
-}
 const getAllOrderDetail = (id) => {
     let url =`payments/order/${id}`;
     return axiosClient.get(url, {headers: getHeaderWithToken()});
@@ -31,6 +27,11 @@ const allOrder = () => {
     return axiosClient.get(url, {headers: getHeaderWithToken()});
 }
 
+const getAllUserOrder = () => {
+    let url ='payments/order';
+    return axiosClient.get(url, {headers: getHeaderWithToken()});
+}
+
 // const retrieveGenre = (slug) => {
 //     let url =`products/genres/${slug}`;
 //     return axiosClient.get(url);
@@ -44,11 +45,12 @@ const allOrder = () => {
 
 // }
 
+
 export default {
     getAllUserOrder,
     createOrder,
     getAllOrderDetail,
     updateOrder,
     allOrder,
-    deleteOder
+    deleteOder,
 }

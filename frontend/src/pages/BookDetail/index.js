@@ -13,55 +13,75 @@ import Slider from 'react-slick';
 import numeral from "numeral";
 import { useDispatch, useSelector } from "react-redux";
 import { handleShowLoginModal } from "redux/reducers/auth/action";
-
-// const bookDetail = {
-//   title: 'Sapiens - Lược Sử Loài Người Bằng Tranh - Tập 2: Những Trụ Cột Của Nền Văn Minh',
-//   author: 'Yuval Noah Harari',
-//   description: '12tháng trước cả Việt Nam căng mình đối phó với đại dịch COVID-19. TP.HCM và vùng phụ cận bị tổn thương nặng nề, cả xã hội căng thẳng trong trạng thái giãn cách ai ở đâu ngồi yên ở đó. Hệ thống y tế quá tải, các bệnh viện chật kín bệnh nhân. Lực lượng y tế tuyến đầu luôn làm việc trong trạng thái căng thẳng, kiệt sức. Các khu công nghiệp hoặc đóng cửa hoặc thực hiện sản xuất ba tại chỗ cầm chừng. Hoạt động giao thông, vận chuyển hàng hóa giữa các địa phương trên cả nước gần như phong tỏa hoàn toàn nhằm ngăn chặn nguy cơ bùng phát dịch bệnh.',
-//   discount: 20,
-//   price: 98000,
-//   image: 'https://www.vinabook.com/images/thumbnails/product/115x/372171_sapiens-luoc-su-loai-nguoi-bang-tranh-tap-2-nhung-tru-cot-cua-nen-van-minh.jpg',
-//   publisher: 'Kim Đồng',
-//   year: '2022',
-//   totalPage: 200
-// }
-const dataComment = [{
-  user: 'Luong Mau Viet Hung',
-  rating: 5,
-  comment: 'Thực sự rất hay, từng câu chuyện về các kĩ năng mềm cho bạn trẻ đc tác giả dạy bảo qua lối kể chuyện hóm hỉnh, hài hước. Và phải công nhận là học được nhiều điều qua quyển sách này, giúp bạn đọc có thêm động lực để hoàn thiện bản thân hơn nữa Shipper cũng vui vẻ, tích cực. Nếu bạn nào yêu thích về tác giả Tony nên đọc quyển sách này, rất hay!',
-  date: '20/11/2022'
-}]
+import { createRating, getAllBookId, getAllComment, getBooksFromListId, getRatingStatistics } from "redux/reducers/product/action";
+import PaginationCustom from "components/PaginationCustom";
+import { useRef } from "react";
+import LoadingPage from "components/SpinnerLoading/LoadingPage";
+import CartIcon from 'assets/icons/cart-icon.svg'
+import genreAPI from "api/genreAPI";
+import useNotification from "hooks/notification";
 
 const BookDetail = () => {
   let { slug } = useParams();
+  const dispatch = useDispatch()
   const [tab, setTab] = useState(1)
   const [bookDetail, setBookDetail] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [listRecommendedBook, setListRecommendedBook] = useState([])
+  const [page, setPage] = useState(1)
   const [countBuy, setCountBuy] = useState(1)
-  const dispatch = useDispatch()
-  const {userInfo} = useSelector(store => store.auth)
+  const [loading, setLoading] = useState(false)
+  const { userInfo } = useSelector(store => store.auth)
+  const { listComment, ratingStatistics, listBookId, listBookReccomend, loadingPage} = useSelector(store => store.product)
+  const commentRef = useRef(null)
   useEffect(() => {
+    dispatch(getRatingStatistics(slug))
+    if(listBookId.length) dispatch(getAllBookId())
     setLoading(true)
-    bookAPI.getBookDetail(slug)
+    bookAPI.getBookDetail(slug, page)
       .then(rs => {
         if (rs.status === 200) {
-          console.log(rs);
           setBookDetail(rs.data)
+          setLoading(false)
+          if(!listRecommendedBook.length) setListRecommendedBook(rs.data?.related_books)
+        } else {
           setLoading(false)
         }
       })
       .catch(e => {
-        console.log(e);
         setLoading(false)
+        console.log(e);
       })
   }, [])
+  useEffect(() => {
+    // document.title =`BBook | ${bookDetail?.title}`
+
+  }, [bookDetail])
+  useEffect(() => {
+    if(listBookId?.length && userInfo.last_name) 
+      bookAPI.getRecommendedBook({
+        bookIds: listBookId,
+        userId: userInfo.user_id
+      })
+      .then(rs => {
+        if(rs.status === 201) {
+          dispatch(getBooksFromListId({list_recommend_book: rs.data}, (data) => {setListRecommendedBook(data)}))
+        }
+      })
+      .catch(e => {
+        console.log(e)
+        setListRecommendedBook(Object.keys(bookDetail).length ? bookDetail.related_books : [])
+      })
+  }, [listBookId])
 
   useEffect(() => {
-    console.log(bookDetail);
-  }, [bookDetail])
+   dispatch(getAllComment({slug, page}))
+  }, [page])
 
   const handleSendFeedback = (data) => {
-    console.log(data);
+    dispatch(createRating(slug,{
+      ...data,
+      user: userInfo.email
+    }))
   }
 
   const settings = {
@@ -100,11 +120,32 @@ const BookDetail = () => {
     localStorage.setItem('item_payment', JSON.stringify(product))
     window.open('/cart-page', '_self')
   }
+
+  const handleClickAddToCart = () => {
+    let listBookCart = localStorage.getItem('cart_items')
+    if(listBookCart) {
+      listBookCart = JSON.parse(listBookCart)
+    } else {
+      listBookCart = []
+    }
+    let index = listBookCart.findIndex(item => item.id === bookDetail.id)
+    if(index !== -1) {
+      listBookCart[index].amount += 1
+    } else {
+      listBookCart.unshift({ ...bookDetail, amount: 1 })
+    }
+      useNotification.Success({
+        title:'THÀNH CÔNG!',
+        message:'Bạn đã thêm một sản phẩm vào giỏ hàng'
+      })
+    localStorage.setItem('cart_items', JSON.stringify(listBookCart))
+  }
   return (
     <>
-      {loading ? <SpinnerLoading /> : Object.keys(bookDetail).length &&
+      {loading ? <SpinnerLoading/> :
+        Object.keys(bookDetail).length ?
         <div className="book-details-session">
-          <Container fluid="">
+          <Container className="container-p-4" fluid>
             <Row>
               <Col sm={9}>
                 <Row>
@@ -114,23 +155,23 @@ const BookDetail = () => {
                   <Col sm={8}>
                     <h4 className="title">{bookDetail.title}</h4>
                     <div className="author">
-                      Tác giả: <span>{bookDetail.author.name}</span>
+                      Tác giả: <span>{bookDetail?.author?.name}</span>
                     </div>
                     <div className="publisher">
-                      Nhà xuất bản: <span>{bookDetail.author.name}</span>
+                      Nhà xuất bản: <span>{bookDetail?.author?.name}</span>
                     </div>
                     <div className="year">
-                      Năm phát hành: <span>{bookDetail.release}</span>
+                      Năm phát hành: <span>{bookDetail?.release}</span>
                     </div>
                     <div className="total-page">
                       Số lượng: <span>{bookDetail.count}</span>
                     </div>
                     <div className="description-content">{bookDetail.description}</div>
-                    <a href="#">Xem thêm</a>
+                    <a href="#des">Xem thêm</a>
                     <div className="devider" />
                     <div className="price-row">
                       <FormatPrice discount={bookDetail.discount} price={bookDetail.price} />
-                      <Button>Thêm vào giỏ hàng</Button>
+                      <Button onClick={handleClickAddToCart}>Thêm vào giỏ hàng</Button>
                     </div>
                   </Col>
                 </Row>
@@ -140,31 +181,30 @@ const BookDetail = () => {
                   <div className="payment-box">
                     <div className="title">THÔNG TIN THANH TOÁN</div>
                     <div className="devider" />
-                    <div className="old-price  mt-2">
-                      Giá bìa: <span>₫{numeral(parseInt(bookDetail.price) * countBuy).format(0, 0)}</span>
+                    <div className="old-price  mt-2 d-flex justify-content-between">
+                      <span>Giá bìa:</span><span>₫{numeral(parseInt(bookDetail.price) * countBuy).format(0, 0)}</span>
                     </div>
-                    <div className="new-price  mt-2">
-                      Giá bán: <span>₫{numeral((bookDetail.price * (100 - bookDetail.discount) * countBuy) / 100).format("0,0")}</span>
+                    <div className="new-price  mt-2 d-flex justify-content-between">
+                      <span>Giá bán:</span><span style={{fontSize: '20px', color:'orange'}}>₫{numeral((bookDetail.price * (100 - bookDetail.discount) * countBuy) / 100).format("0,0")}</span>
                     </div>
-                    <div className="discount-price mt-2">
-                      Tiết kiệm: <span>₫{numeral(parseInt(bookDetail.price) * bookDetail.discount / 100 * countBuy).format("0,0")}</span>
+                    <div className="discount-price mt-2 d-flex justify-content-between">
+                      <span>Tiết kiệm:</span><span style={{color:'#52ab98'}}>₫{numeral(parseInt(bookDetail.price) * bookDetail.discount / 100 * countBuy).format("0,0")}</span>
                     </div>
-                    <div className="amount">
-                      Số lượng:
+                    <div className="amount justify-content-between mt-2">
+                      <span>Số lượng:</span>
                       <ButtonGroup
-                        className="me-2 mt-2 ml-2"
                         aria-label="Second group"
                         size="sm"
                       >
-                        <Button disabled={countBuy === 1} onClick={() => { setCountBuy(countBuy => countBuy - 1) }}>-</Button>
-                        <Button disabled>{countBuy}</Button>
-                        <Button disabled={countBuy === bookDetail.count} onClick={() => { setCountBuy(countBuy => countBuy + 1) }}>+</Button>
+                        <Button variant="secondary" disabled={countBuy === 1} onClick={() => { setCountBuy(countBuy => countBuy - 1) }}>-</Button>
+                        <Button variant="secondary" disabled>{countBuy}</Button>
+                        <Button variant="secondary" disabled={countBuy === bookDetail.count} onClick={() => { setCountBuy(countBuy => countBuy + 1) }}>+</Button>
                       </ButtonGroup>
                     </div>
                     <div className="devider" />
-                    <div className="action-btn">
-                      <Button className="mt-2" variant="primary" size="sm" onClick={handleClickPayment}>
-                        Thanh toán
+                    <div className="action-btn" style={{justifyContent:'center', display:'flex'}}>
+                      <Button className="mt-2" variant="warning" size="md" onClick={handleClickPayment}>
+                        <img src={CartIcon} style={{marginRight:'5px'}}/>THANH TOÁN
                       </Button>
                     </div>
                   </div>
@@ -172,34 +212,37 @@ const BookDetail = () => {
               </Col>
             </Row>
             <div className="list-menu-wrapper">
-              <span
+              <a
+                href='#des'
                 className={`list-menu-detail ${tab === 1 ? 'active-tab' : ''}`}
                 sm={2}
                 onClick={() => { setTab(1) }}
               >
                 Giới thiệu sách
-              </span>
-              <span
+              </a>
+              <a
+                href="#info"
                 className={`list-menu-detail ${tab === 2 ? 'active-tab' : ''}`}
                 sm={2}
                 onClick={() => { setTab(2) }}
               >
                 Thông tin chi tiết
-              </span>
-              <span
+              </a>
+              <a
+                href="#comment"
                 className={`list-menu-detail ${tab === 3 ? 'active-tab' : ''}`}
                 sm={2}
                 onClick={() => { setTab(3) }}
               >
                 Đánh giá
-              </span>
+              </a>
             </div>
-            <div className="book-introduce-wrapper">
+            <div className="book-introduce-wrapper" id='des'>
               <div className="book-title">{bookDetail.title}</div>
               {bookDetail.description}
             </div>
             <Row className="book-detail-wrapper">
-              <h2 className="book-detail-wrapper__title">Thông tin chi tiết</h2>
+              <h2 className="book-detail-wrapper__title" id="info">Thông tin chi tiết</h2>
               <Col sm={2}>
                 <div className="item-detail">&#x2022; Tác giả:</div>
                 <div className="item-detail">&#x2022; Nhà xuất bản:</div>
@@ -208,43 +251,60 @@ const BookDetail = () => {
               </Col>
               <Col sm={3}>
                 <div className="item-detail">{bookDetail.author.name}</div>
-                <div className="item-detail">Fake</div>
+                <div className="item-detail">NXB Hà Nội</div>
                 <div className="item-detail">{bookDetail.genre.title}</div>
                 <div className="item-detail">{bookDetail.release}</div>
               </Col>
             </Row>
             <Row className="comment-wrapper">
-              <h2>Nhận xét từ khách hàng</h2>
+              <h2 ref={commentRef} id='comment'>Nhận xét từ khách hàng</h2>
               {
-                dataComment.map((item, index) => (
-                  <Comment key={index} user={item.user} rating={item.rating} comment={item.comment} date={item.date} />
-                ))
+                listComment?.results?.length ? 
+                <Row>
+                  <Col sm={12} md={8}>
+                    {
+                      listComment?.results?.map((item, index) => (
+                        <Comment key={index} user={item.user.email} rating={item.rating} comment={item.comment} date={item.created_date} />
+                      ))
+                    }
+                  </Col>
+                </Row> :
+                <h6 style={{fontSize: '16px !important', color:'#000'}}>Chưa có đánh giá! Hãy là người đầu tiên đánh giá sách này...</h6>
               }
+              <PaginationCustom 
+                currentPage={page} 
+                totalPage={listComment?.count} 
+                onChangePage={(pageNum) => {
+                  setPage(pageNum);
+                  commentRef?.current?.scrollIntoView()
+                }}
+              />
             </Row>
             <Row className="book-rating-wrapper">
-              <Col sm={8}>
-                <RatingBook numberRating={5} avarageRating={'5.0'} />
-              </Col>
-              <Col sm={4}>
-                {userInfo?.last_name && <div className="btn-login">
+              <Col lg={6} md={12}>
+                {!userInfo?.last_name && <div className="btn-login">
                   <div>Đăng nhập để gửi nhận xét của bạn!</div>
                   <Button className="btn btn-login" onClick={() => dispatch(handleShowLoginModal(true))}>
                     Đăng nhập
                   </Button>
                   <div>Bạn chưa có tài khoản?<a href="/register">Đăng ký </a></div>
                 </div>}
+                {userInfo?.last_name && <FeedbackForm handleSendFeedback={handleSendFeedback} />}
+              </Col>
+              <Col lg={6} md={12}>
+                <RatingBook 
+                  numberRating={listComment.count}
+                  avarageRating={parseFloat(bookDetail.avarage_rating)}
+                  listRating={ratingStatistics}
+                />
               </Col>
             </Row>
-            <Row>
-              <FeedbackForm handleSendFeedback={handleSendFeedback} />
-            </Row>
-            <Row className="recommend-books">
+            <Row className="recommend-books mt-5">
               <div>
-                <h2 style={{ margin: '20px 0', textAlign: 'center', fontFamily: 'monospace', color: 'darkblue' }}>CÓ THỂ BẠN ĐANG TÌM KIẾM</h2>
-
+                <h2 style={{ textAlign: 'left', fontFamily: 'monospace', color: 'darkblue' }}>CÓ THỂ BẠN SẼ THÍCH</h2>
                 <Slider {...settings} style={{ padding: '20px' }}>
                   {
-                    bookDetail.related_books.slice(0, 10)
+                    listRecommendedBook
                       .map((item, index) => (
                         <a href={`/book-detail/${item.slug}`} key={index}>
                           <BookCart
@@ -262,7 +322,8 @@ const BookDetail = () => {
               </div>
             </Row>
           </Container>
-        </div>}
+        </div> : <></>}
+          {!loading && loadingPage ? <LoadingPage/> : <></>}
     </>
   );
 };

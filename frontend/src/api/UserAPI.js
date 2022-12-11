@@ -2,7 +2,6 @@ import axiosClient from "./axiosClient";
 import { getHeaderWithToken } from "./getHeaderWithToken";
 
 const registerUser = (data) => {
-    console.log({data});
     let url = 'users/register';
     return axiosClient.post(url, data);
 }

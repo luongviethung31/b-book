@@ -6,6 +6,7 @@ import SpinnerLoading from "components/SpinnerLoading";
 import ProductBookModal from "components/modal/ProductBookModal/ProductBookModal";
 import { useEffect } from "react";
 import bookAPI from "api/bookAPI";
+import PaginationCustom from "components/PaginationCustom";
 
 const dummyData = [
   {
@@ -60,24 +61,28 @@ const ProductBookPage = () => {
   const [isShowEditProductBookModal, setIsShowEditProductBookModal] =
     useState(false);
   // const { listProduct, loading } = useSelector((store) => store.product);
+  const [totalPage, setTotalPage] = useState(0)
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [dataDetail, setDataDetail] = useState({});
+  const [page, setPage] = useState(1)
   const dispatch = useDispatch();
 
   useEffect(() => {
     setLoading(true);
     bookAPI
-      .getAllBooks(1)
+      .getAllBooks(page, 50)
       .then((rs) => {
-        if (rs.status === 200) setData(rs.data);
+        if (rs.status === 200) {
+          setData(rs.data.results);
+          setTotalPage(rs.data.count)
+        }
         setLoading(false);
       })
       .catch((e) => {
-        console.log(e);
         setLoading(false);
       });
-  }, []);
+  }, [page]);
 
   const handleDeleteProductBook = () => {
     alert("delete?");
@@ -102,7 +107,7 @@ const ProductBookPage = () => {
             Thêm Sách
           </Button>
 
-          <Table striped bordered hover className="table-genre">
+          <Table striped bordered hover className="table-genre" style={{fontSize:'12px'}}>
             <thead>
               <tr>
                 <th className="table-genre__id">STT</th>
@@ -111,7 +116,6 @@ const ProductBookPage = () => {
                 <th>Số lượng</th>
                 <th>Giá</th>
                 {/* <th>Mô tả</th> */}
-                <th>Ngày xuất bản</th>
                 <th>Tác giả</th>
                 <th>Thể loại</th>
                 <th>Giảm giá</th>
@@ -128,21 +132,21 @@ const ProductBookPage = () => {
                     <td>{item.count}</td>
                     <td>{item.price}</td>
                     {/* <td>{item.description}</td> */}
-                    <td>{item.release}</td>
                     <td>{item.author.name}</td>
                     <td>{item.genre.title}</td>
                     <td>{item.discount}</td>
-                    <td className="table-genre__action">
+                    <td className="table-genre__action" style={{minWidth:'100px'}}>
                       <Button
+                        size="sm"
                         onClick={() => {
                           setIsShowEditProductBookModal(true);
                           setDataDetail(item);
                         }}
                       >
                         Sửa
-                      </Button>{" "}
-                      |{" "}
+                      </Button>
                       <Button
+                        size="sm"
                         variant="danger"
                         onClick={() => handleDeleteProductBook()}
                       >
@@ -154,6 +158,7 @@ const ProductBookPage = () => {
               })}
             </tbody>
           </Table>
+          <PaginationCustom onChangePage={(page) => setPage(page)} currentPage={page} totalPage={totalPage/50} />
         </>
       )}
       <ProductBookModal

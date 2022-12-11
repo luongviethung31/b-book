@@ -3,8 +3,7 @@ import { Button } from 'react-bootstrap';
 import DeleteIcon from 'assets/icons/delete.svg'
 import numeral from 'numeral';
 
-const LargeCard = ({ id, title, price, amount, image, handleDelete, handleChangeAmount, total, slug }) => {
-    console.log(id);
+const LargeCard = ({ id, title, price, amount, image, handleDelete, handleChangeAmount, total, slug, discount }) => {
     return (
         <div className='large-card'>
             <div className='col-left'>
@@ -19,7 +18,7 @@ const LargeCard = ({ id, title, price, amount, image, handleDelete, handleChange
                 </div>
             </div>
             <div className='col-right'>
-                <div className='total'>{`${amount}x${numeral(parseInt(price)).format('0,0')}`}</div>
+                <div className='total'>{`${amount}x${numeral(parseInt(price)*(100-discount)/100).format('0,0')}`}</div>
                 <div className='remote' onClick={() => handleDelete(id)} style={{ cursor: 'pointer' }}>
                     <img src={DeleteIcon} alt='' />
                 </div>

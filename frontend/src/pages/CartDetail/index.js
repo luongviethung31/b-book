@@ -11,10 +11,9 @@ const CartDetail = () => {
     const [isShowPayment, setIsShowPayment] = useState(false)
     useEffect(() => {
         let listItem = localStorage.getItem('item_payment')
-        let listItemCart = localStorage.getItem('item_cart')
+        let listItemCart = localStorage.getItem('cart_items')
         if (listItem) {
             listItem = JSON.parse(listItem)
-            console.log({ listItem });
             setListBook(listItem)
         } else {
             if (listItemCart) {
@@ -26,7 +25,6 @@ const CartDetail = () => {
     }, [])
     const handleDelete = (id) => {
         let listBookTemp = [...listBook]
-        console.log({ id, listBook });
         listBookTemp = listBookTemp.filter((item) => item.id !== id)
         setListBook(listBookTemp)
     }
@@ -48,7 +46,6 @@ const CartDetail = () => {
             ...data,
             product
         }
-        console.log({dataPayment});
         paymentAPI.createOrder(dataPayment)
         .then(rs => { 
             if(rs.status === 201){
@@ -72,7 +69,6 @@ const CartDetail = () => {
             <Container fluid="">
                 <Row>
                     <Col sm={8} className="list-book-col">
-                        {console.log(listBook)}
                         {listBook.length ? listBook.map((item, index) => (
                             <LargeCard
                                 key={index}
@@ -85,6 +81,7 @@ const CartDetail = () => {
                                 slug={item.slug}
                                 handleDelete={handleDelete}
                                 handleChangeAmount={handleChangeAmount}
+                                discount={item.discount}
                             />
                         )) :
                             <h2 style={{ marginTop: '200px' }}>Không có sản phẩm nào được chọn</h2>
