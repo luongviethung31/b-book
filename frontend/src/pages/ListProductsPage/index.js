@@ -5,7 +5,7 @@ import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getListProduct } from 'redux/reducers/product/action';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import SpinnerLoading from 'components/SpinnerLoading';
 import PaginationCustom from 'components/PaginationCustom';
@@ -17,14 +17,17 @@ let loadSuccess = false
 function ListProductsPage() {
     const dispatch = useDispatch()
     let { slug, by } = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
+    let title = searchParams.get("title")
     const [page, setPage] = useState(1)
     const [countPage, setCountPage] = useState(0)
     const { listProduct, loading, loadingPage } = useSelector(store => store.product)
     
     const headerRef = useRef(null)
     useEffect(() => {
-        dispatch(getListProduct(by, slug, page, (count) => {setCountPage(count); loadSuccess=true}))
+        dispatch(getListProduct(by, slug, page, title='', (count) => {setCountPage(count); loadSuccess=true}))
     }, [slug, by, page])
+
     useEffect(() => {
         genreTitle = localStorage.getItem('genre_title')
         document.title =`BBook | ${genreTitle ? genreTitle : slug.replaceAll('-', ' ')}`

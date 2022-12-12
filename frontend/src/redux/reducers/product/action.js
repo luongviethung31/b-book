@@ -77,13 +77,13 @@ const addGenre = (data, callback = () => { }) => {
 
 
 
-const getListProduct = (by,slug,page, callback = () => { }) => {
+const getListProduct = (by='', slug, page, title = '', callback = () => { }) => {
     return (dispatch) => {
         dispatch({
             type: types.GET_LIST_PRODUCT,
         })
-        genreAPI.getListProduct(by,slug,page)
-            .then((rs) => {
+        if (slug === 'search') {
+            bookAPI.searchBooks(title, page).then((rs) => {
                 if (rs.status === 200) {
                     dispatch({
                         type: types.GET_LIST_PRODUCT_SUCCESS,
@@ -92,11 +92,27 @@ const getListProduct = (by,slug,page, callback = () => { }) => {
                     callback(rs.data.count)
                 }
             })
-            .catch(e => {
-                dispatch({
-                    type: types.GET_LIST_PRODUCT_FAIL,
+                .catch(e => {
+                    dispatch({
+                        type: types.GET_LIST_PRODUCT_FAIL,
+                    })
                 })
-            })
+        } else
+            genreAPI.getListProduct(by, slug, page)
+                .then((rs) => {
+                    if (rs.status === 200) {
+                        dispatch({
+                            type: types.GET_LIST_PRODUCT_SUCCESS,
+                            payload: rs.data.results
+                        })
+                        callback(rs.data.count)
+                    }
+                })
+                .catch(e => {
+                    dispatch({
+                        type: types.GET_LIST_PRODUCT_FAIL,
+                    })
+                })
     }
 }
 
@@ -123,7 +139,7 @@ const getAllComment = ({ slug, page }, callback = () => { }) => {
     }
 }
 
-const getRatingStatistics = ( slug, callback = () => { }) => {
+const getRatingStatistics = (slug, callback = () => { }) => {
     return (dispatch) => {
         bookAPI.getRatingStatistics(slug)
             .then((rs) => {
@@ -141,18 +157,18 @@ const getRatingStatistics = ( slug, callback = () => { }) => {
     }
 }
 
-const createRating = ( slug, data, callback = () => { }) => {
+const createRating = (slug, data, callback = () => { }) => {
     return (dispatch) => {
         // dispatch({
         //     type: types.CREATE_RATING,
         // })
-        console.log({data:data.user});
-        bookAPI.createRating(slug, {rating: data.rating, comment: data.comment})
+        console.log({ data: data.user });
+        bookAPI.createRating(slug, { rating: data.rating, comment: data.comment })
             .then((rs) => {
                 if (rs.status === 201) {
                     dispatch({
                         type: types.CREATE_RATING_SUCCESS,
-                        payload: {...rs.data, user: data.user}
+                        payload: { ...rs.data, user: data.user }
                     })
                     useNotification.Success({
                         title: "ĐÁNH GIÁ THÀNH CÔNG!",
@@ -173,10 +189,10 @@ const createRating = ( slug, data, callback = () => { }) => {
     }
 }
 
-const getBooksFromListId = (data, callback = () => {}) => {
+const getBooksFromListId = (data, callback = () => { }) => {
     return (dispatch) => {
         dispatch({
-            type : types.SET_LOADING_AI,
+            type: types.SET_LOADING_AI,
             payload: true
         })
         bookAPI.getBooksFromListId(data)
@@ -187,7 +203,7 @@ const getBooksFromListId = (data, callback = () => {}) => {
                         payload: rs.data
                     })
                     dispatch({
-                        type : types.SET_LOADING_AI,
+                        type: types.SET_LOADING_AI,
                         payload: false
                     })
                     callback(rs.data)
@@ -196,13 +212,13 @@ const getBooksFromListId = (data, callback = () => {}) => {
             .catch(e => {
                 console.log(e);
                 dispatch({
-                    type : types.SET_LOADING_AI,
+                    type: types.SET_LOADING_AI,
                     payload: false
                 })
             })
     }
 }
-const getAllBookId = (callback = () => {}) => {
+const getAllBookId = (callback = () => { }) => {
     return (dispatch) => {
         bookAPI.getAllBookId()
             .then((rs) => {
@@ -211,7 +227,7 @@ const getAllBookId = (callback = () => {}) => {
                         type: types.GET_ALL_BOOK_ID,
                         payload: rs.data.list_id
                     })
-                    callback()
+                    callback(rs.data.list_id)
                 }
             })
             .catch(e => {
@@ -223,7 +239,7 @@ const getAllBookId = (callback = () => {}) => {
 const setLoadingAI = (loading) => {
     return (dispatch) => {
         dispatch({
-            type : types.SET_LOADING_AI,
+            type: types.SET_LOADING_AI,
             payload: loading
         })
     }

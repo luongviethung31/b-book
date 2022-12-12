@@ -26,6 +26,9 @@ const Homepage = () => {
         if (!listGenre.length) dispatch(getAllGenre())
     }, [])
     useEffect(() => {
+        document.title =`BBook | Trang chủ`
+    },[])
+    useEffect(() => {
         genreAPI.getAllAuthors().then(rs => {
             if (rs.status === 200) {
                 setListAllAuthors(rs.data)
@@ -58,11 +61,10 @@ const Homepage = () => {
     console.log({ listBookReccomend });
     useEffect(() => {
         if (userInfo.last_name) {
-            dispatch(getAllBookId(() => {
-                if (!listBookReccomend.length) {
+            dispatch(getAllBookId((listId) => {
                     dispatch(setLoadingAI(true))
                     bookAPI.getRecommendedBook({
-                        bookIds: listBookId,
+                        bookIds: listId.map(item => item?.id),
                         userId: userInfo.user_id
                     })
                         .then(rs => {
@@ -76,7 +78,6 @@ const Homepage = () => {
                             console.log(e)
                             dispatch(setLoadingAI(false))
                         })
-                }
             }))
 
         }

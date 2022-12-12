@@ -39,8 +39,13 @@ const createRating = (slug, data) => {
 
 const getRecommendedBook = (data) => {
     // console.log(process.env.SERVER_AI);
-    let url = `http://127.0.0.1:6969/api/v1/recommend/books`;
+    let url = `${process.env.REACT_APP_SERVER_AI}api/v1/recommend/books`;
     return axios.post(url, data)
+}
+
+const searchBooks = (title, page) => {
+    let url = `products/search?title=${title}&limit=24&offset=${page}`
+    return axios.get(url)
 }
 
 export default {
@@ -51,5 +56,6 @@ export default {
     createRating,
     getBooksFromListId,
     getAllBookId,
-    getRecommendedBook
+    getRecommendedBook,
+    searchBooks
 }

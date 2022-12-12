@@ -23,6 +23,7 @@ const UserRoutes = () => {
     const dispatch = useDispatch()
     const { loading, listComment, ratingStatistics, listBookId, listBookReccomend } = useSelector(store => store.product)
     const { userInfo } = useSelector(store => store.auth)
+    console.log("........", process.env.REACT_APP_SERVER_API);
     useEffect(() => {
         let account = getUser();
         if (account) dispatch(setAccountInfo(account, () => {

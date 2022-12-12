@@ -80,7 +80,7 @@ const UserOrder = () => {
                                                         price={item.book.price}
                                                         amount={item.quantity}
                                                         author={item.book.author}
-                                                        // image={item.book.thumbnail}
+                                                        image={item.book.thumbnail}
                                                         slug={item.book.slug}
                                                     />
                                                 ))
