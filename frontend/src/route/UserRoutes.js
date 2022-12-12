@@ -4,6 +4,7 @@ import CartDetail from 'pages/CartDetail';
 import ListProductsPage from 'pages/ListProductsPage';
 import RegisterPage from 'pages/RegisterPage';
 import GenrePage from 'pages/GenrePage';
+import OrderPage from 'pages/OrderPage';
 import React from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,7 +14,7 @@ import { setLoadingAI } from 'redux/reducers/product/action';
 import userLayout from '../HOCS/userLayout';
 import adminLayout from '../HOCS/adminLayout';
 import HomePage from '../pages/HomePage'
-import { ROUTE_BOOK_DETAIL, ROUTE_CART_PAGE, ROUTE_CONTROL_GENRE, ROUTE_HOME, ROUTE_LIST_PRODUCTS, ROUTE_REGISTER, ROUTE_PRODUCT_BOOK, ROUTE_USER_ORDER } from './Types';
+import { ROUTE_BOOK_DETAIL, ROUTE_CART_PAGE, ROUTE_CONTROL_GENRE, ROUTE_HOME, ROUTE_LIST_PRODUCTS, ROUTE_REGISTER, ROUTE_PRODUCT_BOOK, ROUTE_USER_ORDER, ROUTE_ORDER_PAGE } from './Types';
 import ProductBookPage from 'pages/ProductBook';
 import UserOrder from 'pages/UserOrder';
 import { getAllBookId } from 'redux/reducers/product/action';
@@ -87,7 +88,16 @@ const UserRoutes = () => {
                 path={ROUTE_PRODUCT_BOOK}
                 exact
                 element={adminLayout({
-                    Component: ProductBookPage
+                    Component: ProductBookPage,
+                    route: ROUTE_PRODUCT_BOOK
+                })}
+            />
+            <Route
+                path={ROUTE_ORDER_PAGE}
+                exact
+                element={adminLayout({
+                    Component: OrderPage,
+                    route: ROUTE_ORDER_PAGE
                 })}
             />
         </Routes>

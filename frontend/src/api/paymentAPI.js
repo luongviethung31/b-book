@@ -18,12 +18,13 @@ const updateOrder = (id, data) => {
     let url =`payments/order/${id}`;
     return axiosClient.put(url, data, {headers: getHeaderWithToken()});
 }
-const deleteOder = (id) => {
+const deleteOrder = (id) => {
     let url =`payments/order/${id}`;
     return axiosClient.delete(url, {headers: getHeaderWithToken()});
 }
+
 const allOrder = () => {
-    let url ='payments/order/all-order';
+    let url ='payments/all-order';
     return axiosClient.get(url, {headers: getHeaderWithToken()});
 }
 
@@ -52,5 +53,5 @@ export default {
     getAllOrderDetail,
     updateOrder,
     allOrder,
-    deleteOder,
+    deleteOrder,
 }
