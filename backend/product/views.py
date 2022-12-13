@@ -177,7 +177,8 @@ class ListCreateBookView(views.APIView):
                 serializer.save()
                 return response.Response(serializer.data, status=status.HTTP_201_CREATED)
             return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except:
+        except Exception as e:
+            print(e)
             return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 class RetrieveUpdateDeleteBookView(views.APIView):
     permission_classes = [IsAdminUserOrReadOnly]
