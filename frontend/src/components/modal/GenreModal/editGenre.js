@@ -19,7 +19,7 @@ const EditGenreModal = ({ show, handleClose = () => { }, handleEditGenre = () =>
   return (
     <Modal className='edit-genre' show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>{header}</Modal.Title>
+        <Modal.Title style={{color:'#114444 !important', textDecoration:'underline'}}>{header}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form >

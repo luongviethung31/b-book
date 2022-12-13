@@ -204,7 +204,7 @@ const ProductBookModal = ({
 
           <Form.Group as={Row} className="mb-3 edit-genre__save-wrap">
             <Col sm={4} className="edit-genre__save-wrap--button">
-              <Button onClick={() => {}} variant="primary">
+              <Button onClick={() => {handleActionProductBook(allData)}} variant="primary">
                 Lưu
               </Button>
             </Col>

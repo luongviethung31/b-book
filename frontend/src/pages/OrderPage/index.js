@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import paymentAPI from "api/paymentAPI";
 import { useState } from "react";
 import { Form } from "react-router-dom";
+import DeleteIcon from 'assets/icons/delete.svg'
+import { IconDelete, IconView } from "assets/icons/icons";
 
 const OrderPage = () => {
   const [data, setData] = useState([]);
@@ -24,6 +26,9 @@ const OrderPage = () => {
   return (
     <>
       <div className="table-wrap">
+        <div className="header-order-manage">
+          <div style={{color:'#114444 !important', textDecoration:'underline', fontSize:'25px'}}>QUẢN LÝ ĐƠN HÀNG</div>
+        </div>
         <Table
           striped
           bordered
@@ -67,7 +72,10 @@ const OrderPage = () => {
                     style={{ minWidth: "100px" }}
                   >
                     <Button size="sm" variant="danger">
-                      Xóa
+                      <IconDelete/>
+                    </Button>
+                    <Button size="sm" variant="primary">
+                      <IconView/>
                     </Button>
                   </td>
                 </tr>

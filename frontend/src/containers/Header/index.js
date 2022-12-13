@@ -13,7 +13,7 @@ import { getAccessToken, removeAccessToken, removeUser, setAccessToken, setUser 
 import { handleShowLoginModal, setAccountInfo, setLoading } from 'redux/reducers/auth/action';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingLogin from 'components/SpinnerLoading/LoadingLogin';
-import { ROUTE_USER_ORDER } from 'route/Types';
+import { ROUTE_LIST_PRODUCTS, ROUTE_USER_ORDER } from 'route/Types';
 import numeral from 'numeral';
 // import BookCart from 'containers/BookCart';
 
@@ -23,35 +23,7 @@ const Header = () => {
     const dispatch = useDispatch()
 
     const [itemCart, setItemCart] = useState([])
-
-    const handleLogin = (data) => {
-        dispatch(setLoading(true))
-        userAPI.login(data)
-            .then(rs => {
-                if (rs.status === 200) {
-                    dispatch(setLoading(false))
-                    setAccessToken(rs.data.token);
-                    setUser(JSON.stringify({
-                        last_name: rs.data.last_name,
-                        first_name: rs.data.first_name,
-                        is_admin: rs.data.is_admin
-                    }))
-                    dispatch(setAccountInfo({
-                        last_name: rs.data.last_name,
-                        first_name: rs.data.first_name,
-                        is_admin: rs.data.is_admin
-                    }))
-                    // window.location.reload();
-                }
-            })
-            .catch(e => {
-                dispatch(setLoading(false))
-                useNotification.Error({
-                    title: "ĐĂNG NHẬP KHÔNG THÀNH CÔNG!",
-                    message: "Email hoặc mật khẩu không đúng!"
-                })
-            })
-    }
+    const [searchValue, setSearchValue] = useState('')
 
     const handleLogout = () => {
         userAPI.logout(getAccessToken()).then(rs => console.log(rs)).catch(e => console.log(e))
@@ -71,8 +43,24 @@ const Header = () => {
                         aria-label="Example text with button addon"
                         aria-describedby="basic-addon1"
                         placeholder='Tìm kiếm sách...'
+                        onChange={(e) => setSearchValue(e.target.value)}
+                        onKeyDown = {(e) => {
+                            if(e.keyCode === 13) {
+                                if(searchValue?.trim()) {
+                                    localStorage.setItem('genre_title', 'Kết quả tìm kiếm')
+                                    window.open(`all-products/search?title=${searchValue}`,'_self')
+                                }
+                            }
+                        }}
                     />
-                    <Button variant="outline-primary" id="button-addon1">
+                    <Button variant="outline-primary" id="button-addon1"
+                        onClick={() =>{
+                            if(searchValue?.trim()) {
+                                localStorage.setItem('genre_title', 'Kết quả tìm kiếm')
+                                window.open(`all-products/search?title=${searchValue}`,'_self')
+                            }
+                        }}
+                    >
                         Search
                     </Button>
                 </InputGroup>

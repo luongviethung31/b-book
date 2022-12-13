@@ -231,8 +231,8 @@ const Homepage = () => {
                                     {
                                         listAllAuthors.map((item, index) => (
                                             <a href={`/list-products/authors/${item.slug}`} key={index} style={{ textDecoration: 'none' }}>
-                                                <ListGroup.Item key={index} action variant="light" style={{ textAlign: 'left' }} onClick={() => localStorage.setItem('genre_title', item.name)}>
-                                                    {item.name}
+                                                <ListGroup.Item key={index} action variant="light" style={{ textAlign: 'left', display:'flex', justifyContent:'space-between', alignItems:'center' }} onClick={() => localStorage.setItem('genre_title', item.name)}>
+                                                    <span>{item.name}</span><span>&#8250;</span>
                                                 </ListGroup.Item>
                                             </a>
                                         ))

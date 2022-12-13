@@ -1,7 +1,7 @@
 .add-genre {
   &__description {
     min-height: 200px;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   &__save-wrap {
     display: flex;

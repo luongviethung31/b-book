@@ -6,6 +6,15 @@ const getBookDetail = (slug) => {
     let url = `products/books/${slug}`;
     return axiosClient.get(url);
 }
+const deleteBook = (slug) => {
+    let url = `products/books/${slug}`;
+    return axiosClient.delete(url, {headers: getHeaderWithToken()});
+}
+
+const createBook = (data) => {
+    let url = `products/books`;
+    return axiosClient.post(url,data, {headers: getHeaderWithToken()});
+}
 
 const getAllBooks = (page,limit=24) => {
     let url = `products/books?limit=${limit}&offset=${page}`;
@@ -43,9 +52,11 @@ const getRecommendedBook = (data) => {
     return axios.post(url, data)
 }
 
-const searchBooks = (title, page) => {
-    let url = `products/search?title=${title}&limit=24&offset=${page}`
-    return axios.get(url)
+const searchBooks = (title, page, sort) => {
+    console.log("here");
+    let url = `products/search?title=${title}&limit=24&offset=${page}&order=${sort}`
+    console.log();
+    return axiosClient.get(url)
 }
 
 export default {
@@ -57,5 +68,7 @@ export default {
     getBooksFromListId,
     getAllBookId,
     getRecommendedBook,
-    searchBooks
+    searchBooks,
+    deleteBook,
+    createBook
 }

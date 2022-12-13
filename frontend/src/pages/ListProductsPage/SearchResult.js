@@ -4,7 +4,7 @@ import MiniCard from 'components/Card/MiniCard';
 import { Col, Container, Dropdown, ListGroup, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { getAllAuthors, getAllGenre, getListProduct } from 'redux/reducers/product/action';
+import { getAllAuthors, getAllGenre, getListProduct, getListProductSearch } from 'redux/reducers/product/action';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import SpinnerLoading from 'components/SpinnerLoading';
@@ -27,9 +27,9 @@ const SEARCH_OPTION = [{
 }]
 let genreTitle = ''
 let loadSuccess = false
-function ListProductsPage() {
+function SearchResult() {
     const dispatch = useDispatch()
-    let { slug, by } = useParams();
+    let { by } = useParams();
     const [searchParams, setSearchParams] = useSearchParams();
     let title = searchParams.get("title")
     const [page, setPage] = useState(1)
@@ -39,14 +39,14 @@ function ListProductsPage() {
 
     const headerRef = useRef(null)
     useEffect(() => {
-        dispatch(getListProduct(by, slug, page, sort.value, (count) => { setCountPage(count); loadSuccess = true }))
-    }, [slug, by, page, sort])
+        dispatch(getListProductSearch(title, page, sort.value, (count) => { setCountPage(count); loadSuccess = true }))
+    }, [page, sort])
 
     useEffect(() => {
         genreTitle = localStorage.getItem('genre_title')
-        document.title = `BBook | ${genreTitle ? genreTitle : slug.replaceAll('-', ' ')}`
+        document.title = `BBook | Kết quả tìm kiếm`
         localStorage.removeItem('genre_title')
-    }, [slug])
+    }, [])
 
     useEffect(() => {
         if (!listAuthors.length) {
@@ -89,7 +89,7 @@ function ListProductsPage() {
                                 <Row className='new-book-wrapper'></Row>
                                 <Row className='discount-book-wrapper'>
                                     <Col lg={12} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <h2 >{genreTitle ? genreTitle.toUpperCase() : slug.replaceAll('-', ' ').toUpperCase()}</h2>
+                                        <h2 >{`Kết quả tìm kiếm: `}<span style={{color:'gray'}}>{title}</span></h2>
                                         <Dropdown>
                                             <Dropdown.Toggle variant="primary" id="dropdown-basic">
                                                 {`Sắp xếp: ${sort.title}`}
@@ -147,4 +147,4 @@ function ListProductsPage() {
     );
 }
 
-export default ListProductsPage;
+export default SearchResult;

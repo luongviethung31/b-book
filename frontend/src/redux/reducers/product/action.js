@@ -26,7 +26,30 @@ const getAllGenre = (callback = () => { }) => {
     }
 }
 
-const deleteGenre = (data, callback = () => {}) => {
+const getAllAuthors = (callback = () => { }) => {
+    return (dispatch) => {
+        dispatch({
+            type: types.GET_ALL_AUTHOR,
+        })
+        genreAPI.getAllAuthors()
+            .then((rs) => {
+                if (rs.status === 200) {
+                    dispatch({
+                        type: types.GET_ALL_AUTHOR_SUCCESS,
+                        payload: rs.data
+                    })
+                }
+            })
+            .catch(e => {
+                dispatch({
+                    type: types.GET_ALL_AUTHOR_FAIL,
+                })
+            })
+        callback()
+    }
+}
+
+const deleteGenre = (data, callback = () => { }) => {
     return (dispatch) => {
         genreAPI.deleteGenre(data.slug)
             .then(rs => {
@@ -78,13 +101,34 @@ const addGenre = (data, callback = () => { }) => {
 
 
 
-const getListProduct = (by='', slug, page, title = '', callback = () => { }) => {
+const getListProductSearch = (title, page, sort = 'asc_alphabet', callback = () => { }) => {
     return (dispatch) => {
         dispatch({
             type: types.GET_LIST_PRODUCT,
         })
-        if (slug === 'search') {
-            bookAPI.searchBooks(title, page).then((rs) => {
+        bookAPI.searchBooks(title, page, sort).then((rs) => {
+            if (rs.status === 200) {
+                dispatch({
+                    type: types.GET_LIST_PRODUCT_SUCCESS,
+                    payload: rs.data.results
+                })
+                callback(rs.data.count)
+            }
+        })
+            .catch(e => {
+                dispatch({
+                    type: types.GET_LIST_PRODUCT_FAIL,
+                })
+            })
+    }
+}
+const getListProduct = (by, slug, page, sort = 'asc_alphabet', callback = () => { }) => {
+    return (dispatch) => {
+        dispatch({
+            type: types.GET_LIST_PRODUCT,
+        })
+        genreAPI.getListProduct(by, slug, page, sort)
+            .then((rs) => {
                 if (rs.status === 200) {
                     dispatch({
                         type: types.GET_LIST_PRODUCT_SUCCESS,
@@ -93,27 +137,11 @@ const getListProduct = (by='', slug, page, title = '', callback = () => { }) => 
                     callback(rs.data.count)
                 }
             })
-                .catch(e => {
-                    dispatch({
-                        type: types.GET_LIST_PRODUCT_FAIL,
-                    })
+            .catch(e => {
+                dispatch({
+                    type: types.GET_LIST_PRODUCT_FAIL,
                 })
-        } else
-            genreAPI.getListProduct(by, slug, page)
-                .then((rs) => {
-                    if (rs.status === 200) {
-                        dispatch({
-                            type: types.GET_LIST_PRODUCT_SUCCESS,
-                            payload: rs.data.results
-                        })
-                        callback(rs.data.count)
-                    }
-                })
-                .catch(e => {
-                    dispatch({
-                        type: types.GET_LIST_PRODUCT_FAIL,
-                    })
-                })
+            })
     }
 }
 
@@ -256,5 +284,7 @@ export {
     getRatingStatistics,
     getBooksFromListId,
     getAllBookId,
-    setLoadingAI
+    setLoadingAI,
+    getAllAuthors,
+    getListProductSearch
 }

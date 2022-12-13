@@ -226,7 +226,18 @@ class SearchBookView(views.APIView):
             query_string = request.query_params.get('title')
             if query_string == None:
                 return HttpResponseRedirect(redirect_to="/api/v1/bbook/products/books")
-            books = Book.objects.filter(title__icontains=query_string)
+            sort_kw = ["desc_alphabet", "asc_alphabet", "min_price", "max_price"]
+            if request.query_params.get('order') and request.query_params.get('order') in sort_kw:
+                if request.query_params.get('order') == "asc_alphabet":
+                   books = Book.objects.filter(title__icontains=query_string).order_by("title") 
+                elif request.query_params.get('order') == "desc_alphabet":
+                   books = Book.objects.filter(title__icontains=query_string).order_by("-title") 
+                elif request.query_params.get('order') == "min_price":
+                   books = Book.objects.filter(title__icontains=query_string).order_by("price") 
+                elif request.query_params.get('order') == "max_price":
+                   books = Book.objects.filter(title__icontains=query_string).order_by("-price") 
+            else:
+                books = Book.objects.filter(title__icontains=query_string) 
             paginator = pagination.LimitOffsetPagination()
             paginator.max_limit = 100
             books_data = paginator.paginate_queryset(books, request)
@@ -250,7 +261,18 @@ class GetAllBookWithId(views.APIView):
 class GetBooksWithGenre(views.APIView):
     def get(self, request, slug):
         try:
-            books = Book.objects.filter(genre__slug=slug)
+            sort_kw = ["desc_alphabet", "asc_alphabet", "min_price", "max_price"]
+            if request.query_params.get('order') and request.query_params.get('order') in sort_kw:
+                if request.query_params.get('order') == "asc_alphabet":
+                   books = Book.objects.filter(genre__slug=slug).order_by("title") 
+                elif request.query_params.get('order') == "desc_alphabet":
+                   books = Book.objects.filter(genre__slug=slug).order_by("-title") 
+                elif request.query_params.get('order') == "min_price":
+                   books = Book.objects.filter(genre__slug=slug).order_by("price") 
+                elif request.query_params.get('order') == "max_price":
+                   books = Book.objects.filter(genre__slug=slug).order_by("-price") 
+            else:
+                books = Book.objects.filter(genre__slug=slug)
             paginator = pagination.LimitOffsetPagination()
             paginator.max_limit = 100
             books_data = paginator.paginate_queryset(books, request)
@@ -264,7 +286,18 @@ class GetBooksWithGenre(views.APIView):
 class GetBooksWithAuthor(views.APIView):
     def get(self, request, slug):
         try:
-            books = Book.objects.filter(author__slug = slug)
+            sort_kw = ["desc_alphabet", "asc_alphabet", "min_price", "max_price"]
+            if request.query_params.get('order') and request.query_params.get('order') in sort_kw:
+                if request.query_params.get('order') == "asc_alphabet":
+                   books = Book.objects.filter(author__slug = slug).order_by("title") 
+                elif request.query_params.get('order') == "desc_alphabet":
+                   books = Book.objects.filter(author__slug = slug).order_by("-title") 
+                elif request.query_params.get('order') == "min_price":
+                   books = Book.objects.filter(author__slug = slug).order_by("price") 
+                elif request.query_params.get('order') == "max_price":
+                   books = Book.objects.filter(author__slug = slug).order_by("-price") 
+            else:
+                books = Book.objects.filter(author__slug = slug)
             paginator = pagination.LimitOffsetPagination()
             paginator.max_limit = 100
             books_data = paginator.paginate_queryset(books, request)

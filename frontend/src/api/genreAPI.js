@@ -32,8 +32,8 @@ const getAllAuthors = () => {
     let url = 'products/authors';
     return axiosClient.get(url);
 }
-const getListProduct = (by, slug, page) => {
-    let url =`products/${by}/${slug}/books?limit=24&offset=${page}`;
+const getListProduct = (by, slug, page, sort) => {
+    let url =`products/${by}/${slug}/books?limit=24&offset=${page}&order=${sort}`;
     return axiosClient.get(url)
 }
 

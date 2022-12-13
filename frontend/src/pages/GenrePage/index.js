@@ -12,6 +12,7 @@ import SpinnerLoading from "components/SpinnerLoading";
 import EditGenreModal from "components/modal/GenreModal/editGenre";
 import genreAPI from "api/genreAPI";
 import ConfirmModal from "components/modal/ConfirmModal";
+import { IconAdd } from "assets/icons/icons";
 
 const GenrePage = () => {
   const [isShowAddGenreModal, setIsShowAddGenreModal] = useState(false);
@@ -51,22 +52,24 @@ const GenrePage = () => {
         <SpinnerLoading />
       ) : (
         <>
+          <div className="header-genre">
+            <div style={{color:'#114444 !important', textDecoration:'underline', fontSize:'25px'}}>QUẢN LÝ THỂ LOẠI</div>
           <Button
             variant="primary"
             onClick={() => {
               setIsShowAddGenreModal(true);
             }}
           >
-            Thêm thể loại
+            <IconAdd/> Thêm thể loại
           </Button>
-
-          <div className="table-wrap">
+          </div>
+          <div className="table-wrap" style={{ fontSize: "14px", width: '100%' }}>
             <Table
               striped
               bordered
               hover
               className="table-genre"
-              style={{ fontSize: "14px" }}
+              style={{ fontSize: "14px", width: '100%' }}
             >
               <thead>
                 <tr>

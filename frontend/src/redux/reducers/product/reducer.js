@@ -10,7 +10,8 @@ const initialState = {
     listBookId: [],
     loading: false,
     loadingPage: false,
-    loadingAI: false
+    loadingAI: false,
+    listAuthors: [],
   }
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -28,6 +29,25 @@ export const reducer = (state = initialState, action) => {
             }
         }
         case  types.GET_ALL_GENRE_FAIL: {
+            return {
+                ...state,
+                loading: false
+            }
+        }
+        case  types.GET_ALL_AUTHOR: {
+            return {
+                ...state,
+               loading: true
+            }
+        }
+        case  types.GET_ALL_AUTHOR_SUCCESS: {
+            return {
+                ...state,
+                listAuthors: action.payload,
+                loading: false
+            }
+        }
+        case  types.GET_ALL_AUTHOR_FAIL: {
             return {
                 ...state,
                 loading: false
