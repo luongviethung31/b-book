@@ -2,7 +2,7 @@
 
 ######################### Environment variable ##########################x
 @userToken = 89949cc62719d22c50acac73c9b8f5ec814c14dd
-@adminToken = 101f0009ea536ba8fa50877e691048086ec29744
+@adminToken = b72e46623bb97f7db1e0cd3a79c9b7b76a312475
 @baseUserUrl = http://127.0.0.1:8000/api/v1/bbook/users
 @baseProductUrl = http://127.0.0.1:8000/api/v1/bbook/products
 @basePaymentUrl = http://127.0.0.1:8000/api/v1/bbook/payments
@@ -165,10 +165,11 @@ Authorization: Token {{adminToken}}
 {
     "genre": 1,
     "author": 1,
-    "title": "Tiếng chim hót trong bụi mận gai",
-    "thumbnail": "",
+    "title": "Ánh sáng vô hình",
+    "thumbnail": "https://upload.wikimedia.org/wikipedia/vi/c/cf/Anh_sang_vo_hinh_VN.jpg",
     "count": 1000,
-    "price": 100000
+    "price": 100000,
+    "discount": 20
 }
 
 ### RETRIEVE BOOK
