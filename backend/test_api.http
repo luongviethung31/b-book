@@ -172,7 +172,7 @@ Authorization: Token {{adminToken}}
 }
 
 ### RETRIEVE BOOK
-GET {{baseProductUrl}}/books/product-1
+GET {{baseProductUrl}}/books/product-2
 
 ### UPDATE BOOK
 PUT {{baseProductUrl}}/books/product-0
@@ -208,10 +208,8 @@ Content-Type: application/json
 Authorization: Token {{userToken}}
 
 {
-    "ship_date": "2022-12-12 12:00",
     "ship_place": "HCM",
     "note" : "giao hang tan noi",
-    "is_paid": true,
     "paid_at": "paypal",
     "product": [
         { "book" : 3, "quantity" : 2}
@@ -229,20 +227,13 @@ Content-Type: application/json
 Authorization: Token {{userToken}}
 
 {
-    "ship_date": "2012-04-23T18:25:43.511Z",
-    "ship_place": "HCM",
+    "ship_date": "2022-12-12 12:00",
+    "ship_place": "Da Nang",
     "note" : "giao hang tan noi",
     "is_paid": true,
     "paid_at": "paypal",
     "product": [
-    {
-        "book" : 1,
-        "quantity" : 1,
-    },
-    {
-        "book" : 2,
-        "quantity" : 2
-    }
+        { "book" : 3, "quantity" : 4}
     ]
 }
 ### DELETE ORDER
