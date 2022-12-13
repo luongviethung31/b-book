@@ -23,8 +23,6 @@ from .serializers import (
     CartItemSerializer
 )
 
-from product.views import IsAdminUserOrReadOnly
-
 
 ### ORDER ###
 
@@ -87,7 +85,7 @@ class CreateOrderView(views.APIView):
             return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class RetrieveOrderView(views.APIView):
-    permission_classes = IsAdminUserOrReadOnly
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request, id):
         # retrieve order data by id
         try:
