@@ -38,7 +38,7 @@ Content-Type: application/json
 
 {
     "username": "nguyenanh@gmail.com",
-    "password": "Nguyenanh123"
+    "password": "Nguyenanh1234"
 }
 
 ### ADMIN LOGIN
@@ -55,6 +55,16 @@ Content-Type: application/json
 GET {{baseUserUrl}}/logout
 Content-Type: application/json
 Authorization: Token {{userToken}}
+
+### CHANGE PASSWORD
+PUT {{baseUserUrl}}/change-password
+Content-Type: application/json
+Authorization: Token {{userToken}}
+
+{
+    "old_password": "Nguyenanh123",
+    "new_password": "Nguyenanh1234"
+}
 
 ####################################################################
 

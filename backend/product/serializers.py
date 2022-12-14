@@ -5,16 +5,23 @@ from .models import (
     Book,
     Author
 )
+from rating.models import Rating
+from django.db.models import Avg
 import datetime
 
 class BookSerializer(serializers.ModelSerializer):
+    average_rating = serializers.SerializerMethodField(method_name='get_average_rating')
     class Meta:
         model = Book
         fields = "__all__"
         extra_kwargs = {
-            'slug': {'read_only': True}
+            'slug': {'read_only': True},
+            'average_rating': {'read_only': True},
         }    
     
+    def get_average_rating(self, obj):
+        return Rating.objects.filter(book=obj.id).aggregate(average_rating=Avg("rating"))
+
     def validate_release(self, value):
         if value > datetime.date.today().year:
             raise serializers.ValidationError("Release year can not greater than this year")
