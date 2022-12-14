@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import User
 from django.contrib.auth.hashers import make_password
 import re
+from django.contrib.auth.password_validation import validate_password
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -66,6 +67,26 @@ class UserLoginSerializer(serializers.ModelSerializer):
     username = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
 
+class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializer for password change endpoint.
+    """
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_new_password(self, value):
+        if len(value)<9:
+           raise serializers.ValidationError("Password length must be greater than 8")
+        if not value.isascii():
+            raise serializers.ValidationError("Password contains invalid character")
+        if not any(map(str.isdigit, value)):
+            raise serializers.ValidationError("Password must be contain at least one number")
+        if not bool(re.match('^(?=.*[0-9]$)(?=.*[a-zA-Z])', value)):
+            raise serializers.ValidationError("Password contains at least one letter")
+        if not re.fullmatch(r'[A-Za-z0-9@#$%^&+=]{8,}', value):
+            raise serializers.ValidationError("Password is invalid")
+        return value
+    
 
 def CheckIsPhoneNumber(phone_text): 
     x = re.search(r"(84|0[3|5|7|8|9])+([0-9]{8}\b)", phone_text)
