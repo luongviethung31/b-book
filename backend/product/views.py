@@ -275,4 +275,14 @@ class GetBooksWithAuthor(views.APIView):
         except:
             return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class GetTopRatingBook(views.APIView):
+    def get(self, request):
+        try:
+            books = Book.objects.annotate(avg=Avg("books__rating")).order_by('-avg')[:10]
+            serializer = BookSerializer(books, many=True)
+            return response.Response(serializer.data, status=status.HTTP_200_OK) 
+        except Exception as e:
+            print(e)
+            return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 ### !BOOK ###

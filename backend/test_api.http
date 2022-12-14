@@ -119,6 +119,8 @@ DELETE  {{baseProductUrl}}/authors/sach-thieu-nhi
 
 ############################# BOOK #################################
 ###
+GET  {{baseProductUrl}}/top-rating
+###
 GET {{baseProductUrl}}/search?title=m
 
 ### GET ALL BOOK WITH QUERY PARAM
@@ -163,13 +165,12 @@ Content-Type: application/json
 Authorization: Token {{adminToken}}
 
 {
-    "genre": 1,
-    "author": 1,
-    "title": "Ánh sáng vô hình",
-    "thumbnail": "https://upload.wikimedia.org/wikipedia/vi/c/cf/Anh_sang_vo_hinh_VN.jpg",
-    "count": 1000,
-    "price": 100000,
-    "discount": 20
+    "genre": 5,
+    "author": 10,
+    "title": "Những tù nhân của địa lý",
+    "thumbnail": "https://salt.tikicdn.com/cache/w1200/ts/product/8d/96/9e/c0c1f23db756d50b1944dff9c3988753.jpg",
+    "count": 100,
+    "price": 150000
 }
 
 ### RETRIEVE BOOK

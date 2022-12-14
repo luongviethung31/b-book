@@ -10,7 +10,8 @@ from .models import (
 
 from .serializers import (
     UserSerializer,
-    UserLoginSerializer
+    UserLoginSerializer,
+    ChangePasswordSerializer
 )
 
 from rest_framework.authtoken.models import Token
@@ -98,3 +99,29 @@ class UserView(views.APIView):
         users = User.objects.all()
         serializer = UserSerializer(data=users, many=True)
         return response.Response(serializer.data, status=status.HTTP_200_OK)
+
+class UpdatePassword(views.APIView):
+    """
+    An endpoint for changing password.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        serializer = ChangePasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            old_password = serializer.data.get("old_password")
+            if not self.object.check_password(old_password):
+                return response.Response({"old_password": ["Wrong password."]}, 
+                                status=status.HTTP_400_BAD_REQUEST)
+            # set_password also hashes the password that the user will get
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            return response.Response(status=status.HTTP_204_NO_CONTENT)
+
+        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -10,7 +10,8 @@ from .views import (
     SearchBookView,
     GetAllBookWithId,
     GetBooksWithGenre,
-    GetBooksWithAuthor
+    GetBooksWithAuthor,
+    GetTopRatingBook
 )
 
 urlpatterns = [
@@ -24,6 +25,7 @@ urlpatterns = [
     path('books', ListCreateBookView.as_view(), name='ListCreateBook'),
     path('search', SearchBookView.as_view(), name='SearchBook'),
     path('all-book-id', GetAllBookWithId.as_view(), name="GetAllBookId"),
+    path('top-rating', GetTopRatingBook.as_view(), name="GetTopRatingbBook"),
     path('', include('rating.urls')),
 ]
  
