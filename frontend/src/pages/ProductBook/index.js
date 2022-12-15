@@ -28,7 +28,7 @@ const ProductBookPage = () => {
   useEffect(() => {
     setLoading(true);
     bookAPI
-      .getAllBooks(page, 100)
+      .getAllBooks("", "", 'asc_alphabet')
       .then((rs) => {
         if (rs.status === 200) {
           setData(rs.data.results);
@@ -59,6 +59,7 @@ const ProductBookPage = () => {
     })
   };
   const handleAddProductBook = (book) => {
+    console.log({book});
     bookAPI.createBook(book).then((rs) => {
       console.log(rs);
       if(rs.status === 201) {
@@ -144,6 +145,7 @@ const ProductBookPage = () => {
                           variant="danger"
                           onClick={() => {
                             setDataDetail(item)
+                            setIsShowConfirm(true)
                           }}
                         >
                           <IconDelete/>
@@ -173,7 +175,7 @@ const ProductBookPage = () => {
         handleActionProductBook={handleEditProductBook}
         header="CẬP NHẬT SÁCH"
       />
-      <ConfirmModal show={isShowConfirm} handleClose={() => setIsShowConfirm(false)} handleConfirm={() => {handleDelete(dataDetail)}}/>
+      <ConfirmModal show={isShowConfirm} handleClose={() => setIsShowConfirm(false)} handleConfirm={() => {handleDelete(dataDetail)}} title="Xác nhận xóa sách?"/>
     </div>
   );
 };

@@ -14,13 +14,14 @@ import { setLoadingAI } from 'redux/reducers/product/action';
 import userLayout from '../HOCS/userLayout';
 import adminLayout from '../HOCS/adminLayout';
 import HomePage from '../pages/HomePage'
-import { ROUTE_BOOK_DETAIL, ROUTE_CART_PAGE, ROUTE_CONTROL_GENRE, ROUTE_HOME, ROUTE_LIST_PRODUCTS, ROUTE_REGISTER, ROUTE_PRODUCT_BOOK, ROUTE_USER_ORDER, ROUTE_ORDER_PAGE, ROUTE_SEARCH_RESULT, ROUTE_STATISTIC_PAGE } from './Types';
+import { ROUTE_BOOK_DETAIL, ROUTE_CART_PAGE, ROUTE_CONTROL_GENRE, ROUTE_HOME, ROUTE_LIST_PRODUCTS, ROUTE_REGISTER, ROUTE_PRODUCT_BOOK, ROUTE_USER_ORDER, ROUTE_ORDER_PAGE, ROUTE_SEARCH_RESULT, ROUTE_STATISTIC_PAGE, ROUTE_ACCOUNT_DETAIL } from './Types';
 import ProductBookPage from 'pages/ProductBook';
 import UserOrder from 'pages/UserOrder';
 import { getAllBookId } from 'redux/reducers/product/action';
 import bookAPI from 'api/bookAPI';
 import SearchResult from 'pages/ListProductsPage/SearchResult';
 import Statistic from 'pages/Statistic';
+import AccountDetail from 'pages/AccountDetail';
 
 const UserRoutes = () => {
     const dispatch = useDispatch()
@@ -84,6 +85,13 @@ const UserRoutes = () => {
                 exact
                 element={userLayout({
                     Component: UserOrder
+                })}
+            />
+            <Route
+                path={ROUTE_ACCOUNT_DETAIL}
+                exact
+                element={userLayout({
+                    Component: AccountDetail
                 })}
             />
             <Route

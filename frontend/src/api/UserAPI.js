@@ -26,11 +26,17 @@ const getAllUsers = () => {
     return axiosClient.get(url, {headers: getHeaderWithToken()});
 }
 
+const changePassword = (data) => {
+    let url = `users/change-password`
+    return axiosClient.put(url,data, {headers: getHeaderWithToken()});
+}
+
 
 export default {
     registerUser,
     login,
     logout,
     getUserInfo,
-    getAllUsers
+    getAllUsers,
+    changePassword
 }

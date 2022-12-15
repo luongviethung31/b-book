@@ -7,8 +7,12 @@ import { getHeaderWithToken } from "./getHeaderWithToken";
 // }
 
 const createOrder = (data) => {
+    let dataOrder = {
+        ...data,
+        ship_date: new Date()
+    }
     let url ='payments/order';
-    return axiosClient.post(url, data, {headers: getHeaderWithToken()});
+    return axiosClient.post(url, dataOrder, {headers: getHeaderWithToken()});
 }
 const getAllOrderDetail = (id) => {
     let url =`payments/order/${id}`;

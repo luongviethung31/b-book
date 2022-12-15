@@ -13,6 +13,8 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { IconOrderTotal, IconRevenue, IconUser } from 'assets/icons/icons';
+import numeral from 'numeral';
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -38,6 +40,8 @@ const options2 = {
 const Statistic = ({}) => {
     const [data, setData] = useState([]);
     const [dataRevenue, setDataRevenue] = useState({})
+    const [totalUser, setTotalUser] = useState(0)
+    const [revenue, setRevenue] = useState(0)
     useEffect(() => {
       paymentAPI
         .allOrder()
@@ -53,10 +57,9 @@ const Statistic = ({}) => {
     }, []);
 
     useEffect(() => {
-        let arrRev = [0,0,0,0,0,0,0,0,0,0,0,0]
-        let label = [0,0,0,0,0,0,0,0,0,0,0,0]
-        console.log({arrRev});
-        console.log({data});
+        let arrRev = new Array(12).fill(0)
+        let label = new Array(12).fill(0)
+        
         label = label.map((item, index) => `Tháng ${index+1}`)
         data.forEach(item => {
             if(item.is_paid) {
@@ -64,7 +67,10 @@ const Statistic = ({}) => {
                 console.log(item.total);
             }
         })
-        console.log(arrRev);
+
+        let totalUserTemp = Array.from(new Set(data.map(item => item.user.id))).length
+        setTotalUser(totalUserTemp)
+        setRevenue(arrRev.reduce((acc, cur) => acc+cur,0))
         setDataRevenue(
             {
                 labels: label,
@@ -80,10 +86,35 @@ const Statistic = ({}) => {
     },[data])
 
     return (
-        <div className='chart-revenue'>
-           <div style={{height:'500px',width:'700px', margin: 'auto'}}>
+        <div className='statistic-session'>
+            <div className='row-statistic'>
+                <div className='statistic-card revenue-card'>
+                    <div className='title'>Doanh thu</div>
+                    <div className='detail'>
+                        <div className='revenue'><IconRevenue/></div>
+                        <span>{numeral(revenue).format("0,0")}đ</span>
+                    </div>
+                </div>
+                <div className='statistic-card order-card'>
+                    <div className='title'>Đơn hàng</div>
+                    <div className='detail'>
+                    <div className='order'><IconOrderTotal/></div>
+                        <span>{`${data.length} đơn`}</span>
+                    </div>
+                </div>
+                <div className='statistic-card user-card'>
+                    <div className='title'>Khách hàng</div>
+                    <div className='detail'>
+                    <div className='user'><IconUser/></div>
+                        <span>{`${totalUser} người`}</span>
+                    </div>
+                </div>
+            </div>
+            <div className='chart-revenue'>
+           <div style={{height:'400px',width:'700px', margin: 'auto'}}>
            { Object.keys(dataRevenue).length && <Bar options={options2} data={dataRevenue} />}
            </div>
+        </div>
         </div>
     );
 };

@@ -60,7 +60,7 @@ const deleteGenre = (data, callback = () => { }) => {
                     })
                     useNotification.Success({
                         title: "XÓA THÀNH CÔNG!",
-                        message: `Đã xóa ${data.title}`
+                        message: `Đã xóa thể loại ${data.title}`
                     })
                     callback()
                 }
@@ -85,7 +85,7 @@ const addGenre = (data, callback = () => { }) => {
                     })
                     useNotification.Success({
                         title: "THÊM THÀNH CÔNG!",
-                        message: `Đã them ${rs.data.title}`
+                        message: `Đã thêm thể loại ${rs.data.title}`
                     })
                     callback()
                 }
@@ -93,7 +93,7 @@ const addGenre = (data, callback = () => { }) => {
             .catch(() => {
                 useNotification.Error({
                     title: "LỖI",
-                    message: "Them không thành công!"
+                    message: "Thêm không thành công!"
                 })
             })
     }

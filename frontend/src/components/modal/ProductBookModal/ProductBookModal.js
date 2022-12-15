@@ -46,6 +46,7 @@ const ProductBookModal = ({
   }, []);
 
   const handleChange = (e) => {
+    console.log(e);
     setAllData({
       ...allData,
       [e.target.name]: e.target.value,

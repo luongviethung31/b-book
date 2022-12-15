@@ -76,7 +76,7 @@ const adminLayout = ({ Component, route = '' }) => {
             </ListGroup.Item>
           </ListGroup>
         </Col>
-        <Col sm={11} style={{ minHeight: "100vh", position: "relative" }}>
+        <Col sm={11} style={{ minHeight: "100vh", position: "relative", background:'#fefefe' }}>
           <Component />
         </Col>
       </Row>

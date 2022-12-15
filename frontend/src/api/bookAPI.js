@@ -16,8 +16,8 @@ const createBook = (data) => {
     return axiosClient.post(url,data, {headers: getHeaderWithToken()});
 }
 
-const getAllBooks = (page,limit=24) => {
-    let url = `products/books?limit=${limit}&offset=${page}`;
+const getAllBooks = (page,limit=24, order='desc_alphabet') => {
+    let url = `products/books?limit=${limit}&offset=${page}&order=${order}`;
     return axiosClient.get(url);
 }
 
@@ -49,7 +49,12 @@ const createRating = (slug, data) => {
 const getRecommendedBook = (data) => {
     // console.log(process.env.SERVER_AI);
     let url = `${process.env.REACT_APP_SERVER_AI}api/v1/recommend/books`;
-    return axios.post(url, data)
+    return axios.post(url, data, {
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json" ,
+            }
+    })
 }
 
 const searchBooks = (title, page, sort) => {

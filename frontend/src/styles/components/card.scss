@@ -192,3 +192,76 @@
         }
     }
 }
+
+.row-statistic {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    .revenue-card {
+        background: rgb(255,255,255);
+        background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(249,191,191,1) 35%, rgba(255,73,73,1) 100%);
+    }
+    .order-card {
+        background: rgb(255,255,255);
+        background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(252,250,205,1) 35%, rgba(246,255,97,1) 100%);
+    }
+    .user-card {
+        background: rgb(255,255,255);
+background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(201,245,246,1) 35%, rgba(7,210,238,1) 100%);
+    }
+    .statistic-card {
+        width: 275px;
+        height: 150px;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        display: flex;
+        color: #006666;
+        justify-content: space-between;
+        flex-direction: column;
+        .title {
+            font-size: 20px;
+        }
+        .detail {
+            display: flex;
+            justify-content: space-between;
+            span {
+                font-size: 25px;
+            }
+            .revenue {
+                width: 50px;
+                height: 50px;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background-color: #f7c8cc;
+                box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+            }
+            .user {
+                width: 50px;
+                height: 50px;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background-color: #c7fcff;
+                box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+            }
+            .order {
+                width: 50px;
+                height: 50px;
+                padding: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background-color: #f9f7cc;
+                box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+            }
+        }
+    }
+}

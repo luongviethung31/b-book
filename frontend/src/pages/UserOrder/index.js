@@ -70,7 +70,9 @@ const UserOrder = () => {
                                         <div key={index} style={{ boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px', padding:'10px', marginBottom:'20px'}}>
                                             <div className='order-date' style={{
                                                 fontSize:'12px', textAlign:'left', padding:'10px'
-                                            }}>Thời gian:&nbsp; {new Date(order.ship_date).toLocaleString('en-GB', { timeZone: 'UTC' })}</div>
+                                            }}>Thời gian:&nbsp; {new Date(order.ship_date).toLocaleString('en-GB', { timeZone: 'UTC' })}
+                                            {` - Nơi giao hàng: ${order?.ship_place}`}
+                                            </div>
                                             {
                                                 order.order_detail.map((item, _index) => (
                                                     <BookCardOrder

@@ -13,7 +13,7 @@ import { getAccessToken, removeAccessToken, removeUser, setAccessToken, setUser 
 import { handleShowLoginModal, setAccountInfo, setLoading } from 'redux/reducers/auth/action';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingLogin from 'components/SpinnerLoading/LoadingLogin';
-import { ROUTE_LIST_PRODUCTS, ROUTE_USER_ORDER } from 'route/Types';
+import { ROUTE_ACCOUNT_DETAIL, ROUTE_LIST_PRODUCTS, ROUTE_USER_ORDER } from 'route/Types';
 import numeral from 'numeral';
 // import BookCart from 'containers/BookCart';
 
@@ -72,7 +72,7 @@ const Header = () => {
                             </Dropdown.Toggle>
                             <Dropdown.Menu align='end'>
                                 <Dropdown.Item href={ROUTE_USER_ORDER}>Đơn hàng của bạn</Dropdown.Item>
-                                <Dropdown.Item >Tài khoản của bạn</Dropdown.Item>
+                                <Dropdown.Item href={ROUTE_ACCOUNT_DETAIL}>Tài khoản của bạn</Dropdown.Item>
                                 <Dropdown.Item onClick={handleLogout}>Đăng xuất</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
