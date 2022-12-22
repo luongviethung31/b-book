@@ -1,7 +1,7 @@
 // This is file to test api
 
 ######################### Environment variable ##########################x
-@userToken = 89949cc62719d22c50acac73c9b8f5ec814c14dd
+@userToken = 7867c890c11f724b9befb838ec106fcb68140b4d
 @adminToken = b72e46623bb97f7db1e0cd3a79c9b7b76a312475
 @baseUserUrl = http://127.0.0.1:8000/api/v1/bbook/users
 @baseProductUrl = http://127.0.0.1:8000/api/v1/bbook/products
@@ -220,12 +220,14 @@ Content-Type: application/json
 Authorization: Token {{userToken}}
 
 {
+    "is_paid": false,
     "ship_place": "HCM",
-    "note" : "giao hang tan noi",
+    "note" : "to 1",
     "paid_at": "paypal",
     "product": [
         { "book" : 3, "quantity" : 2}
-    ]
+    ],
+    "ship_date": "2022-12-24T10:36:59.727Z"
 }
 
 ### GET ORDER DETAIL

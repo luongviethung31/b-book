@@ -8,11 +8,11 @@ import decimal
 class Order(models.Model):
     user = models.ForeignKey(User, related_name='owner', on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
-    ship_date = models.DateTimeField()
+    ship_date = models.DateTimeField(auto_now_add=True, blank=True)
     ship_place = models.CharField(blank=True, null=True, max_length=500)
     total = models.DecimalField(decimal_places=3, max_digits=10, default=0)
     note = models.CharField(blank=True, null=True, max_length=500)
-    is_paid = models.BooleanField()
+    is_paid = models.BooleanField(default=False)
     is_delivered = models.BooleanField(default=False)
     paid_at = models.CharField(blank=True, null=True, max_length=100)
     created = models.DateTimeField(auto_created=True, auto_now=True)
