@@ -312,7 +312,7 @@ class GetBooksWithAuthor(views.APIView):
 class GetTopRatingBook(views.APIView):
     def get(self, request):
         try:
-            books = Book.objects.annotate(avg=Avg("books__rating")).order_by('-avg')[:10]
+            books = Book.objects.annotate(avg=Avg("books__rating")).order_by('avg')[:10]
             serializer = BookSerializer(books, many=True)
             return response.Response(serializer.data, status=status.HTTP_200_OK) 
         except Exception as e:
