@@ -1,7 +1,7 @@
 // This is file to test api
 
 ######################### Environment variable ##########################x
-@userToken = 7867c890c11f724b9befb838ec106fcb68140b4d
+@userToken = cf4d9dd61c85393b7c4aeffb190689e219df727b
 @adminToken = b72e46623bb97f7db1e0cd3a79c9b7b76a312475
 @baseUserUrl = http://127.0.0.1:8000/api/v1/bbook/users
 @baseProductUrl = http://127.0.0.1:8000/api/v1/bbook/products
@@ -147,6 +147,8 @@ GET {{baseProductUrl}}/books?order=max_price&limit=10&offset=10
 
 ### GET ALL BOOK ID
 GET {{baseProductUrl}}/all-book-id
+Content-Type: application/json
+Authorization: Token {{userToken}}
 
 ### GET BOOK FROM LIST ID
 POST {{baseProductUrl}}/all-book-id

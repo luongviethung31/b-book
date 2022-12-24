@@ -14,6 +14,8 @@ from .models import (
 
 from rating.models import Rating
 
+from payment.models import Order, OrderDetail
+
 from .serializers import (
     GenreSerializer,
     BookSerializer,
@@ -238,8 +240,16 @@ class SearchBookView(views.APIView):
             return response.Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class GetAllBookWithId(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
-        books = Book.objects.all().values("id")
+        book_id = []
+        orders = Order.objects.filter(user=request.user.id)
+        for order in orders:
+            # get order detail
+            order_item = OrderDetail.objects.filter(order=order.id)
+            for item in order_item:
+                book_id.append(item.book.id)
+        books = Book.objects.exclude(id__in=book_id).values("id")
         return response.Response({"list_id": books}, status=status.HTTP_200_OK)
     def post(self, request):
         list_book_id = request.data.get("list_recommend_book")
